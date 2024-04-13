@@ -1,20 +1,28 @@
 package bank;
 
+import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
+import transaction.DepositService;
+import transaction.WithdrawalService;
 
 import java.util.Scanner;
 
 public class MainMenu {
     private final Scanner scanner;
     private final AccountService accountService;
+    private final DepositService depositService;
+    private final WithdrawalService withdrawlService;
     private final String loggedInUserId;
 
 
     public MainMenu(String userId) {
         this.scanner = new Scanner(System.in);
         UserDao userDao = new UserDao(new DatabaseManager());
+        AccountDao accountDao = new AccountDao(new DatabaseManager());
         this.accountService = new AccountService(userDao);
+        this.depositService = new DepositService(userDao, accountDao);
+        this.withdrawlService = new WithdrawalService(userDao, accountDao);
         this.loggedInUserId = userId;
     }
 
@@ -44,12 +52,14 @@ public class MainMenu {
                     break;
                 case 3:
                     // 입금 로직
+                    depositService.showDeposit(loggedInUserId);
                     break;
                 case 4:
                     // 송금 로직
                     break;
                 case 5:
                     // 출금 로직
+                    withdrawlService.showWithdrawal(loggedInUserId);
                     break;
                 case 6:
                     // 계좌 및 예·적금 조회 로직

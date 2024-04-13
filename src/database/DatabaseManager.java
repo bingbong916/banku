@@ -27,4 +27,5 @@ public class DatabaseManager {
         Path path = Paths.get(accountNumber + ".txt");
         Files.write(path, lines, StandardCharsets.UTF_8);
     }
+
 }
