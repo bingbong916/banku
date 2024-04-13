@@ -24,23 +24,32 @@ public class AccountService {
             // 계좌 존재 여부 확인
             if (userDao.hasAccount(loggedInUserId)) {
                 System.out.println();
-                System.out.println("계좌가 이미 존재합니다.");
-                System.out.println();
+                System.out.println("\n계좌가 이미 존재합니다.\n");
                 return;
             }
 
             System.out.println("[계좌 개설 서비스]");
             System.out.println("============================================");
-            System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("계좌를 개설합니다.");
             System.out.println("============================================");
+            System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
 
-            // 초기 입금액 입력
-            System.out.print("초기 입금액을 입력하세요: ₩ ");
-            String amount = scanner.nextLine();
-            if (!amount.matches("\\d+")) {
-                System.out.println("숫자만 입력하세요.");
-                return;
+
+            String amount;
+            while (true) {
+                // 초기 입금액 입력
+                System.out.print("초기 입금액을 입력하세요: ₩ ");
+                amount = scanner.nextLine();
+
+                if (amount.equals("q")) {
+                    return;
+                }
+
+                if (!amount.matches("\\d+")) {
+                    System.out.println("올바른 양식이 아닙니다.");
+                } else {
+                    break;
+                }
             }
 
             String accountNumber = generateAccountNumber();
