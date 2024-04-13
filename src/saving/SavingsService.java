@@ -30,6 +30,7 @@ public class SavingsService {
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Scanner scan = new Scanner(System.in);
+            System.out.println();
             System.out.println("[정기예금 서비스]");
             System.out.println("============================================");
             System.out.println("현재 예금 가능한 최대 금액: ₩");
@@ -41,13 +42,17 @@ public class SavingsService {
                 int inputMoney = scan.nextInt();
 
                 if (inputMoney < 1000 || inputMoney > 1000000000) {
-                    System.out.println("범위 내 금액을 힙력하세요.");
+                    System.out.println("범위 내 금액을 입력하세요.");
+                    return;
                 }
 
                 String amount = Integer.toString(inputMoney);
                 String account = userDao.findUserToAccount(loggedInUserId);
                 String startDate = dateFormat.format(date);
                 accountDao.updateSavings(account, 0, amount, startDate);
+                System.out.println("예금이 완료되었습니다!");
+                System.out.println();
+                break;
             }
         }catch (Exception e){
             e.getMessage();

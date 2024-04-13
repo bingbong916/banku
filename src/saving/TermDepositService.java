@@ -29,6 +29,7 @@ public class TermDepositService {
         try {
 
             Scanner scan = new Scanner(System.in);
+            System.out.println();
             System.out.println("[정기예금 서비스]");
             System.out.println("============================================");
             System.out.println("적금 가능항 상품");
@@ -69,6 +70,7 @@ public class TermDepositService {
                         System.out.println("숫자만 입력하세요.");
                         break;
                 }
+                System.out.println();
             }
         }catch (Exception e){
             e.getMessage();
