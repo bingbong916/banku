@@ -12,6 +12,7 @@ public class SavingServiceManager {
     private final AccountDao accountDao;
     private final SavingsService savingsService;
     private final TermDepositService termDepositService;
+    private final CloseSavingService closeSavingService;
 
     public SavingServiceManager(UserDao userDao, AccountDao accountDao){
         this.accountDao = accountDao;
@@ -19,6 +20,7 @@ public class SavingServiceManager {
         this.scanner = new Scanner(System.in);
         this.savingsService = new SavingsService(userDao, accountDao);
         this.termDepositService = new TermDepositService(userDao, accountDao);
+        this.closeSavingService = new CloseSavingService(userDao, accountDao);
         initializeServices();
     }
 
@@ -29,6 +31,7 @@ public class SavingServiceManager {
 
     public void printSavingMenu(String loggedInUserId){
 
+        System.out.println();
         System.out.println("[예ㆍ적금 서비스]");
         System.out.println("============================================");
         System.out.println("정기예금 또는 적금 상품에 가입합니다.");
@@ -51,6 +54,7 @@ public class SavingServiceManager {
                     termDepositService.doSavingService(loggedInUserId);
                     break;
                 case 3:
+                    closeSavingService.doCloseService(loggedInUserId);
                     break;
                 case 0:
                     break;
