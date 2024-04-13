@@ -41,4 +41,12 @@ public class AccountDao {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         return lines.get(0);
     }
+
+    public boolean hasSavings (String accountNumber, int index) throws IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        if (lines.get(index).isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 }

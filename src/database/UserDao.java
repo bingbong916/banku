@@ -57,4 +57,15 @@ public class UserDao {
         }
         return userId;
     }
+
+    public String findUserToRRN(String userId) throws IOException {
+        List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            String[] textId = line.split("\t");
+            if (textId[0].equals(userId)) {
+                return textId[3];
+            }
+        }
+        return userId;
+    }
 }
