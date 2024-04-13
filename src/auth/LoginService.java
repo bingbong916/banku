@@ -18,7 +18,6 @@ public class LoginService {
             for (String line : lines) {
                 String[] userDetails = line.split("\t");
                 if (userDetails[0].equals(userId) && userDetails[1].equals(password)) {
-                    System.out.println("로그인 성공!");
                     return userId;
                 }
             }

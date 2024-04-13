@@ -13,7 +13,7 @@ public class MainMenu {
     private final Scanner scanner;
     private final AccountService accountService;
     private final DepositService depositService;
-    private final WithdrawalService withdrawlService;
+    private final WithdrawalService withdrawalService;
     private final SavingServiceManager savingServiceManager;
     private final String loggedInUserId;
 
@@ -24,7 +24,7 @@ public class MainMenu {
         AccountDao accountDao = new AccountDao(new DatabaseManager());
         this.accountService = new AccountService(userDao);
         this.depositService = new DepositService(userDao, accountDao);
-        this.withdrawlService = new WithdrawalService(userDao, accountDao);
+        this.withdrawalService = new WithdrawalService(userDao, accountDao);
         this.savingServiceManager = new SavingServiceManager(userDao, accountDao);
         this.loggedInUserId = userId;
     }
@@ -63,13 +63,12 @@ public class MainMenu {
                     break;
                 case 5:
                     // 출금 로직
-                    withdrawlService.showWithdrawal(loggedInUserId);
+                    withdrawalService.showWithdrawal(loggedInUserId);
                     break;
                 case 6:
                     // 계좌 및 예·적금 조회 로직
                     break;
                 case 0:
-                    System.out.println("서비스를 종료합니다.");
                     return;
                 default:
                     System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
