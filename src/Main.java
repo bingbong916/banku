@@ -3,7 +3,7 @@ import bank.MainMenu;
 
 public class Main {
     public static void main(String[] args) {
-        MainMenu mainMenu = new MainMenu("test");
-        mainMenu.show();
+        AuthUI authUI = new AuthUI();
+        authUI.showMenu();
     }
 }
