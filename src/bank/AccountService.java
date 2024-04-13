@@ -31,6 +31,7 @@ public class AccountService {
 
             System.out.println("[계좌 개설 서비스]");
             System.out.println("============================================");
+            System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("계좌를 개설합니다.");
             System.out.println("============================================");
 

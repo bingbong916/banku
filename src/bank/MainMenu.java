@@ -69,7 +69,6 @@ public class MainMenu {
                     // 계좌 및 예·적금 조회 로직
                     break;
                 case 0:
-                    System.out.println("서비스를 종료합니다.");
                     return;
                 default:
                     System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
