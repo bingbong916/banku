@@ -1,7 +1,9 @@
 package bank;
 
+import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
+import transaction.TransferService;
 
 import java.util.Scanner;
 
@@ -9,12 +11,14 @@ public class MainMenu {
     private final Scanner scanner;
     private final AccountService accountService;
     private final String loggedInUserId;
+    private final TransferService transferService;
 
 
     public MainMenu(String userId) {
         this.scanner = new Scanner(System.in);
         UserDao userDao = new UserDao(new DatabaseManager());
         this.accountService = new AccountService(userDao);
+        this.transferService = new TransferService(new AccountDao(new DatabaseManager()), userDao);
         this.loggedInUserId = userId;
     }
 
@@ -46,7 +50,7 @@ public class MainMenu {
                     // 입금 로직
                     break;
                 case 4:
-                    // 송금 로직
+                	transferService.transfer(loggedInUserId);
                     break;
                 case 5:
                     // 출금 로직
