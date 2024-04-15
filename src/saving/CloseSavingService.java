@@ -10,11 +10,18 @@ public class CloseSavingService {
     private final Scanner scanner;
     private final UserDao userDao;
     private final AccountDao accountDao;
+    // 추가
+    private SavingProduct product1;
+    private SavingProduct product2;
+    private SavingProduct product3;
 
-    public CloseSavingService(UserDao userDao, AccountDao accountDao) {
+    public CloseSavingService(UserDao userDao, AccountDao accountDao, SavingProduct product1, SavingProduct product2, SavingProduct product3) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
+        this.product1 = product1;
+        this.product2 = product2;
+        this.product3 = product3;
         initializeServices();
     }
 
@@ -36,7 +43,10 @@ public class CloseSavingService {
             while (flag) {
                 System.out.print("이름을 입력하세요 : ");
                 String inputName = scanner.nextLine();
-                if (!inputName.equals(loggedInUserId)) {
+
+                //추가
+                String actualName = userDao.findUserNameById(loggedInUserId);
+                if (!inputName.equals(actualName)) {
                     System.out.println("존재하지 않는 이름입니다.");
                     return;
                 }
@@ -75,25 +85,57 @@ public class CloseSavingService {
                 System.out.println("[0] 뒤로가기");
                 System.out.println("============================================");
                 System.out.print("해지하실 예ㆍ적금 번호를 입력하세요 :");
+                //추가
                 int inputNum = scanner.nextInt();
+                scanner.nextLine();
+                String accountNumber = userDao.findUserToAccount(loggedInUserId);
+                String amountstr = accountDao.getSavingsAmount(accountNumber, inputNum - 1);
+                int amount = Integer.parseInt(amountstr);
 
                 switch (inputNum){
                     case 1:
                         if (!result1){
                             System.out.println("올바르지 않은 메뉴입니다.");
                         }
+                        flag = false;
+                        break;
                     case 2:
                         if (!result2){
                             System.out.println("올바르지 않은 메뉴입니다.");
                         }
+                        product1.adjustInterestRateBasedOnAmount(amount);
+                        int currentMonths = product1.getCurrentMonths();
+                        System.out.println(currentMonths);
+                        System.out.println("1번 상품 해지 결과");
+                        System.out.println("원금 : " + amount);
+                        System.out.println("이자 : " + product1.calculateTotalInterest(amount, currentMonths));
+                        System.out.println("합게 : " + product1.calculateTotalAmount(amount, currentMonths));
+                        flag = false;
+                        break;
                     case 3:
                         if (!result3){
                             System.out.println("올바르지 않은 메뉴입니다.");
                         }
+                        product2.adjustInterestRateBasedOnAmount(amount);
+                        currentMonths = product2.getCurrentMonths();
+                        System.out.println("2번 상품 해지 결과");
+                        System.out.println("원금 : " + amount);
+                        System.out.println("이자 : " + product2.calculateTotalInterest(amount, currentMonths));
+                        System.out.println("합게 : " + product2.calculateTotalAmount(amount, currentMonths));
+                        flag = false;
+                        break;
                     case 4:
                         if (!result4){
                             System.out.println("올바르지 않은 메뉴입니다.");
                         }
+                        product3.adjustInterestRateBasedOnAmount(amount);
+                        currentMonths = product3.getCurrentMonths();
+                        System.out.println("3번 상품 해지 결과");
+                        System.out.println("원금 : " + amount);
+                        System.out.println("이자 : " + product3.calculateTotalInterest(amount, currentMonths));
+                        System.out.println("합게 : " + product3.calculateTotalAmount(amount, currentMonths));
+                        flag = false;
+                        break;
                 }
             }
         }catch (Exception e){
