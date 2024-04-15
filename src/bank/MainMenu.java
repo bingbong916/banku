@@ -3,6 +3,7 @@ package bank;
 import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
+import transaction.TransferService;
 import saving.SavingServiceManager;
 import transaction.DepositService;
 import transaction.WithdrawalService;
@@ -16,6 +17,7 @@ public class MainMenu {
     private final WithdrawalService withdrawalService;
     private final SavingServiceManager savingServiceManager;
     private final String loggedInUserId;
+    private final TransferService transferService;
 
 
     public MainMenu(String userId) {
@@ -23,6 +25,7 @@ public class MainMenu {
         UserDao userDao = new UserDao(new DatabaseManager());
         AccountDao accountDao = new AccountDao(new DatabaseManager());
         this.accountService = new AccountService(userDao);
+        this.transferService = new TransferService(new AccountDao(new DatabaseManager()), userDao);
         this.depositService = new DepositService(userDao, accountDao);
         this.withdrawalService = new WithdrawalService(userDao, accountDao);
         this.savingServiceManager = new SavingServiceManager(userDao, accountDao);
@@ -59,7 +62,7 @@ public class MainMenu {
                     depositService.showDeposit(loggedInUserId);
                     break;
                 case 4:
-                    // 송금 로직
+                	transferService.transfer(loggedInUserId);
                     break;
                 case 5:
                     // 출금 로직
