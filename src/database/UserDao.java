@@ -47,6 +47,20 @@ public class UserDao {
         return false;
     }
 
+    public String getAccountNumber(String userId) throws IOException {
+        List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            if (line.startsWith(userId + "\t")) {
+                String[] parts = line.split("\t");
+                if (parts.length > 4) {
+                    return parts[4];
+                }
+                break;
+            }
+        }
+        return userId;
+    }
+
     public String findUserToAccount(String userId) throws IOException {
         List<String> lines = dbManager.readUserFile();
         for (String line : lines) {
@@ -56,5 +70,17 @@ public class UserDao {
             }
         }
         return userId;
+    }
+
+    public String findUserToRRN(String userId) throws IOException {
+        List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            String[] textId = line.split("\t");
+            if (textId[0].equals(userId)) {
+                return textId[3];
+            }
+        }
+        return userId;
+
     }
 }
