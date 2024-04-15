@@ -43,12 +43,30 @@ public class DepositService {
             System.out.println("입금할 금액을 입력하세요");
             System.out.print("입금할 금액: ");
 
+            String money = "";
+
+            while (true) {
+                // 입금 금액 입력 받기
+                System.out.print("입금할 금액: ");
+                money = scanner.nextLine();
+
+                if (money.equals("q")) {
+                    return;
+                }
+
+                if (!money.matches("\\d+")) {
+                    System.out.println("올바른 양식이 아닙니다.");
+                } else {
+                    break;
+                }
+            }
+
             // 입금 금액 입력 받기
-            int money = scanner.nextInt();
+            int amount = Integer.parseInt(money);
 
             // id 해당 계좌
             String account = userDao.findUserToAccount(loggedInUserId);
-            accountDao.depositSavings(account, money);
+            accountDao.depositSavings(account, amount);
 
             System.out.println();
             System.out.println("입금이 완료되었습니다!");

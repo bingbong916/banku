@@ -46,8 +46,14 @@ public class AccountDao {
 
     public void withdrawalSavings (String accountNumber, int money) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        int savings = Integer.parseInt(lines.get(0)) - money;
-        lines.set(0, Integer.toString(savings)); // 잔액 index = 0
+        int oldSavings = Integer.parseInt(lines.get(0));
+        if(Integer.parseInt(lines.get(0)) - money < 0){
+            System.out.println("잔액이 부족합니다. 현재 남은 계좌는" + oldSavings + "입니다.");
+            return;
+        }
+        int newSavings = oldSavings - money;
+
+        lines.set(0, Integer.toString(newSavings)); // 잔액 index = 0
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
