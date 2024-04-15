@@ -70,6 +70,12 @@ public class AccountDao {
         return true;
     }
 
+    public void removeSavings (String accountNumber, int productNum) throws IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        lines.set(productNum, "");
+        dbManager.writeAccountFile(accountNumber,lines);
+    }
+
     //추가
         public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
             List<String> lines = dbManager.readAccountFile(accountNumber);
