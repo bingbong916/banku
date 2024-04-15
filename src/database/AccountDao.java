@@ -22,6 +22,7 @@ public class AccountDao {
         lines.set(productIndex + 1, productLine); // 예금 금액은 인덱스 0, 적금 상품은 인덱스 1부터 시작
         dbManager.writeAccountFile(accountNumber, lines);
     }
+    
     public int getBalance(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         // Assuming the balance is stored as the first line in the account file
@@ -34,5 +35,32 @@ public class AccountDao {
         // Update balance in the first line
         lines.set(0, String.valueOf(newBalance));
         dbManager.writeAccountFile(accountNumber, lines);
+    }
+
+    public void depositSavings(String accountNumber, int money) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        int savings = money + Integer.parseInt(lines.get(0));
+        lines.set(0, Integer.toString(savings)); // 잔액 index = 0
+        dbManager.writeAccountFile(accountNumber, lines);
+    }
+
+    public void withdrawalSavings (String accountNumber, int money) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        int savings = Integer.parseInt(lines.get(0)) - money;
+        lines.set(0, Integer.toString(savings)); // 잔액 index = 0
+        dbManager.writeAccountFile(accountNumber, lines);
+    }
+
+    public String showSavings (String accountNumber) throws IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        return lines.get(0);
+    }
+
+    public boolean hasSavings (String accountNumber, int index) throws IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        if (lines.get(index).isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
