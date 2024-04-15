@@ -13,17 +13,17 @@ public class CloseSavingService {
     private final AccountDao accountDao;
     private final DecimalFormat decimalFormat;
     // 추가
-    private SavingProduct product1;
     private SavingProduct product2;
     private SavingProduct product3;
+    private SavingProduct product4;
 
-    public CloseSavingService(UserDao userDao, AccountDao accountDao, SavingProduct product1, SavingProduct product2, SavingProduct product3) {
+    public CloseSavingService(UserDao userDao, AccountDao accountDao, SavingProduct product2, SavingProduct product3, SavingProduct product4) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
-        this.product1 = product1;
         this.product2 = product2;
         this.product3 = product3;
+        this.product4 = product4;
         this.decimalFormat = new DecimalFormat("#,###");
         initializeServices();
     }
@@ -104,49 +104,40 @@ public class CloseSavingService {
 
                 System.out.println("[0] 뒤로가기");
                 System.out.println("============================================");
-                System.out.print("해지하실 예ㆍ적금 번호를 입력하세요 :");
+                System.out.print("해지하실 예ㆍ적금 번호를 입력하세요 : ");
                 //추가
                 int inputNum = scanner.nextInt();
                 scanner.nextLine();
                 String accountNumber = userDao.findUserToAccount(loggedInUserId);
-                String amountstr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
-                int amount = Integer.parseInt(amountstr);
+                String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
+                int amount = Integer.parseInt(amountStr);
 
                 switch (inputNum){
                     case 1:
                         if (!result1){
                             System.out.println("올바르지 않은 메뉴입니다.");
+                            continue;
                         }
-                        flag = false;
                         break;
                     case 2:
                         if (!result2){
                             System.out.println("올바르지 않은 메뉴입니다.");
+                            continue;
                         }
-                        product1.adjustInterestRateBasedOnAmount(amount);
-                        int currentMonths = product1.getCurrentMonths();
+                        product2.adjustInterestRateBasedOnAmount(amount);
+                        int currentMonths = product2.getCurrentMonths();
                         System.out.println(currentMonths);
-                        System.out.println("1번 상품 해지 결과");
+                        System.out.println("2번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product1.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product1.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("이자 : " + decimalFormat.format(product2.calculateTotalInterest(amount, currentMonths)));
+                        System.out.println("합게 : " + decimalFormat.format(product2.calculateTotalAmount(amount, currentMonths)));
+                        accountDao.removeSavings(accountNumber,2);
                         flag = false;
                         break;
                     case 3:
                         if (!result3){
                             System.out.println("올바르지 않은 메뉴입니다.");
-                        }
-                        product2.adjustInterestRateBasedOnAmount(amount);
-                        currentMonths = product2.getCurrentMonths();
-                        System.out.println("2번 상품 해지 결과");
-                        System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product2.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product2.calculateTotalAmount(amount, currentMonths)));
-                        flag = false;
-                        break;
-                    case 4:
-                        if (!result4){
-                            System.out.println("올바르지 않은 메뉴입니다.");
+                            continue;
                         }
                         product3.adjustInterestRateBasedOnAmount(amount);
                         currentMonths = product3.getCurrentMonths();
@@ -154,9 +145,33 @@ public class CloseSavingService {
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product3.calculateTotalInterest(amount, currentMonths)));
                         System.out.println("합게 : " + decimalFormat.format(product3.calculateTotalAmount(amount, currentMonths)));
+                        accountDao.removeSavings(accountNumber,3);
                         flag = false;
                         break;
+                    case 4:
+                        if (!result4){
+                            System.out.println("올바르지 않은 메뉴입니다.");
+                            continue;
+                        }
+                        product4.adjustInterestRateBasedOnAmount(amount);
+                        currentMonths = product4.getCurrentMonths();
+                        System.out.println("4번 상품 해지 결과");
+                        System.out.println("원금 : " + decimalFormat.format(amount));
+                        System.out.println("이자 : " + decimalFormat.format(product4.calculateTotalInterest(amount, currentMonths)));
+                        System.out.println("합게 : " + decimalFormat.format(product4.calculateTotalAmount(amount, currentMonths)));
+                        accountDao.removeSavings(accountNumber,4);
+                        flag = false;
+                        break;
+                    default:
+                        String num = Integer.toString(inputNum);
+                        if(!num.matches("[0-9]")){
+                            System.out.println("상품의 숫자를 입력해주세요.");
+                        }
+                        else{
+                            System.out.println("올바르지 않은 메뉴입니다.");
+                        }
                 }
+                System.out.println();
             }
         }catch (Exception e){
             e.getMessage();
