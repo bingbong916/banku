@@ -50,21 +50,25 @@ public class TermDepositService {
                 System.out.print("적금하실 상품 번호의 숫자만 입력하세요 (0~3): ");
                 int termDepositNum = scan.nextInt();
 
+                //추가
                 switch (termDepositNum){
                     case 1:
                         accountDao.updateSavings(account, 1, amount, startDate);
                         System.out.println("적금 가입이 완료되었습니다!");
                         flag = false;
+                        SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
                         break;
                     case 2:
                         accountDao.updateSavings(account, 2, amount, startDate);
                         System.out.println("적금 가입이 완료되었습니다!");
                         flag = false;
+                        SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
                         break;
                     case 3:
                         accountDao.updateSavings(account, 3, amount, startDate);
                         System.out.println("적금 가입이 완료되었습니다!");
                         flag = false;
+                        SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
                         break;
                     default:
                         System.out.println("숫자만 입력하세요.");
