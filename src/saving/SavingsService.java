@@ -4,6 +4,7 @@ import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -12,11 +13,13 @@ public class SavingsService {
     private final Scanner scanner;
     private final UserDao userDao;
     private final AccountDao accountDao;
+    private final DecimalFormat decimalFormat;
 
     public SavingsService(UserDao userDao, AccountDao accountDao){
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
+        this.decimalFormat = new DecimalFormat("#,###");
         initializeServices();
     }
 
@@ -39,14 +42,21 @@ public class SavingsService {
 
             while (true) {
                 System.out.print("예금할 금액을 입력하세요 (₩1,000 ~ ₩1,000,000,000): ₩ ");
-                int inputMoney = scan.nextInt();
+                String inputMoney = scan.nextLine();
 
-                if (inputMoney < 1000 || inputMoney > 1000000000) {
-                    System.out.println("범위 내 금액을 입력하세요.");
-                    return;
+                if(!inputMoney.matches("\\D")){
+                    System.out.println("숫자가 아닙니다.");
+                    continue;
                 }
 
-                String amount = Integer.toString(inputMoney);
+                int money = Integer.parseInt(inputMoney);
+
+                if (money < 1000 || money > 1000000000) {
+                    System.out.println("범위 내 금액을 입력하세요.");
+                    continue;
+                }
+
+                String amount = decimalFormat.format(money);
                 String account = userDao.findUserToAccount(loggedInUserId);
                 String startDate = dateFormat.format(date);
                 accountDao.updateSavings(account, 0, amount, startDate);
