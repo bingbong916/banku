@@ -71,6 +71,8 @@ public class TransferService {
                 accountDao.updateBalance(receiverAccountNumber, receiverBalance);
                 System.out.println();
                 System.out.println("송금이 완료되었습니다.");
+                System.out.println("현재 잔액: ₩ " + senderBalance);
+                
                 break;
             }
         } catch (IOException e) {
@@ -83,7 +85,7 @@ public class TransferService {
     }
 
     private boolean isValidAmount(String amountStr) {
-        return amountStr.matches("\\d{1,3}(,\\d{3})*(\\.\\d+)?");
+        return amountStr.matches("\\d+");
     }
 
 }
