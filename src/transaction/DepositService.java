@@ -41,13 +41,12 @@ public class DepositService {
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("============================================");
             System.out.println("입금할 금액을 입력하세요");
-            System.out.print("입금할 금액: ");
 
             String money = "";
 
             while (true) {
                 // 입금 금액 입력 받기
-                System.out.print("입금할 금액: ");
+                System.out.print("입금할 금액: ₩ ");
                 money = scanner.nextLine();
 
                 if (money.equals("q")) {
