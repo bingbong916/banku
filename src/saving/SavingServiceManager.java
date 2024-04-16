@@ -59,9 +59,6 @@ public class SavingServiceManager {
                     break;
                 case 3:
                     closeSavingService.doCloseService(loggedInUserId);
-                    // if (closeSavingService.shouldGoBackToPreviousMenu()) {
-                    //     return;
-                    // } //추가
                     break;
                 case 0:
                     break;
