@@ -12,11 +12,13 @@ public class TermDepositService {
     private final Scanner scanner;
     private final UserDao userDao;
     private final AccountDao accountDao;
+    private final SavingServiceManager savingServiceManager;
 
-    public TermDepositService(UserDao userDao, AccountDao accountDao){
+    public TermDepositService(UserDao userDao, AccountDao accountDao, SavingServiceManager savingServiceManager){
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
+        this.savingServiceManager = savingServiceManager;
         initializeServices();
     }
 
@@ -65,6 +67,9 @@ public class TermDepositService {
                         accountDao.updateSavings(account, 3, amount, startDate);
                         System.out.println("적금 가입이 완료되었습니다!");
                         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
+                        break;
+                    case 0:
+                        savingServiceManager.printSavingMenu(loggedInUserId);
                         break;
                     default:
                         System.out.println("숫자만 입력하세요.");       //상품 번호의 숫자만 입력하세요 라고 수정?
