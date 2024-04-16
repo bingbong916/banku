@@ -3,6 +3,7 @@ package database;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 public class AccountDao {
     private final DatabaseManager dbManager;
@@ -28,6 +29,32 @@ public class AccountDao {
         // Assuming the balance is stored as the first line in the account file
         String balanceStr = lines.get(0);
         return Integer.parseInt(balanceStr);
+    }
+
+    public String getStartDate(String accountNumber, int index) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        List<String> subList = lines.subList(1, lines.size());
+        for (index=0;index<4;index++) {
+            String str = subList.get(index);
+            if (!str.isEmpty()) {
+                String[] parts = str.split("\t");
+
+                return parts[1];
+            }
+        }
+        return accountNumber;
+    }
+
+    public String getCarryBack(String accountNumber) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+
+        String carryBackStr = lines.get(1);
+        if(!carryBackStr.isEmpty()) {
+            String[] parts = carryBackStr.split("\t");
+
+            return parts[0];
+        }
+        return accountNumber;
     }
 
     public void updateBalance(String accountNumber, int newBalance) throws IOException {
