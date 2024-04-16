@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +49,6 @@ public class AccountDao {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         int oldSavings = Integer.parseInt(lines.get(0));
         if(Integer.parseInt(lines.get(0)) - money < 0){
-            System.out.println("잔액이 부족합니다. 현재 남은 계좌는 " + oldSavings + " 입니다.");
             return 0;
         }
         int newSavings = oldSavings - money;
@@ -60,7 +60,8 @@ public class AccountDao {
 
     public String showSavings (String accountNumber) throws IOException{
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        return lines.get(0);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        return decimalFormat.format(Integer.parseInt(lines.get(0)));
     }
 
     public boolean hasSavings (String accountNumber, int index) throws IOException{
