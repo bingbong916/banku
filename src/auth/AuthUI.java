@@ -65,19 +65,107 @@ public class AuthUI {
         System.out.println("============================================");
         System.out.println("회원가입을 시작합니다.");
 
-        System.out.print("아이디를 입력하세요: ");
-        String userId = scanner.nextLine();
+        // 아이디
+        while (true) {
+            System.out.print("아이디를 입력하세요: ");
+            String userId = scanner.nextLine();
 
-        System.out.print("비밀번호를 입력하세요: ");
-        String password = scanner.nextLine();
+            if (userId == null || userId.isEmpty()) {
+                System.out.println("아이디를 입력해주세요");
+                continue;
+            }
 
-        System.out.print("이름을 입력하세요: ");
-        String name = scanner.nextLine();
+            else if (userId.length() < 6 || userId.length() > 10) {
+                System.out.println("6자 이상 10자 이하로 입력해주세요.");
+                continue;
+            }
 
-        System.out.print("주민등록번호를 입력하세요 (예: 991106-1234567): ");
-        String rrn = scanner.nextLine(); // resident registration number
+            else if (!userId.matches("[a-z0-9]+")) {
+                System.out.println("소문자 영어와 숫자의 조합으로 이루어져야 합니다.");
+                continue;
+            }
+            
+            else {
+            	break;
+            }
+        }
+        
+     // Password input
+        while (true) {
+            System.out.print("비밀번호를 입력하세요: ");
+            String password = scanner.nextLine();
 
-        registrationService.registerUser(userId, password, name, rrn);
+            if (password == null || password.isEmpty()) {
+                System.out.println("비밀번호를 입력해주세요.");
+                continue;
+            }
+
+            else if (!password.matches("\\d+")) {
+                System.out.println("비밀번호는 숫자만 포함해야 합니다.");
+                continue;
+            }
+
+            else if (password.length() != 6) {
+                System.out.println("비밀번호는 6자리 숫자로 이루어져야 합니다.");
+                continue;
+            }
+
+            break;
+        }
+
+        // 이름
+        while (true) {
+            System.out.print("이름을 입력하세요: ");
+            String name = scanner.nextLine();
+
+            if (name == null || name.isEmpty()) {
+                System.out.println("이름을 입력해주세요.");
+                continue;
+            }
+
+            else if (name.length() < 2 || name.length() > 5) {
+                System.out.println("2자 이상 5자 이하로 입력해주세요.");
+                continue;
+            }
+
+            else if (!name.matches("[가-힣]+")) {
+                System.out.println("이름은 한글로만 구성되어야 합니다.");
+                continue;
+            }
+
+            else if (!name.matches("^[ㄱ-ㅎㅏ-ㅣ가-힣]*$")) {
+                System.out.println("이름은 자음과 모음의 조합으로 이루어져야합니다.");
+                continue;
+            }
+
+            break;
+        }
+
+        // 주민등록번호
+        while (true) {
+            System.out.print("주민등록번호를 입력하세요: ");
+            String rrn = scanner.nextLine();
+
+            if (rrn == null || rrn.isEmpty()) {
+                System.out.println("주민등록번호를 입력해주세요.");
+                continue;
+            }
+
+            else if (!rrn.matches("\\d+")) {
+                System.out.println("주민등록번호는 숫자만 포함해야 합니다.");
+                continue;
+            }
+
+            else if (rrn.length() != 13) {
+                System.out.println("주민등록번호는 13자리 숫자로 이루어져야 합니다.");
+                continue;
+            }
+
+            break;
+        }
+        
+        System.out.println("회원가입이 완료되었습니다!");
+        
     }
 
     private String loginUser() {
@@ -86,11 +174,52 @@ public class AuthUI {
         System.out.println("============================================");
         System.out.println("로그인을 시작합니다.");
 
-        System.out.print("아이디를 입력하세요: ");
-        String userId = scanner.nextLine();
+        // 아이디
+        while (true) {
+            System.out.print("아이디를 입력하세요: ");
+            String userId = scanner.nextLine();
 
-        System.out.print("비밀번호를 입력하세요: ");
-        String password = scanner.nextLine();
+            if (userId == null || userId.isEmpty()) {
+                System.out.println("아이디를 입력해주세요");
+                continue;
+            }
+
+            else if (userId.length() < 6 || userId.length() > 10) {
+                System.out.println("6자 이상 10자 이하로 입력해주세요.");
+                continue;
+            }
+
+            else if (!userId.matches("[a-z0-9]+")) {
+                System.out.println("소문자 영어와 숫자의 조합으로 이루어져야 합니다.");
+                continue;
+            }
+
+            break;
+        }
+
+        // 비밀번호
+        while (true) {
+            System.out.print("비밀번호를 입력하세요: ");
+            String password = scanner.nextLine();
+
+            if (password == null || password.isEmpty()) {
+                System.out.println("비밀번호를 입력해주세요.");
+                continue;
+            }
+
+            else if (!password.matches("\\d+")) {
+                System.out.println("비밀번호는 숫자만 포함해야 합니다.");
+                continue;
+            }
+
+            else if (password.length() != 6) {
+                System.out.println("비밀번호는 6자리 숫자로 이루어져야 합니다.");
+                continue;
+            }
+
+            break;
+        }
+
         String loggedInUserId = loginService.login(userId, password);
 
         if (loggedInUserId != null) {
