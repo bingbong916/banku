@@ -92,8 +92,6 @@ public class UserDao {
             }
         }
         return userId;
-<<<<<<< HEAD
-=======
     }
 
     //추가
@@ -106,6 +104,5 @@ public class UserDao {
             }
         }
         return null;
->>>>>>> upstream/main
     }
 }
