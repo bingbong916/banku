@@ -3,6 +3,10 @@ import bank.MainMenu;
 
 import database.DatabaseManager;
 import database.UserDao;
+
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
 import java.util.Scanner;
 
 import java.io.IOException;
@@ -31,7 +35,7 @@ public class AuthUI {
     public void showMenu() {
         String loggedInUserId = null;
         while (true) {
-            System.out.println("[회원가입·로그인 서비스]");
+            System.out.println("\n\n[회원가입·로그인 서비스]");
             System.out.println("============================================");
             System.out.println("회원가입 또는 로그인을 해주세요");
             System.out.println("============================================");
@@ -70,7 +74,7 @@ public class AuthUI {
           String name = "";
           String rrn = "";
           
-        System.out.println("============================================");
+        System.out.println("\n\n============================================");
         System.out.println("[회원가입 서비스]");
         System.out.println("============================================");
         System.out.println("회원가입을 시작합니다.");
@@ -100,9 +104,9 @@ public class AuthUI {
 						System.out.println("아이디가 이미 존재합니다.");
 						continue;
 					}
-					
+
 					else {
-      
+
 						break;
 					}
 				} catch (IOException e) {
@@ -181,10 +185,18 @@ public class AuthUI {
 					}
 
 					else {
-						// 생년월일
-					    String birthDate = rrn.substring(0, 6);
-					    try {
-					        LocalDate.parse(birthDate , DateTimeFormatter.ofPattern("yyMMdd"));
+                        int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+                        String birthDate = rrn.substring(0, 6);
+
+                        try {
+                            int month = Integer.parseInt(birthDate.substring(2, 4));
+                            int day = Integer.parseInt(birthDate.substring(4, 6));
+
+                            if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month]) {
+                                throw new DateTimeParseException("입력된 월이나 일이 유효 범위를 초과함", birthDate, 0);
+                            }
+
 					    } catch (DateTimeParseException e) {
 					        System.out.println("유효하지 않은 생년월일입니다.");
 					        continue;
@@ -233,7 +245,7 @@ public class AuthUI {
     }
 
     private String loginUser() {
-        System.out.println("============================================");
+        System.out.println("\n\n============================================");
         System.out.println("[로그인 서비스]");
         System.out.println("============================================");
         System.out.println("로그인을 시작합니다.");

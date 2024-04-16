@@ -37,7 +37,7 @@ public class SavingServiceManager {
     public void printSavingMenu(String loggedInUserId){
 
         System.out.println();
-        System.out.println("[예ㆍ적금 서비스]");
+        System.out.println("\n\n[예ㆍ적금 서비스]");
         System.out.println("============================================");
         System.out.println("정기예금 또는 적금 상품에 가입합니다.");
         System.out.println("============================================");

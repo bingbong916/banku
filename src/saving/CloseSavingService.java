@@ -39,7 +39,7 @@ public class CloseSavingService {
     public void doCloseService(String loggedInUserId){
         try {
             System.out.println();
-            System.out.println("[예ㆍ적금 해지 서비스]");
+            System.out.println("\n\n[예ㆍ적금 해지 서비스]");
             System.out.println("============================================");
             System.out.println("'q'를 입력할 시 이전 화면으로 돌아갑니다.");
             System.out.println("예ㆍ적금 해지 서비스를 시작합니다. 개인정보를 입력해주세요");
@@ -100,7 +100,7 @@ public class CloseSavingService {
                 }
 
                 System.out.println();
-                System.out.println("[예ㆍ적금 해지 서비스]");
+                System.out.println("\n\n[예ㆍ적금 해지 서비스]");
                 System.out.println("============================================");
                 System.out.println("예ㆍ적금 조회 결과:");
 

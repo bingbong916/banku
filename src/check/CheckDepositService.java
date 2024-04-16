@@ -45,7 +45,7 @@ public class CheckDepositService {
             String storedRRN = userDao.findUserToRRN(loggedInUserId);
             String storedName = userDao.findUserToName(loggedInUserId);    
             
-            System.out.println("[예·적금 조회 서비스]");
+            System.out.println("\n\n[예·적금 조회 서비스]");
             System.out.println("============================================");
             System.out.println("('q를 입력할 시 이전 화면으로 돌아갑니다.')");
             System.out.print("이름을 입력하세요: ");
@@ -61,7 +61,7 @@ public class CheckDepositService {
 
             if (userRRN.equals(storedRRN)) {
                 // 주민등록번호 일치
-                System.out.println("[예·적금 조회 서비스]");
+                System.out.println("\n\n[예·적금 조회 서비스]");
                 System.out.println("============================================");
                 System.out.println("예·적금 조회 결과:");
 
@@ -114,12 +114,11 @@ public class CheckDepositService {
                     System.out.println("만기일: " + addMonths(startDate4, 24));
                     System.out.println("예상 환급액: ₩ 25,830,000");
                 }
-                else {
+                if (!result1 & !result2 & !result3 & !result4) {
                     System.out.println("가입된 예·적금이 없습니다.");
                 }
 
                 System.out.println("============================================");
-                System.out.println(" ");  
             }
             else {
                 System.out.println("정보가 일치하지 않습니다.");

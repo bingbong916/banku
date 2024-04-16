@@ -36,7 +36,7 @@ public class WithdrawalService {
             }
 
             // 입금 서비스 시작
-            System.out.println("[출금 서비스]");
+            System.out.println("\n\n[출금 서비스]");
             System.out.println("============================================");
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("============================================");
@@ -70,12 +70,10 @@ public class WithdrawalService {
                     System.out.println();
                     System.out.println("출금이 완료되었습니다!");
                     System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
-                    System.out.println();
                     break;
                 } else {
                     System.out.println();
                     System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 " + accountDao.showSavings(account) + " 입니다. 출금할 금액을 다시 입력해주세요.");
-                    System.out.println();
                 }
             }
 

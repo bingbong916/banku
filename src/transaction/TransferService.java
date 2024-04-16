@@ -25,7 +25,7 @@ public class TransferService {
                 return;
             }
 
-            System.out.println("[송금 서비스]");
+            System.out.println("\n\n[송금 서비스]");
             System.out.println("============================================");
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("송금할 계좌번호와 금액을 입력하세요");

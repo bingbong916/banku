@@ -36,7 +36,7 @@ public class MainMenu {
 
     public void show() {
         while (true) {
-            System.out.println("============================================");
+            System.out.println("\n\n============================================");
             System.out.println("      건국 은행에 오신 것을 환영합니다.");
             System.out.println("============================================");
             System.out.println("[1] 계좌 개설");

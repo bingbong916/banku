@@ -34,7 +34,7 @@ public class CheckAccountService {
             String storedName = userDao.findUserToName(loggedInUserId);
             String storedRRN = userDao.findUserToRRN(loggedInUserId);
 
-            System.out.println("[계좌 조회 서비스]");
+            System.out.println("\n\n[계좌 조회 서비스]");
             System.out.println("============================================");
             System.out.println("('q를 입력할 시 이전 화면으로 돌아갑니다.')");
             System.out.print("이름을 입력하세요: ");
@@ -51,14 +51,10 @@ public class CheckAccountService {
                 // 주민등록번호 일치
                 String storedAccount = userDao.findUserToAccount(loggedInUserId);
                 int balance = accountDao.getBalance(storedAccount);
-                
-                System.out.println("[계좌 조회 서비스]");
-                System.out.println("============================================");
-                System.out.println("계좌 조회 서비스:");
+
+                System.out.println("계좌 조회 결과:");
                 System.out.println("계좌 번호: " + storedAccount);
                 System.out.println("현재 잔액: ₩ " + balance);
-                System.out.println("============================================");
-                System.out.println(" ");
 
             } else {
                 System.out.println("정보가 일치하지 않습니다.");

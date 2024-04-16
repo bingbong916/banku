@@ -36,7 +36,7 @@ public class DepositService {
             }
 
             // 입금 서비스 시작
-            System.out.println("[입금 서비스]");
+            System.out.println("\n\n[입금 서비스]");
             System.out.println("============================================");
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("============================================");
@@ -70,8 +70,6 @@ public class DepositService {
             System.out.println();
             System.out.println("입금이 완료되었습니다!");
             System.out.println("현재 잔액: " + accountDao.showSavings(account));
-            System.out.println();
-
         } catch (IOException e){
             System.out.println("입금 중 오류가 발생했습니다: " + e.getMessage());
         }
