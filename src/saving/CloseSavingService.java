@@ -70,7 +70,7 @@ public class CloseSavingService {
                 String actualName = userDao.findUserNameById(loggedInUserId);
                 if (!inputName.equals(actualName)) {
                     System.out.println("존재하지 않는 이름입니다.");
-                    return;
+                    continue;
                 }
 
                 System.out.print("주민등록번호를 입력하세요: ");
