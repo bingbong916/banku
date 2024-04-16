@@ -51,7 +51,7 @@ public class SavingsService {
                     return;
                 }
 
-                if(!inputMoney.matches("\\D")){
+                if(!inputMoney.matches("\\d+")){
                     System.out.println("숫자가 아닙니다.");
                     continue;
                 }

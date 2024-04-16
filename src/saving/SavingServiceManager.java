@@ -4,6 +4,7 @@ import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
 
+import java.lang.reflect.Parameter;
 import java.util.Scanner;
 
 public class SavingServiceManager {
@@ -48,7 +49,14 @@ public class SavingServiceManager {
 
         while(true) {
             System.out.print("선택하실 서비스 번호를 입력하세요 (0-3): ");
-            int menuNum = scanner.nextInt();
+            String inputNum = scanner.nextLine();
+
+            if(!inputNum.matches("[0-3]")){
+                System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
+                continue;
+            }
+
+            int menuNum = Integer.parseInt(inputNum);
 
             switch (menuNum){
                 case 1:
@@ -59,9 +67,6 @@ public class SavingServiceManager {
                     break;
                 case 3:
                     closeSavingService.doCloseService(loggedInUserId);
-                    // if (closeSavingService.shouldGoBackToPreviousMenu()) {
-                    //     return;
-                    // } //추가
                     break;
                 case 0:
                     break;

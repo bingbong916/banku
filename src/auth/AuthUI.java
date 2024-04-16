@@ -1,39 +1,35 @@
 package auth;
-
 import bank.MainMenu;
 
 import database.DatabaseManager;
 import database.UserDao;
-
 import java.util.Scanner;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+
 
 public class AuthUI {
     private RegistrationService registrationService;
     private LoginService loginService;
     private UserDao userDao;
     private final Scanner scanner;
-    
 
     public AuthUI() {
         this.scanner = new Scanner(System.in);
         initializeServices();
     }
-
     private void initializeServices() {
         DatabaseManager dbManager = new DatabaseManager();
         userDao = new UserDao(dbManager);
         this.registrationService = new RegistrationService(userDao);
         this.loginService = new LoginService(userDao);
     }
-
-
     public void showMenu() {
         String loggedInUserId = null;
-
         while (true) {
             System.out.println("[회원가입·로그인 서비스]");
             System.out.println("============================================");
@@ -44,7 +40,6 @@ public class AuthUI {
             System.out.println("[0] 종료하기");
             System.out.println("============================================");
             System.out.print("선택하실 메뉴 번호를 입력하세요 (0-2): ");
-
             String selected = scanner.nextLine();
             switch (selected) {
                 case "1":
@@ -68,7 +63,6 @@ public class AuthUI {
             }
         }
     }
-
     private void registerUser() {
     	
     	  String userId = "";
@@ -80,6 +74,7 @@ public class AuthUI {
         System.out.println("[회원가입 서비스]");
         System.out.println("============================================");
         System.out.println("회원가입을 시작합니다.");
+
 
         // 아이디
         while (true) {
@@ -234,6 +229,7 @@ public class AuthUI {
         } catch (Exception e) {
             System.out.println("회원가입 중 오류가 발생했습니다: " + e.getMessage());
         }
+
     }
 
     private String loginUser() {
@@ -291,6 +287,7 @@ public class AuthUI {
 
             break;
         }
+
 
         String loggedInUserId = loginService.login(userId, password);
 

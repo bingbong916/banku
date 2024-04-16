@@ -29,8 +29,6 @@ public class TermDepositService {
 
     public void doSavingService(String loggedInUserId) {
         try {
-
-            Scanner scan = new Scanner(System.in);
             System.out.println();
             System.out.println("[정기예금 서비스]");
             System.out.println("============================================");
@@ -49,22 +47,31 @@ public class TermDepositService {
                 String startDate = dateFormat.format(date);
 
                 System.out.print("적금하실 상품 번호의 숫자만 입력하세요 (0~3): ");
-                int termDepositNum = scan.nextInt();
+                int termDepositNum = scanner.nextInt();
 
                 //추가
                 switch (termDepositNum){
                     case 1:
-                        accountDao.updateSavings(account, 1, amount, startDate);
+                        // 첫 달 납입금을 현재 계좌에서 차감
+                        accountDao.withdrawalSavings(account, 200000);
+                        // 첫 달 납입금을 적금 계좌에 적립
+                        accountDao.updateSavings(account, 1, "200000", startDate);
                         System.out.println("적금 가입이 완료되었습니다!");
                         SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
                         break;
                     case 2:
-                        accountDao.updateSavings(account, 2, amount, startDate);
+                        // 첫 달 납입금을 현재 계좌에서 차감
+                        accountDao.withdrawalSavings(account, 500000);
+                        // 첫 달 납입금을 적금 계좌에 적립
+                        accountDao.updateSavings(account, 2, "500000", startDate);
                         System.out.println("적금 가입이 완료되었습니다!");
                         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
                         break;
                     case 3:
-                        accountDao.updateSavings(account, 3, amount, startDate);
+                        // 첫 달 납입금을 현재 계좌에서 차감
+                        accountDao.withdrawalSavings(account, 1000000);
+                        // 첫 달 납입금을 적금 계좌에 적립
+                        accountDao.updateSavings(account, 3, "1000000", startDate);
                         System.out.println("적금 가입이 완료되었습니다!");
                         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
                         break;

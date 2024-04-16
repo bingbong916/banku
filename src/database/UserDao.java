@@ -61,6 +61,17 @@ public class UserDao {
         return userId;
     }
 
+    public String findUserToName(String userId) throws IOException {
+        List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            String[] textId = line.split("\t");
+            if (textId[0].equals(userId)) {
+                return textId[2];
+            }
+        }
+        return userId;
+    }
+
     public String findUserToAccount(String userId) throws IOException {
         List<String> lines = dbManager.readUserFile();
         for (String line : lines) {
