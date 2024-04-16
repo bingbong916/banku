@@ -18,9 +18,13 @@ public class SavingServiceManager {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
+        //추가
+        SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
+        SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
+        SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
         this.savingsService = new SavingsService(userDao, accountDao);
         this.termDepositService = new TermDepositService(userDao, accountDao);
-        this.closeSavingService = new CloseSavingService(userDao, accountDao);
+        this.closeSavingService = new CloseSavingService(userDao, accountDao, product1, product2, product3, this);
         initializeServices();
     }
 
@@ -55,6 +59,9 @@ public class SavingServiceManager {
                     break;
                 case 3:
                     closeSavingService.doCloseService(loggedInUserId);
+                    // if (closeSavingService.shouldGoBackToPreviousMenu()) {
+                    //     return;
+                    // } //추가
                     break;
                 case 0:
                     break;

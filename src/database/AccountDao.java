@@ -70,4 +70,18 @@ public class AccountDao {
         }
         return true;
     }
+
+    public void removeSavings (String accountNumber, int productNum) throws IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        lines.set(productNum, "");
+        dbManager.writeAccountFile(accountNumber,lines);
+    }
+
+    //추가
+        public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
+            List<String> lines = dbManager.readAccountFile(accountNumber);
+            String productLine = lines.get(productIndex + 1); // 인덱스 1부터 적금 상품 정보 시작
+            String[] productInfo = productLine.split("\t");
+            return productInfo.length > 0 ? productInfo[0] : "0";
+        }
 }
