@@ -67,7 +67,5 @@ public class CheckAccountService {
         catch (Exception e){
             e.getMessage();
         }
-
-        scan.close();
     }
 }
