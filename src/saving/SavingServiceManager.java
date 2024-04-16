@@ -22,8 +22,8 @@ public class SavingServiceManager {
         SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
-        this.savingsService = new SavingsService(userDao, accountDao);
-        this.termDepositService = new TermDepositService(userDao, accountDao);
+        this.savingsService = new SavingsService(userDao, accountDao, this);
+        this.termDepositService = new TermDepositService(userDao, accountDao, this);
         this.closeSavingService = new CloseSavingService(userDao, accountDao, product1, product2, product3, this);
         initializeServices();
     }
@@ -59,9 +59,6 @@ public class SavingServiceManager {
                     break;
                 case 3:
                     closeSavingService.doCloseService(loggedInUserId);
-                    // if (closeSavingService.shouldGoBackToPreviousMenu()) {
-                    //     return;
-                    // } //추가
                     break;
                 case 0:
                     break;

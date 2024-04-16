@@ -21,7 +21,7 @@ public class TransferService {
         try {
             String senderAccountNumber = userDao.getAccountNumber(loggedInUserId);
             if (senderAccountNumber == null) {
-                System.out.println("받는 사람 계좌번호 못 찾았습니다.");
+                System.out.println("계좌번호 못 찾았습니다.");
                 return;
             }
 
@@ -45,32 +45,44 @@ public class TransferService {
                     continue;
                 }
 
-                System.out.print("송금할 금액: ₩ ");
-                String amountStr = scanner.nextLine();
+                while (true) {
+                    System.out.print("송금할 금액: ₩ ");
+                    String amountStr = scanner.nextLine();
 
-                if (!isValidAmount(amountStr)) {
-                    System.out.println("올바른 금액을 입력하세요!");
-                    continue;
-                }
+                    if (amountStr.equals("q")) {
+                        System.out.println("이전 화면으로 돌아갑니다.");
+                        return;
+                    }
 
-                int amount = Integer.parseInt(amountStr.replace(",", "")); // Remove commas if present
+                    if (!isValidAmount(amountStr)) {
+                        System.out.println("올바른 금액을 입력하세요!");
+                        continue;
+                    }
 
-                int senderBalance = accountDao.getBalance(senderAccountNumber);
-                if (senderBalance < amount) {
-                    System.out.println("잔액이 부족합니다!");
+                    int amount = Integer.parseInt(amountStr.replace(",", "")); // Remove commas if present
+
+                    int senderBalance = accountDao.getBalance(senderAccountNumber);
+                    if (senderBalance < amount) {
+                        System.out.println("잔액이 부족합니다!");
+                        System.out.println("현재 잔액: ₩ " + senderBalance);
+                        // 사용자가 올바른 금액을 입력할 때까지 반복
+                        continue;
+                    }
+
+                    int receiverBalance = accountDao.getBalance(receiverAccountNumber);
+
+                    senderBalance -= amount;
+                    receiverBalance += amount;
+
+                    accountDao.updateBalance(senderAccountNumber, senderBalance);
+                    accountDao.updateBalance(receiverAccountNumber, receiverBalance);
+                    System.out.println();
+                    System.out.println("송금이 완료되었습니다.");
                     System.out.println("현재 잔액: ₩ " + senderBalance);
-                    continue;
+                    
+                    break;
                 }
-
-                int receiverBalance = accountDao.getBalance(receiverAccountNumber);
-
-                senderBalance -= amount;
-                receiverBalance += amount;
-
-                accountDao.updateBalance(senderAccountNumber, senderBalance);
-                accountDao.updateBalance(receiverAccountNumber, receiverBalance);
-                System.out.println();
-                System.out.println("송금이 완료되었습니다.");
+                
                 break;
             }
         } catch (IOException e) {
@@ -78,12 +90,13 @@ public class TransferService {
         }
     }
 
+
     private boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{6}-\\d{6}");
     }
 
     private boolean isValidAmount(String amountStr) {
-        return amountStr.matches("\\d{1,3}(,\\d{3})*(\\.\\d+)?");
+        return amountStr.matches("\\d+");
     }
 
 }
