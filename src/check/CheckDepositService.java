@@ -128,8 +128,5 @@ public class CheckDepositService {
         catch (Exception e){
             e.getMessage();
         }
-
-
-        scan.close();
     }
 }
