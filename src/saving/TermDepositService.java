@@ -29,8 +29,6 @@ public class TermDepositService {
 
     public void doSavingService(String loggedInUserId) {
         try {
-
-            Scanner scan = new Scanner(System.in);
             System.out.println();
             System.out.println("[정기예금 서비스]");
             System.out.println("============================================");
@@ -49,7 +47,7 @@ public class TermDepositService {
                 String startDate = dateFormat.format(date);
 
                 System.out.print("적금하실 상품 번호의 숫자만 입력하세요 (0~3): ");
-                int termDepositNum = scan.nextInt();
+                int termDepositNum = scanner.nextInt();
 
                 //추가
                 switch (termDepositNum){

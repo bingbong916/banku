@@ -130,17 +130,12 @@ public class CloseSavingService {
                     System.out.print("해지하실 예ㆍ적금 번호를 입력하세요 : ");
                     //추가
                     String input = scanner.nextLine();
-                    if (!input.matches("[0-9]")) {
+                    if (!input.matches("[0-4]")) {
                         System.out.println("상품의 숫자를 입력해주세요.");
                         continue;
                     }
 
                     int inputNum = Integer.parseInt(input);
-                    if (inputNum < 0 || inputNum > 3){
-                        System.out.println("상품의 숫자를 입력해주세요.");
-                        continue;
-                    }
-
                     String accountNumber = userDao.findUserToAccount(loggedInUserId);
                     String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
                     int amount = Integer.parseInt(amountStr);
@@ -222,14 +217,12 @@ public class CloseSavingService {
                     }
                 }
                 System.out.println();
+                System.out.println();
                 break;
             }
         }catch (Exception e){
             e.getMessage();
         }
     }
-    // public boolean shouldGoBackToPreviousMenu() {
-    //     return backToPreviousMenu;
-    // } //추가
 }
 
