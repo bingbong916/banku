@@ -14,12 +14,14 @@ public class SavingsService {
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final DecimalFormat decimalFormat;
+    private final SavingServiceManager savingServiceManager;
 
-    public SavingsService(UserDao userDao, AccountDao accountDao){
+    public SavingsService(UserDao userDao, AccountDao accountDao, SavingServiceManager savingServiceManager){
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
         this.decimalFormat = new DecimalFormat("#,###");
+        this.savingServiceManager = savingServiceManager;
         initializeServices();
     }
 
@@ -44,7 +46,12 @@ public class SavingsService {
                 System.out.print("예금할 금액을 입력하세요 (₩1,000 ~ ₩1,000,000,000): ₩ ");
                 String inputMoney = scan.nextLine();
 
-                if(!inputMoney.matches("\\D")){
+                if (inputMoney.equals("q")){
+                    savingServiceManager.printSavingMenu(loggedInUserId);
+                    return;
+                }
+
+                if(!inputMoney.matches("\\d+")){
                     System.out.println("숫자가 아닙니다.");
                     continue;
                 }

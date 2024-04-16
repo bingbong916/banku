@@ -66,13 +66,15 @@ public class WithdrawalService {
 
             // id 해당 계좌
             String account = userDao.findUserToAccount(loggedInUserId);
-            accountDao.withdrawalSavings(account, amount);
-            // 출금 잔고 0원 로직 해야함
+            int type = accountDao.withdrawalSavings(account, amount);
 
-            System.out.println();
-            System.out.println("출금이 완료되었습니다!");
-            System.out.println("현재 잔액: " + accountDao.showSavings(account));
-            System.out.println();
+            // 출금 잔고 0원 로직 해야함
+            if(type == 1){
+                System.out.println();
+                System.out.println("출금이 완료되었습니다!");
+                System.out.println("현재 잔액: " + accountDao.showSavings(account));
+                System.out.println();
+            }
 
         } catch (IOException e){
             System.out.println("출금 중 오류가 발생했습니다: " + e.getMessage());
