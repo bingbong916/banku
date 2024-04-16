@@ -92,5 +92,20 @@ public class UserDao {
             }
         }
         return userId;
+<<<<<<< HEAD
+=======
+    }
+
+    //추가
+    public String findUserNameById(String userId) throws IOException {
+        List<String> lines = readUserFile();
+        for (String line : lines) {
+            String[] parts = line.split("\t");
+            if (parts[0].equals(userId)) {
+                return parts[2];
+            }
+        }
+        return null;
+>>>>>>> upstream/main
     }
 }
