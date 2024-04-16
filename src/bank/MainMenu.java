@@ -7,6 +7,7 @@ import transaction.TransferService;
 import saving.SavingServiceManager;
 import transaction.DepositService;
 import transaction.WithdrawalService;
+import check.CheckManager;
 
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ public class MainMenu {
     private final SavingServiceManager savingServiceManager;
     private final String loggedInUserId;
     private final TransferService transferService;
-
+    private final CheckManager checkManager;
 
     public MainMenu(String userId) {
         this.scanner = new Scanner(System.in);
@@ -29,13 +30,14 @@ public class MainMenu {
         this.depositService = new DepositService(userDao, accountDao);
         this.withdrawalService = new WithdrawalService(userDao, accountDao);
         this.savingServiceManager = new SavingServiceManager(userDao, accountDao);
+        this.checkManager = new CheckManager(userDao, accountDao);
         this.loggedInUserId = userId;
     }
 
     public void show() {
         while (true) {
             System.out.println("============================================");
-            System.out.println("          건국 은행에 오신 것을 환영합니다.");
+            System.out.println("      건국 은행에 오신 것을 환영합니다.");
             System.out.println("============================================");
             System.out.println("[1] 계좌 개설");
             System.out.println("[2] 예·적금");
@@ -70,6 +72,7 @@ public class MainMenu {
                     break;
                 case 6:
                     // 계좌 및 예·적금 조회 로직
+                    checkManager.printCheckingMenu(loggedInUserId);
                     break;
                 case 0:
                     return;
