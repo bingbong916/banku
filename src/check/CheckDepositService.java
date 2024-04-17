@@ -96,6 +96,7 @@ public class CheckDepositService {
                 else break;
             }
 
+            //이름&주민번호 일치
             System.out.println("\n\n[예·적금 조회 서비스]");
             System.out.println("============================================");
             System.out.println("예·적금 조회 결과:");

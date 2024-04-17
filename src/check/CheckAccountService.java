@@ -84,6 +84,7 @@ public class CheckAccountService {
                 else break;
             }
 
+            //이름&주민번호 일치
             System.out.println("============================================");
 
             String storedAccount = userDao.findUserToAccount(loggedInUserId);
