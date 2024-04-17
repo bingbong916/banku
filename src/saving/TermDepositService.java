@@ -30,11 +30,7 @@ public class TermDepositService {
     public void doSavingService(String loggedInUserId) {
         try {
             System.out.println();
-<<<<<<< HEAD
             System.out.println("[적금 서비스]"); // 정기예금 -> 적금 텍스트 수정
-=======
-            System.out.println("\n\n[정기예금 서비스]");
->>>>>>> main
             System.out.println("============================================");
             System.out.println("적금 가능한 상품");
             System.out.println("[1] 6개월 적금 - 연 2.0%, 월 ₩ 200,000    예상 수령액 : ₩ 1,200,000");
