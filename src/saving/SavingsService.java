@@ -36,7 +36,7 @@ public class SavingsService {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Scanner scan = new Scanner(System.in);
             System.out.println();
-            System.out.println("[정기예금 서비스]");
+            System.out.println("\n\n[정기예금 서비스]");
             System.out.println("============================================");
             System.out.println("현재 예금 가능한 최대 금액: ₩");
             System.out.println("'q'를 입력할 시 이전 화면으로 돌아갑니다.");

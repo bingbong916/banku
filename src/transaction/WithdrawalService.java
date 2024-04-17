@@ -36,18 +36,17 @@ public class WithdrawalService {
             }
 
             // 입금 서비스 시작
-            System.out.println("[출금 서비스]");
+            System.out.println("\n\n[출금 서비스]");
             System.out.println("============================================");
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("============================================");
             System.out.println("출금할 금액을 입력하세요");
-            System.out.print("출금할 금액: ");
 
             String money = "";
 
             while (true) {
-                // 입금 금액 입력 받기
-                System.out.print("출금할 금액: ");
+                // 출금 금액 입력 받기
+                System.out.print("출금할 금액: ₩ ");
                 money = scanner.nextLine();
 
                 if (money.equals("q")) {
@@ -56,24 +55,26 @@ public class WithdrawalService {
 
                 if (!money.matches("\\d+")) {
                     System.out.println("올바른 양식이 아닙니다.");
-                } else {
-                    break;
+                    continue;
                 }
-            }
 
-            // 출금 금액 입력 받기
-            int amount = Integer.parseInt(money);
+                // 출금 금액 입력 받기
+                int amount = Integer.parseInt(money);
 
-            // id 해당 계좌
-            String account = userDao.findUserToAccount(loggedInUserId);
-            int type = accountDao.withdrawalSavings(account, amount);
+                // id 해당 계좌
+                String account = userDao.findUserToAccount(loggedInUserId);
+                int type = accountDao.withdrawalSavings(account, amount);
 
-            // 출금 잔고 0원 로직 해야함
-            if(type == 1){
-                System.out.println();
-                System.out.println("출금이 완료되었습니다!");
-                System.out.println("현재 잔액: " + accountDao.showSavings(account));
-                System.out.println();
+                // 출금 잔고 0원 로직 해야함
+                if(type == 1){
+                    System.out.println();
+                    System.out.println("출금이 완료되었습니다!");
+                    System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
+                    break;
+                } else {
+                    System.out.println();
+                    System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 " + accountDao.showSavings(account) + " 입니다. 출금할 금액을 다시 입력해주세요.");
+                }
             }
 
         } catch (IOException e){

@@ -41,59 +41,68 @@ public class CloseSavingService {
     public void doCloseService(String loggedInUserId){
         try {
             System.out.println();
-            System.out.println("[예ㆍ적금 해지 서비스]");
+            System.out.println("\n\n[예ㆍ적금 해지 서비스]");
             System.out.println("============================================");
             System.out.println("'q'를 입력할 시 이전 화면으로 돌아갑니다.");
             System.out.println("예ㆍ적금 해지 서비스를 시작합니다. 개인정보를 입력해주세요");
             System.out.println("============================================");
 
             boolean flag = true;
-            while (flag) {
-                System.out.print("이름을 입력하세요 : ");
-                String inputName = scanner.nextLine();
-                inputName = inputName.replaceAll(" ", "");
+            while (true) {
+                String inputName;
+                String actualName;
 
-                if ("q".equals(inputName)) {
-                    savingServiceManager.printSavingMenu(loggedInUserId);
-                    return;
-                } //추가
+                while (true) {
+                    System.out.print("이름을 입력하세요 : ");
+                    inputName = scanner.nextLine();
+                    inputName = inputName.replaceAll(" ", "");
+                    if ("q".equals(inputName)) {
+                        savingServiceManager.printSavingMenu(loggedInUserId);
+                        return;
+                    } //추가
 
-                if(!inputName.matches("^[가-힣]*$")){
-                    System.out.println("이름의 형식이 잘못되었습니다.");     //메세지 뭐라 쓸지
-                    continue;
+                    if (!inputName.matches("^[가-힣]*$")) {
+                        System.out.println("이름의 형식이 잘못되었습니다.");     //메세지 뭐라 쓸지
+                        continue;
+                    }
+
+                    if (inputName.length() < 2 || inputName.length() > 3) {
+                        System.out.println("이름의 길이가 잘못되었습니다.");     //메세지 뭐라 쓸지
+                        continue;
+                    }
+
+                    //추가
+                    actualName = userDao.findUserNameById(loggedInUserId);
+                    if (!inputName.equals(actualName)) {
+                        System.out.println("존재하지 않는 이름입니다.");
+                        continue;
+                    }
+                    break;
                 }
 
-                if(inputName.length() < 2 || inputName.length() > 3){
-                    System.out.println("이름의 길이가 잘못되었습니다.");     //메세지 뭐라 쓸지
-                    continue;
-                }
+                String inputRRN;
 
-                //추가
-                String actualName = userDao.findUserNameById(loggedInUserId);
-                if (!inputName.equals(actualName)) {
-                    System.out.println("존재하지 않는 이름입니다.");
-                    continue;
-                }
+                while (true) {
+                    System.out.print("주민등록번호를 입력하세요: ");
+                    inputRRN = scanner.nextLine();
+                    if ("q".equals(inputRRN)) {
+                        savingServiceManager.printSavingMenu(loggedInUserId);
+                        return;
+                    } //추가
+                    if (!inputRRN.matches("\\d{6}-\\d{7}")) {
+                        System.out.println("주민등록번호 형식에 어긋납니다.");    //메세지 뭐라 쓸지
+                        continue;
+                    }
 
-                System.out.print("주민등록번호를 입력하세요: ");
-                String inputRRN = scanner.nextLine();
-
-                if ("q".equals(inputRRN)) {
-                    savingServiceManager.printSavingMenu(loggedInUserId);
-                    return;
-                } //추가
-                if(!inputRRN.matches("\\d{6}-\\d{7}")){
-                    System.out.println("주민등록번호 형식에 어긋납니다.");    //메세지 뭐라 쓸지
-                    continue;
-                }
-
-                if (!inputRRN.equals(userDao.findUserToRRN(loggedInUserId))) {
-                    System.out.println("존재하지 않는 주민등록번호입니다.");
-                    return;
+                    if (!inputRRN.equals(userDao.findUserToRRN(loggedInUserId))) {
+                        System.out.println("존재하지 않는 주민등록번호입니다.");
+                        return;
+                    }
+                    break;
                 }
 
                 System.out.println();
-                System.out.println("[예ㆍ적금 해지 서비스]");
+                System.out.println("\n\n[예ㆍ적금 해지 서비스]");
                 System.out.println("============================================");
                 System.out.println("예ㆍ적금 조회 결과:");
 
@@ -118,13 +127,20 @@ public class CloseSavingService {
 
                 System.out.println("[0] 뒤로가기");
                 System.out.println("============================================");
-                System.out.print("해지하실 예ㆍ적금 번호를 입력하세요 : ");
-                //추가
-                int inputNum = scanner.nextInt();
-                scanner.nextLine();
-                String accountNumber = userDao.findUserToAccount(loggedInUserId);
-                String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
-                int amount = Integer.parseInt(amountStr);
+
+                while (flag) {
+                    System.out.print("해지하실 예ㆍ적금 번호를 입력하세요 : ");
+                    //추가
+                    String input = scanner.nextLine();
+                    if (!input.matches("[0-4]")) {
+                        System.out.println("상품의 숫자를 입력해주세요.");
+                        continue;
+                    }
+
+                    int inputNum = Integer.parseInt(input);
+                    String accountNumber = userDao.findUserToAccount(loggedInUserId);
+                    String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
+                    int amount = Integer.parseInt(amountStr);
 
                 switch (inputNum){
                     case 1: //예금
@@ -222,13 +238,12 @@ public class CloseSavingService {
                         }
                 }
                 System.out.println();
+                System.out.println();
+                break;
             }
         }catch (Exception e){
             e.getMessage();
         }
     }
-    // public boolean shouldGoBackToPreviousMenu() {
-    //     return backToPreviousMenu;
-    // } //추가
 }
 
