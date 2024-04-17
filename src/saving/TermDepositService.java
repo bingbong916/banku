@@ -30,7 +30,7 @@ public class TermDepositService {
     public void doSavingService(String loggedInUserId) {
         try {
             System.out.println();
-            System.out.println("\n\n[정기예금 서비스]");
+            System.out.println("[적금 서비스]"); // 정기예금 -> 적금 텍스트 수정
             System.out.println("============================================");
             System.out.println("적금 가능한 상품");
             System.out.println("[1] 6개월 적금 - 연 2.0%, 월 ₩ 200,000    예상 수령액 : ₩ 1,200,000");
@@ -52,6 +52,11 @@ public class TermDepositService {
                 //추가
                 switch (termDepositNum){
                     case 1:
+                        if(accountDao.hasSavings(account, 2)) {
+                            System.out.println("이미 가입한 적금입니다.");
+                            savingServiceManager.printSavingMenu(loggedInUserId);
+                            break; // 이미 가입한 적금인지 확인
+                        }
                         // 첫 달 납입금을 현재 계좌에서 차감
                         accountDao.withdrawalSavings(account, 200000);
                         // 첫 달 납입금을 적금 계좌에 적립
@@ -60,6 +65,11 @@ public class TermDepositService {
                         SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
                         break;
                     case 2:
+                        if(accountDao.hasSavings(account, 3)) {
+                            System.out.println("이미 가입한 적금입니다.");
+                            savingServiceManager.printSavingMenu(loggedInUserId);
+                            break; // 이미 가입한 적금인지 확인
+                        }   
                         // 첫 달 납입금을 현재 계좌에서 차감
                         accountDao.withdrawalSavings(account, 500000);
                         // 첫 달 납입금을 적금 계좌에 적립
@@ -68,6 +78,11 @@ public class TermDepositService {
                         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
                         break;
                     case 3:
+                        if(accountDao.hasSavings(account, 4)) {
+                            System.out.println("이미 가입한 적금입니다.");
+                            savingServiceManager.printSavingMenu(loggedInUserId);
+                            break; // 이미 가입한 적금인지 확인
+                        }
                         // 첫 달 납입금을 현재 계좌에서 차감
                         accountDao.withdrawalSavings(account, 1000000);
                         // 첫 달 납입금을 적금 계좌에 적립
