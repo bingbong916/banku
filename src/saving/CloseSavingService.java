@@ -13,16 +13,18 @@ public class CloseSavingService {
     private final AccountDao accountDao;
     private final DecimalFormat decimalFormat;
     // 추가
+    private SavingProduct product1;
     private SavingProduct product2;
     private SavingProduct product3;
     private SavingProduct product4;
     //private boolean backToPreviousMenu = false; //추가
     private SavingServiceManager savingServiceManager;
 
-    public CloseSavingService(UserDao userDao, AccountDao accountDao, SavingProduct product2, SavingProduct product3, SavingProduct product4, SavingServiceManager savingServiceManager) {
+    public CloseSavingService(UserDao userDao, AccountDao accountDao,SavingProduct product1, SavingProduct product2, SavingProduct product3, SavingProduct product4, SavingServiceManager savingServiceManager) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
+        this.product1 = product1;
         this.product2 = product2;
         this.product3 = product3;
         this.product4 = product4;
@@ -125,11 +127,27 @@ public class CloseSavingService {
                 int amount = Integer.parseInt(amountStr);
 
                 switch (inputNum){
-                    case 1:
+                    case 1: //예금
                         if (!result1){
                             System.out.println("올바르지 않은 메뉴입니다.");
                             continue;
                         }
+                        product1.adjustInterestRateBasedOnAmount(amount);
+                        int currentMonths = product1.getCurrentMonths();
+                        int totalReturnAmount = product1.calculateTotalAmount(amount, currentMonths);
+                        // 현재 계좌 잔액 조회
+                        int currentBalance = accountDao.getBalance(accountNumber);
+                        // 적금 해지 금액을 현재 계좌에 합치기
+                        int newBalance = currentBalance + totalReturnAmount;
+                        // 계좌 잔액 업데이트
+                        accountDao.updateBalance(accountNumber, newBalance);
+                        System.out.println(currentMonths);
+                        System.out.println("1번 상품 해지 결과");
+                        System.out.println("원금 : " + decimalFormat.format(amount));
+                        System.out.println("이자 : " + decimalFormat.format(product1.calculateTotalInterest(amount, currentMonths)));
+                        System.out.println("합게 : " + decimalFormat.format(product1.calculateTotalAmount(amount, currentMonths)));
+                        accountDao.removeSavings(accountNumber,1);
+                        flag = false;
                         break;
                     case 2:
                         if (!result2){
@@ -137,12 +155,12 @@ public class CloseSavingService {
                             continue;
                         }
                         product2.adjustInterestRateBasedOnAmount(amount);
-                        int currentMonths = product2.getCurrentMonths();
-                        int totalReturnAmount = product2.calculateTotalAmount(amount, currentMonths);
+                        currentMonths = product2.getCurrentMonths();
+                        totalReturnAmount = product2.calculateTotalAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
-                        int currentBalance = accountDao.getBalance(accountNumber);
+                        currentBalance = accountDao.getBalance(accountNumber);
                         // 적금 해지 금액을 현재 계좌에 합치기
-                        int newBalance = currentBalance + totalReturnAmount;
+                        newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
                         accountDao.updateBalance(accountNumber, newBalance);
                         System.out.println("2번 상품 해지 결과");

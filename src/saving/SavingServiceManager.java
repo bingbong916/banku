@@ -18,13 +18,14 @@ public class SavingServiceManager {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
-        //추가
+        //product0 수정해야함
+        SavingProduct product0 = new SavingProduct(12, 3.0, 1234567);
         SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
         this.savingsService = new SavingsService(userDao, accountDao, this);
         this.termDepositService = new TermDepositService(userDao, accountDao, this);
-        this.closeSavingService = new CloseSavingService(userDao, accountDao, product1, product2, product3, this);
+        this.closeSavingService = new CloseSavingService(userDao, accountDao,product0, product1, product2, product3, this);
         initializeServices();
     }
 

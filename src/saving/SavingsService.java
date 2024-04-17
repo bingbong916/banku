@@ -66,7 +66,16 @@ public class SavingsService {
                 String amount = decimalFormat.format(money);
                 String account = userDao.findUserToAccount(loggedInUserId);
                 String startDate = dateFormat.format(date);
-                accountDao.updateSavings(account, 0, amount, startDate);
+                if(accountDao.hasSavings(account, 1)) {
+                    System.out.println("이미 가입한 예금입니다.");
+                    savingServiceManager.printSavingMenu(loggedInUserId);
+                    break; // 이미 가입한 예금인지 확인
+                }
+                int intInputMoney = Integer.parseInt(inputMoney);
+                // 첫 달 납입금을 현재 계좌에서 차감
+                accountDao.withdrawalSavings(account, intInputMoney);
+                // 첫 달 납입금을 적금 계좌에 적립
+                accountDao.updateSavings(account, 0, inputMoney, startDate);
                 System.out.println("예금이 완료되었습니다!");
                 System.out.println();
                 break;

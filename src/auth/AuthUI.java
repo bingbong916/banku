@@ -79,10 +79,13 @@ public class AuthUI {
         String userId = scanner.nextLine();
         System.out.print("비밀번호를 입력하세요: ");
         String password = scanner.nextLine();
+        System.out.print("오늘 날짜를 입력하세요: "); // 오늘 날짜 입력받기 추가
+        String inputDate = scanner.nextLine();
         String loggedInUserId = loginService.login(userId, password);
 
         if (loggedInUserId != null) {
             System.out.println("로그인 성공!");
+            System.out.println("오늘 날짜: " + inputDate); // 입력받은 날짜 확인용
             return userId;
         } else {
             System.out.println("로그인 실패");
