@@ -61,6 +61,17 @@ public class UserDao {
         return userId;
     }
 
+    public String findUserToName(String userId) throws IOException {
+        List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            String[] textId = line.split("\t");
+            if (textId[0].equals(userId)) {
+                return textId[2];
+            }
+        }
+        return userId;
+    }
+
     public String findUserToAccount(String userId) throws IOException {
         List<String> lines = dbManager.readUserFile();
         for (String line : lines) {
@@ -81,6 +92,39 @@ public class UserDao {
             }
         }
         return userId;
+    }
 
+    //추가
+    public String findUserNameById(String userId) throws IOException {
+        List<String> lines = readUserFile();
+        for (String line : lines) {
+            String[] parts = line.split("\t");
+            if (parts[0].equals(userId)) {
+                return parts[2];
+            }
+        }
+        return null;
+    }
+    
+    public boolean checkDuplicateUserId(String userId) throws IOException {
+        List<String> lines = readUserFile();
+        for (String line : lines) {
+            String[] parts = line.split("\t");
+            if (parts[0].equals(userId)) {
+                return true; // 이미 존재하는 아이디일 경우 true 반환
+            }
+        }
+        return false; // 존재하지 않는 아이디일 경우 false 반환
+    }
+
+    public boolean checkDuplicateRRN(String rrn) throws IOException {
+        List<String> lines = readUserFile();
+        for (String line : lines) {
+            String[] parts = line.split("\t");
+            if (parts[3].equals(rrn)) {
+                return true; // 이미 존재하는 주민등록번호일 경우 true 반환
+            }
+        }
+        return false; // 존재하지 않는 주민등록번호일 경우 false 반환
     }
 }

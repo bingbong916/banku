@@ -1,8 +1,10 @@
 package database;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 public class AccountDao {
     private final DatabaseManager dbManager;
@@ -30,6 +32,32 @@ public class AccountDao {
         return Integer.parseInt(balanceStr);
     }
 
+    public String getStartDate(String accountNumber, int index) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        List<String> subList = lines.subList(1, lines.size());
+        for (index=0;index<4;index++) {
+            String str = subList.get(index);
+            if (!str.isEmpty()) {
+                String[] parts = str.split("\t");
+
+                return parts[1];
+            }
+        }
+        return accountNumber;
+    }
+
+    public String getCarryBack(String accountNumber) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+
+        String carryBackStr = lines.get(1);
+        if(!carryBackStr.isEmpty()) {
+            String[] parts = carryBackStr.split("\t");
+
+            return parts[0];
+        }
+        return accountNumber;
+    }
+
     public void updateBalance(String accountNumber, int newBalance) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         // Update balance in the first line
@@ -44,16 +72,23 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
-    public void withdrawalSavings (String accountNumber, int money) throws IOException {
+    public int withdrawalSavings (String accountNumber, int money) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        int savings = Integer.parseInt(lines.get(0)) - money;
-        lines.set(0, Integer.toString(savings)); // 잔액 index = 0
+        int oldSavings = Integer.parseInt(lines.get(0));
+        if(Integer.parseInt(lines.get(0)) - money < 0){
+            return 0;
+        }
+        int newSavings = oldSavings - money;
+
+        lines.set(0, Integer.toString(newSavings)); // 잔액 index = 0
         dbManager.writeAccountFile(accountNumber, lines);
+        return 1;
     }
 
     public String showSavings (String accountNumber) throws IOException{
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        return lines.get(0);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+        return decimalFormat.format(Integer.parseInt(lines.get(0)));
     }
 
     public boolean hasSavings (String accountNumber, int index) throws IOException{
@@ -63,4 +98,18 @@ public class AccountDao {
         }
         return true;
     }
+
+    public void removeSavings (String accountNumber, int productNum) throws IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        lines.set(productNum, "");
+        dbManager.writeAccountFile(accountNumber,lines);
+    }
+
+    //추가
+        public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
+            List<String> lines = dbManager.readAccountFile(accountNumber);
+            String productLine = lines.get(productIndex + 1); // 인덱스 1부터 적금 상품 정보 시작
+            String[] productInfo = productLine.split("\t");
+            return productInfo.length > 0 ? productInfo[0] : "0";
+        }
 }

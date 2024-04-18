@@ -20,12 +20,14 @@ public class TransferService {
     public void transfer(String loggedInUserId) {
         try {
             String senderAccountNumber = userDao.getAccountNumber(loggedInUserId);
-            if (senderAccountNumber == null) {
-                System.out.println("계좌번호 못 찾았습니다.");
+            if(!userDao.hasAccount(loggedInUserId)){
+                System.out.println();
+                System.out.println("해당 아이디의 계좌가 존재하지 않습니다. 계좌 개설 후 다시 이용해주세요.");
+                System.out.println();
                 return;
             }
 
-            System.out.println("[송금 서비스]");
+            System.out.println("\n\n[송금 서비스]");
             System.out.println("============================================");
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
             System.out.println("송금할 계좌번호와 금액을 입력하세요");

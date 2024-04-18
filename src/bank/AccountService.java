@@ -24,11 +24,11 @@ public class AccountService {
             // 계좌 존재 여부 확인
             if (userDao.hasAccount(loggedInUserId)) {
                 System.out.println();
-                System.out.println("\n계좌가 이미 존재합니다.\n");
+                System.out.println("계좌가 이미 존재합니다.");
                 return;
             }
 
-            System.out.println("[계좌 개설 서비스]");
+            System.out.println("\n\n[계좌 개설 서비스]");
             System.out.println("============================================");
             System.out.println("계좌를 개설합니다.");
             System.out.println("============================================");
