@@ -12,7 +12,7 @@ public class LoginService {
         this.userDao = userDao;
     }
 
-    public String login(String userId, String password) {
+    public String login(String userId, String password, String inputDateStr) { // 날짜 추가
         try {
             List<String> lines = userDao.readUserFile();
             for (String line : lines) {

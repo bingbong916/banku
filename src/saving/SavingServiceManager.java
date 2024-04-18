@@ -14,20 +14,28 @@ public class SavingServiceManager {
     private final SavingsService savingsService;
     private final TermDepositService termDepositService;
     private final CloseSavingService closeSavingService;
+    private SavingProduct product0;
 
     public SavingServiceManager(UserDao userDao, AccountDao accountDao){
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
         //product0 수정해야함
-        SavingProduct product0 = new SavingProduct(12, 3.0, 1234567);
+//        this.product0 = new SavingProduct(12, 3.0, 100000)
         SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
         this.savingsService = new SavingsService(userDao, accountDao, this);
         this.termDepositService = new TermDepositService(userDao, accountDao, this);
-        this.closeSavingService = new CloseSavingService(userDao, accountDao,product0, product1, product2, product3, this);
+        this.closeSavingService = new CloseSavingService(userDao, accountDao, product0, product1, product2, product3, this);
         initializeServices();
+    }
+
+    public void updateSavingProductAmount(int intInputMoney) {
+        // product0를 사용자가 입력한 금액으로 초기화
+        this.product0 = new SavingProduct(12, 3.0, intInputMoney);
+        
+        // 필요한 경우 추가 로직 구현
     }
 
     private void initializeServices() {

@@ -13,23 +13,32 @@ public class CloseSavingService {
     private final AccountDao accountDao;
     private final DecimalFormat decimalFormat;
     // 추가
-    private SavingProduct product1;
+    private SavingProduct savingProduct;
+    private SavingProduct product0;
     private SavingProduct product2;
     private SavingProduct product3;
     private SavingProduct product4;
     //private boolean backToPreviousMenu = false; //추가
     private SavingServiceManager savingServiceManager;
 
-    public CloseSavingService(UserDao userDao, AccountDao accountDao,SavingProduct product1, SavingProduct product2, SavingProduct product3, SavingProduct product4, SavingServiceManager savingServiceManager) {
-        this.accountDao = accountDao;
-        this.userDao = userDao;
+    private String startDateStr;
+    private String loginDateStr;
+//    private String loginDate;
+//    private String inputDateStr;
+
+    public CloseSavingService(UserDao userDao, AccountDao accountDao, SavingProduct product0, SavingProduct product2, SavingProduct product3, SavingProduct product4, SavingServiceManager savingServiceManager) {
+        DatabaseManager dbManager = new DatabaseManager();
+        this.accountDao = new AccountDao(dbManager);
+        this.userDao = new UserDao(dbManager);
         this.scanner = new Scanner(System.in);
-        this.product1 = product1;
+        this.product0 = product0;
         this.product2 = product2;
         this.product3 = product3;
         this.product4 = product4;
         this.decimalFormat = new DecimalFormat("#,###");
         this.savingServiceManager = savingServiceManager; //추가
+//        this.loginDate = loginDate;
+//        this.inputDateStr = inputDateStr;
         initializeServices();
     }
 
@@ -38,7 +47,13 @@ public class CloseSavingService {
         UserDao userDao = new UserDao(dbManager);
     }
 
-    public void doCloseService(String loggedInUserId){
+
+    public void setDates(String loginDate, String startDate) {
+//        this.loginDateStr = loginDate;
+        this.startDateStr = startDate;
+    }
+
+    public void doCloseService(String loggedInUserId) {
         try {
             System.out.println();
             System.out.println("\n\n[예ㆍ적금 해지 서비스]");
@@ -112,16 +127,16 @@ public class CloseSavingService {
                 boolean result3 = accountDao.hasSavings(account, 3);
                 boolean result4 = accountDao.hasSavings(account, 4);
 
-                if (result1){
+                if (result1) {
                     System.out.println("[1] 정기 예금");
                 }
-                if (result2){
+                if (result2) {
                     System.out.println("[2] 6개월 적금");
                 }
-                if (result3){
+                if (result3) {
                     System.out.println("[3] 12개월 적금");
                 }
-                if (result4){
+                if (result4) {
                     System.out.println("[4] 24개월 저금");
                 }
 
@@ -141,107 +156,123 @@ public class CloseSavingService {
                     String accountNumber = userDao.findUserToAccount(loggedInUserId);
                     String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
                     int amount = Integer.parseInt(amountStr);
+                    String startDate = accountDao.getStartDate(accountNumber, inputNum);
+                    this.startDateStr = startDate;
 
-                switch (inputNum){
-                    case 1: //예금
-                        if (!result1){
-                            System.out.println("올바르지 않은 메뉴입니다.");
-                            continue;
-                        }
-                        product1.adjustInterestRateBasedOnAmount(amount);
-                        int currentMonths = product1.getCurrentMonths();
-                        int totalReturnAmount = product1.calculateTotalAmount(amount, currentMonths);
-                        // 현재 계좌 잔액 조회
-                        int currentBalance = accountDao.getBalance(accountNumber);
-                        // 적금 해지 금액을 현재 계좌에 합치기
-                        int newBalance = currentBalance + totalReturnAmount;
-                        // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
-                        System.out.println(currentMonths);
-                        System.out.println("1번 상품 해지 결과");
-                        System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product1.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product1.calculateTotalAmount(amount, currentMonths)));
-                        accountDao.removeSavings(accountNumber,1);
-                        flag = false;
-                        break;
-                    case 2:
-                        if (!result2){
-                            System.out.println("올바르지 않은 메뉴입니다.");
-                            continue;
-                        }
-                        product2.adjustInterestRateBasedOnAmount(amount);
-                        currentMonths = product2.getCurrentMonths();
-                        totalReturnAmount = product2.calculateTotalAmount(amount, currentMonths);
-                        // 현재 계좌 잔액 조회
-                        currentBalance = accountDao.getBalance(accountNumber);
-                        // 적금 해지 금액을 현재 계좌에 합치기
-                        newBalance = currentBalance + totalReturnAmount;
-                        // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
-                        System.out.println("2번 상품 해지 결과");
-                        System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product2.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product2.calculateTotalAmount(amount, currentMonths)));
-                        accountDao.removeSavings(accountNumber,2);
-                        flag = false;
-                        break;
-                    case 3:
-                        if (!result3){
-                            System.out.println("올바르지 않은 메뉴입니다.");
-                            continue;
-                        }
-                        product3.adjustInterestRateBasedOnAmount(amount);
-                        currentMonths = product3.getCurrentMonths();
-                        totalReturnAmount = product3.calculateTotalAmount(amount, currentMonths);
-                        // 현재 계좌 잔액 조회
-                        currentBalance = accountDao.getBalance(accountNumber);
-                        // 적금 해지 금액을 현재 계좌에 합치기
-                        newBalance = currentBalance + totalReturnAmount;
-                        // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
-                        System.out.println("3번 상품 해지 결과");
-                        System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product3.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product3.calculateTotalAmount(amount, currentMonths)));
-                        accountDao.removeSavings(accountNumber,3);
-                        flag = false;
-                        break;
-                    case 4:
-                        if (!result4){
-                            System.out.println("올바르지 않은 메뉴입니다.");
-                            continue;
-                        }
-                        product4.adjustInterestRateBasedOnAmount(amount);
-                        currentMonths = product4.getCurrentMonths();
-                        totalReturnAmount = product4.calculateTotalAmount(amount, currentMonths);
-                        // 현재 계좌 잔액 조회
-                        currentBalance = accountDao.getBalance(accountNumber);
-                        // 적금 해지 금액을 현재 계좌에 합치기
-                        newBalance = currentBalance + totalReturnAmount;
-                        // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
-                        System.out.println("4번 상품 해지 결과");
-                        System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product4.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product4.calculateTotalAmount(amount, currentMonths)));
-                        accountDao.removeSavings(accountNumber,4);
-                        flag = false;
-                        break;
-                    default:
-                        String num = Integer.toString(inputNum);
-                        if(!num.matches("[0-9]")){
-                            System.out.println("상품의 숫자를 입력해주세요.");
-                        }
-                        else{
-                            System.out.println("올바르지 않은 메뉴입니다.");
-                        }
-                }
-                System.out.println();
-                System.out.println();
-                break;
+                    switch (inputNum) {
+                        case 1: //예금
+                            if (!result1) {
+                                System.out.println("올바르지 않은 메뉴입니다.");
+                                continue;
+                            }
+//                            setDates(loginDateStr, startDateStr);
+                            System.out.println("예금 체크1");
+                            System.out.println(amount);
+                            System.out.println(loginDateStr);
+                            System.out.println(startDateStr);
+                            savingProduct.adjustInterestRateBasedOnAmount2(amount, loginDateStr, startDateStr);
+                            System.out.println("예금 체크2");
+                            int currentMonths2 = (int) SavingProduct.getCurrentMonths2(loginDateStr, startDateStr);
+                            System.out.println(currentMonths2);
+                            int totalReturnAmount = savingProduct.calculateTotalAmount2(amount, currentMonths2);
+                            // 현재 계좌 잔액 조회
+                            int currentBalance = accountDao.getBalance(accountNumber);
+                            // 적금 해지 금액을 현재 계좌에 합치기
+                            int newBalance = currentBalance + totalReturnAmount;
+                            // 계좌 잔액 업데이트
+                            accountDao.updateBalance(accountNumber, newBalance);
+                            System.out.println(currentMonths2);
+                            System.out.println("1번 상품 해지 결과");
+                            System.out.println("원금 : " + decimalFormat.format(amount));
+                            System.out.println("이자 : " + decimalFormat.format(savingProduct.calculateTotalInterest(amount, currentMonths2)));
+                            System.out.println("합게 : " + decimalFormat.format(savingProduct.calculateTotalAmount(amount, currentMonths2)));
+                            accountDao.removeSavings(accountNumber, 1);
+                            flag = false;
+                            break;
+                        case 2:
+                            if (!result2) {
+                                System.out.println("올바르지 않은 메뉴입니다.");
+                                continue;
+                            }
+                            System.out.println("적금1 체크1");
+                            product2.adjustInterestRateBasedOnAmount(amount);
+                            int currentMonths = product2.getCurrentMonths();
+                            totalReturnAmount = product2.calculateTotalAmount(amount, currentMonths);
+                            // 현재 계좌 잔액 조회
+                            currentBalance = accountDao.getBalance(accountNumber);
+                            // 적금 해지 금액을 현재 계좌에 합치기
+                            newBalance = currentBalance + totalReturnAmount;
+                            // 계좌 잔액 업데이트
+                            accountDao.updateBalance(accountNumber, newBalance);
+                            System.out.println("적금1 체크2");
+                            System.out.println("2번 상품 해지 결과");
+                            System.out.println("원금 : " + decimalFormat.format(amount));
+                            System.out.println("이자 : " + decimalFormat.format(product2.calculateTotalInterest(amount, currentMonths)));
+                            System.out.println("합게 : " + decimalFormat.format(product2.calculateTotalAmount(amount, currentMonths)));
+                            accountDao.removeSavings(accountNumber, 2);
+                            System.out.println("적금1 체크3");
+                            flag = false;
+                            System.out.println("적금1 체크4");
+                            break;
+                        case 3:
+                            if (!result3) {
+                                System.out.println("올바르지 않은 메뉴입니다.");
+                                continue;
+                            }
+                            product3.adjustInterestRateBasedOnAmount(amount);
+                            currentMonths = product3.getCurrentMonths();
+                            totalReturnAmount = product3.calculateTotalAmount(amount, currentMonths);
+                            // 현재 계좌 잔액 조회
+                            currentBalance = accountDao.getBalance(accountNumber);
+                            // 적금 해지 금액을 현재 계좌에 합치기
+                            newBalance = currentBalance + totalReturnAmount;
+                            // 계좌 잔액 업데이트
+                            accountDao.updateBalance(accountNumber, newBalance);
+                            System.out.println("3번 상품 해지 결과");
+                            System.out.println("원금 : " + decimalFormat.format(amount));
+                            System.out.println("이자 : " + decimalFormat.format(product3.calculateTotalInterest(amount, currentMonths)));
+                            System.out.println("합게 : " + decimalFormat.format(product3.calculateTotalAmount(amount, currentMonths)));
+                            accountDao.removeSavings(accountNumber, 3);
+                            flag = false;
+                            break;
+                        case 4:
+                            if (!result4) {
+                                System.out.println("올바르지 않은 메뉴입니다.");
+                                continue;
+                            }
+                            product4.adjustInterestRateBasedOnAmount(amount);
+                            currentMonths = product4.getCurrentMonths();
+                            totalReturnAmount = product4.calculateTotalAmount(amount, currentMonths);
+                            // 현재 계좌 잔액 조회
+                            currentBalance = accountDao.getBalance(accountNumber);
+                            // 적금 해지 금액을 현재 계좌에 합치기
+                            newBalance = currentBalance + totalReturnAmount;
+                            // 계좌 잔액 업데이트
+                            accountDao.updateBalance(accountNumber, newBalance);
+                            System.out.println("4번 상품 해지 결과");
+                            System.out.println("원금 : " + decimalFormat.format(amount));
+                            System.out.println("이자 : " + decimalFormat.format(product4.calculateTotalInterest(amount, currentMonths)));
+                            System.out.println("합게 : " + decimalFormat.format(product4.calculateTotalAmount(amount, currentMonths)));
+                            accountDao.removeSavings(accountNumber, 4);
+                            flag = false;
+                            break;
+                        default:
+                            String num = Integer.toString(inputNum);
+                            if (!num.matches("[0-9]")) {
+                                System.out.println("상품의 숫자를 입력해주세요.");
+                            }
+                            if (num.matches("0")) {
+                                savingServiceManager.printSavingMenu(loggedInUserId);
+                            } else {
+                                System.out.println("올바르지 않은 메뉴입니다.");
+                            }
+                            flag = false;
+                    }
+                    System.out.println();
+                    System.out.println();
+                } break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
     }
