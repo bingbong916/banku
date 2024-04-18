@@ -4,6 +4,7 @@ import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Scanner;
 
@@ -161,7 +162,7 @@ public class CloseSavingService {
                         System.out.println("1번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product1.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product1.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product1.calculateTotalAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,1);
                         flag = false;
                         break;
@@ -182,7 +183,7 @@ public class CloseSavingService {
                         System.out.println("2번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product2.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product2.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product2.calculateTotalAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,2);
                         flag = false;
                         break;
@@ -203,7 +204,7 @@ public class CloseSavingService {
                         System.out.println("3번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product3.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product3.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product3.calculateTotalAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,3);
                         flag = false;
                         break;
@@ -224,7 +225,7 @@ public class CloseSavingService {
                         System.out.println("4번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product4.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합게 : " + decimalFormat.format(product4.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product4.calculateTotalAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,4);
                         flag = false;
                         break;
@@ -241,8 +242,9 @@ public class CloseSavingService {
                 System.out.println();
                 break;
             }
-        }catch (Exception e){
-            e.getMessage();
+        }
+    } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
