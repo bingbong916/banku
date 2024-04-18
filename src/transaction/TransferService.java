@@ -90,12 +90,6 @@ public class TransferService {
         }
     }
 
-
-    private int parseInt(String amountStr) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	private boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{6}-\\d{6}");
     }
