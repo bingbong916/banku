@@ -54,7 +54,7 @@ public class TransferService {
                         return;
                     }
 
-                    if (!isValidAmount(amountStr)) {
+                    if (!isValidAmount(amountStr) || Integer.parseInt(amountStr) == 0) {
                         System.out.println("올바른 금액을 입력하세요!");
                         continue;
                     }
@@ -91,7 +91,12 @@ public class TransferService {
     }
 
 
-    private boolean isValidAccountNumber(String accountNumber) {
+    private int parseInt(String amountStr) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{6}-\\d{6}");
     }
 
