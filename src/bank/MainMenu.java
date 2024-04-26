@@ -22,6 +22,7 @@ public class MainMenu {
     private final TransferService transferService;
     private final CheckManager checkManager;
 
+
     public MainMenu(String userId) {
         this.scanner = new Scanner(System.in);
         UserDao userDao = new UserDao(new DatabaseManager());

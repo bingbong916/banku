@@ -21,7 +21,7 @@ public class CloseSavingService {
     //private boolean backToPreviousMenu = false; //추가
     private SavingServiceManager savingServiceManager;
 
-    public CloseSavingService(UserDao userDao, AccountDao accountDao,SavingProduct product1, SavingProduct product2, SavingProduct product3, SavingProduct product4, SavingServiceManager savingServiceManager) {
+    public CloseSavingService(UserDao userDao, AccountDao accountDao, SavingProduct product1, SavingProduct product2, SavingProduct product3, SavingProduct product4, SavingServiceManager savingServiceManager) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
@@ -39,7 +39,7 @@ public class CloseSavingService {
         UserDao userDao = new UserDao(dbManager);
     }
 
-    public void doCloseService(String loggedInUserId){
+    public void doCloseService(String loggedInUserId) throws IOException {
         try {
             System.out.println();
             System.out.println("\n\n[예ㆍ적금 해지 서비스]");
@@ -113,16 +113,16 @@ public class CloseSavingService {
                 boolean result3 = accountDao.hasSavings(account, 3);
                 boolean result4 = accountDao.hasSavings(account, 4);
 
-                if (result1){
+                if (result1) {
                     System.out.println("[1] 정기 예금");
                 }
-                if (result2){
+                if (result2) {
                     System.out.println("[2] 6개월 적금");
                 }
-                if (result3){
+                if (result3) {
                     System.out.println("[3] 12개월 적금");
                 }
-                if (result4){
+                if (result4) {
                     System.out.println("[4] 24개월 저금");
                 }
 
@@ -243,10 +243,11 @@ public class CloseSavingService {
                 System.out.println();
                 System.out.println();
                 break;
+                }
+                break;
             }
-        }
-    } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.getMessage();
         }
     }
 }

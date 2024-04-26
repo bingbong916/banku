@@ -71,12 +71,12 @@ public class AuthUI {
         }
     }
     private void registerUser() {
-    	
-    	  String userId = "";
-          String password = "";
-          String name = "";
-          String rrn = "";
-          
+
+        String userId = "";
+        String password = "";
+        String name = "";
+        String rrn = "";
+
         System.out.println("\n\n============================================");
         System.out.println("[회원가입 서비스]");
         System.out.println("============================================");
@@ -92,7 +92,7 @@ public class AuthUI {
                 System.out.println("아이디를 입력해주세요");
                 continue;
             }
-            
+
             else if (!userId.matches("[a-z0-9]+")) {
                 System.out.println("소문자 영어와 숫자의 조합으로 이루어져야 합니다.");
                 continue;
@@ -102,23 +102,23 @@ public class AuthUI {
                 System.out.println("6자 이상 10자 이하로 입력해주세요.");
                 continue;
             } else
-				try {
-					if(userDao.checkDuplicateUserId(userId)) {
-						System.out.println("아이디가 이미 존재합니다.");
-						continue;
-					}
+                try {
+                    if(userDao.checkDuplicateUserId(userId)) {
+                        System.out.println("아이디가 이미 존재합니다.");
+                        continue;
+                    }
 
-					else {
+                    else {
 
-						break;
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                        break;
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
         }
-        
-     // 비밀번호
+
+        // 비밀번호
         while (true) {
             System.out.print("비밀번호를 입력하세요: ");
             password = scanner.nextLine();
@@ -181,13 +181,13 @@ public class AuthUI {
                 System.out.println("주민등록번호는 (6자리 숫자)-(7자리 숫자) 형식이어야 합니다.");
                 continue;
             } else
-				try {
-					if (userDao.checkDuplicateRRN(rrn)) {
-						System.out.println("주민등록번호가 이미 존재합니다.");
-						continue;
-					}
+                try {
+                    if (userDao.checkDuplicateRRN(rrn)) {
+                        System.out.println("주민등록번호가 이미 존재합니다.");
+                        continue;
+                    }
 
-					else {
+                    else {
                         int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
                         String birthDate = rrn.substring(0, 6);
@@ -200,24 +200,22 @@ public class AuthUI {
                                 throw new DateTimeParseException("입력된 월이나 일이 유효 범위를 초과함", birthDate, 0);
                             }
 
-					    } catch (DateTimeParseException e) {
-					        System.out.println("유효하지 않은 생년월일입니다.");
-					        continue;
-					    }
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            
+                        } catch (DateTimeParseException e) {
+                            System.out.println("유효하지 않은 생년월일입니다.");
+                            continue;
+                        }
+                    }
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
 
             break;
         }
-        
-     // 회원가입 정보 추가
         try {
             registrationService.registerUser(userId, password, name, rrn);
-            
+
         } catch (Exception e) {
             System.out.println("회원가입 중 오류가 발생했습니다: " + e.getMessage());
         }

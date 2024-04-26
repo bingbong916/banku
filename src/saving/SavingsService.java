@@ -48,7 +48,8 @@ public class SavingsService {
             while (true) {
                 System.out.print("예금할 금액을 입력하세요 (₩1,000 ~ ₩1,000,000,000): ₩ ");
                 String inputMoney = scan.nextLine();
-
+                int intInputMoney = Integer.parseInt(inputMoney);
+                savingServiceManager.updateSavingProductAmount(intInputMoney);
                 if (inputMoney.equals("q")){
                     savingServiceManager.printSavingMenu(loggedInUserId);
                     return;
@@ -74,10 +75,10 @@ public class SavingsService {
                     savingServiceManager.printSavingMenu(loggedInUserId);
                     break; // 이미 가입한 예금인지 확인
                 }
-                int intInputMoney = Integer.parseInt(inputMoney);
+                intInputMoney = Integer.parseInt(inputMoney);
                 // 첫 달 납입금을 현재 계좌에서 차감
                 accountDao.withdrawalSavings(account, intInputMoney);
-                // 첫 달 납입금을 적금 계좌에 적립
+                // 첫 달 납입금을 예금 계좌에 적립
                 accountDao.updateSavings(account, 0, inputMoney, startDate);
                 System.out.println("예금이 완료되었습니다!");
                 System.out.println();
@@ -87,5 +88,6 @@ public class SavingsService {
             e.getMessage();
         }
     }
+
 
 }
