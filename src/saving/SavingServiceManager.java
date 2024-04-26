@@ -59,7 +59,6 @@ public class SavingServiceManager {
                 System.out.println("[3] 적금 해지 서비스");
                 System.out.println("[0] 뒤로가기");
                 System.out.println("============================================");
-
                 System.out.print("선택하실 서비스 번호를 입력하세요 (0-3): ");
                 String inputNum = scanner.nextLine();
 
@@ -81,7 +80,7 @@ public class SavingServiceManager {
                         closeSavingService.doCloseService(loggedInUserId);
                         break;
                     case 0:
-                        break;
+                        return;
                     default:
                         System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
                         break;
