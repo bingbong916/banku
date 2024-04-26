@@ -229,6 +229,8 @@ public class CloseSavingService {
                         accountDao.removeSavings(accountNumber,4);
                         flag = false;
                         break;
+                    case 0:
+                        return;
                     default:
                         String num = Integer.toString(inputNum);
                         if(!num.matches("[0-9]")){
