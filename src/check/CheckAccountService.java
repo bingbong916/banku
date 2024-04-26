@@ -88,7 +88,7 @@ public class CheckAccountService {
             System.out.println("============================================");
 
             String storedAccount = userDao.findUserToAccount(loggedInUserId);
-            int balance = accountDao.getBalance(storedAccount);
+            String balance = accountDao.getBalanceToString(storedAccount);
 
             System.out.println("계좌 조회 결과:");
             System.out.println("계좌 번호: " + storedAccount);

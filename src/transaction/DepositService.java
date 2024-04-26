@@ -69,7 +69,7 @@ public class DepositService {
 
             System.out.println();
             System.out.println("입금이 완료되었습니다!");
-            System.out.println("현재 잔액: " + accountDao.showSavings(account));
+            System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
         } catch (IOException e){
             System.out.println("입금 중 오류가 발생했습니다: " + e.getMessage());
         }

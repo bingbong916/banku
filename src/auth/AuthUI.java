@@ -2,6 +2,7 @@ package auth;
 import bank.MainMenu;
 
 import database.DatabaseManager;
+import database.DateDao;
 import database.UserDao;
 
 import java.time.YearMonth;
@@ -21,6 +22,7 @@ public class AuthUI {
     private LoginService loginService;
     private UserDao userDao;
     private final Scanner scanner;
+    private DateDao dateDao;
 
     public AuthUI() {
         this.scanner = new Scanner(System.in);
@@ -31,6 +33,7 @@ public class AuthUI {
         userDao = new UserDao(dbManager);
         this.registrationService = new RegistrationService(userDao);
         this.loginService = new LoginService(userDao);
+        dateDao = new DateDao(dbManager);
     }
     public void showMenu() {
         String loggedInUserId = null;
@@ -210,29 +213,6 @@ public class AuthUI {
 
             break;
         }
-
-//        while (true) {
-//            System.out.print("주민등록번호를 입력하세요: (6자리 숫자 - 7자리 숫자) ");
-//            String rrn = scanner.nextLine();
-//
-//            if (rrn == null || rrn.isEmpty()) {
-//                System.out.println("주민등록번호를 입력해주세요.");
-//                continue;
-//            }
-//
-//            else if (!rrn.matches("\\d+")) {
-//                System.out.println("주민등록번호는 숫자만 포함해야 합니다.");
-//                continue;
-//            }
-//
-//            else if (rrn.length() != 13) {
-//                System.out.println("주민등록번호는 13자리 숫자로 이루어져야 합니다.");
-//                continue;
-//            }
-//
-//            break;
-//        }
-        
         
      // 회원가입 정보 추가
         try {
@@ -249,7 +229,7 @@ public class AuthUI {
         System.out.println("[로그인 서비스]");
         System.out.println("============================================");
         System.out.println("로그인을 시작합니다.");
-        
+
         String userId;
         String password;
 
@@ -310,8 +290,23 @@ public class AuthUI {
             break;
         }
 
-        System.out.print("오늘 날짜를 입력하세요: "); // 오늘 날짜 입력받기 추가
-        String inputDate = scanner.nextLine();
+        String inputDate = "";
+
+        while (true) {
+            try {
+                String pastDate = dateDao.getDate();
+                System.out.println("이전 날짜 :" + pastDate);
+                System.out.println();
+                System.out.print("오늘 날짜를 입력하세요: "); // 오늘 날짜 입력받기 추가
+                inputDate = scanner.nextLine();
+                dateDao.setDate(inputDate);
+            } catch (Exception e){
+                System.out.println("유효하지 않은 날짜입니다.");
+                continue;
+            }
+            break;
+        }
+
 
         String loggedInUserId = loginService.login(userId, password);
 
