@@ -147,15 +147,15 @@ public class AuthUI {
                 System.out.println("이름을 입력해주세요.");
                 continue;
             }
-            else if (name.matches("^[ㄱ-ㅎㅏ-ㅣ가-힣]*$") && !name.matches(("[가-힣]")) && name.length() <= 5) {
-                System.out.println("이름은 자음과 모음의 조합으로 이루어져야합니다.");
-                continue;
-            }
+
             else if (!name.matches("[ㄱ-ㅎㅏ-ㅣ가-힣]+")) {
                 System.out.println("이름은 한글로만 구성되어야 합니다.");
                 continue;
             }
-
+            if (!name.matches("^[가-힣]+$")) {
+                System.out.println("이름은 조합된 한글 글자로만 입력해주세요.");
+                continue;
+            }
             else if (name.length() < 2 || name.length() > 5) {
                 System.out.println("2자 이상 5자 이하로 입력해주세요.");
                 continue;
