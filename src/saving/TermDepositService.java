@@ -2,6 +2,7 @@ package saving;
 
 import database.AccountDao;
 import database.DatabaseManager;
+import database.DateDao;
 import database.UserDao;
 
 import java.text.SimpleDateFormat;
@@ -13,12 +14,14 @@ public class TermDepositService {
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final SavingServiceManager savingServiceManager;
+    private final DateDao dateDao;
 
     public TermDepositService(UserDao userDao, AccountDao accountDao, SavingServiceManager savingServiceManager){
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
         this.savingServiceManager = savingServiceManager;
+        this.dateDao = new DateDao(new DatabaseManager());
         initializeServices();
     }
 
@@ -44,7 +47,7 @@ public class TermDepositService {
                 Date date = new Date();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String account = userDao.findUserToAccount(loggedInUserId);
-                String startDate = dateFormat.format(date);
+                String startDate = dateDao.getDate();
 
                 System.out.print("적금하실 상품 번호의 숫자만 입력하세요 (0~3): ");
                 int termDepositNum = scanner.nextInt();

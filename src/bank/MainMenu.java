@@ -2,6 +2,7 @@ package bank;
 
 import database.AccountDao;
 import database.DatabaseManager;
+import database.DateDao;
 import database.UserDao;
 import transaction.TransferService;
 import saving.SavingServiceManager;
@@ -32,6 +33,7 @@ public class MainMenu {
         this.savingServiceManager = new SavingServiceManager(userDao, accountDao);
         this.checkManager = new CheckManager(userDao, accountDao);
         this.loggedInUserId = userId;
+        DateDao dateDao = new DateDao(new DatabaseManager());
     }
 
     public void show() {

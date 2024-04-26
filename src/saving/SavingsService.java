@@ -2,6 +2,7 @@ package saving;
 
 import database.AccountDao;
 import database.DatabaseManager;
+import database.DateDao;
 import database.UserDao;
 
 import java.text.DecimalFormat;
@@ -15,6 +16,7 @@ public class SavingsService {
     private final AccountDao accountDao;
     private final DecimalFormat decimalFormat;
     private final SavingServiceManager savingServiceManager;
+    private final DateDao dateDao;
 
     public SavingsService(UserDao userDao, AccountDao accountDao, SavingServiceManager savingServiceManager){
         this.accountDao = accountDao;
@@ -22,6 +24,7 @@ public class SavingsService {
         this.scanner = new Scanner(System.in);
         this.decimalFormat = new DecimalFormat("#,###");
         this.savingServiceManager = savingServiceManager;
+        dateDao = new DateDao(new DatabaseManager());
         initializeServices();
     }
 
@@ -65,7 +68,7 @@ public class SavingsService {
 
                 String amount = decimalFormat.format(money);
                 String account = userDao.findUserToAccount(loggedInUserId);
-                String startDate = dateFormat.format(date);
+                String startDate = dateDao.getDate();
                 if(accountDao.hasSavings(account, 1)) {
                     System.out.println("이미 가입한 예금입니다.");
                     savingServiceManager.printSavingMenu(loggedInUserId);
