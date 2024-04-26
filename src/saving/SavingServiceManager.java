@@ -47,18 +47,18 @@ public class SavingServiceManager {
                 return;
             }
 
-            System.out.println();
-            System.out.println("\n\n[예ㆍ적금 서비스]");
-            System.out.println("============================================");
-            System.out.println("정기예금 또는 적금 상품에 가입합니다.");
-            System.out.println("============================================");
-            System.out.println("[1] 정기 예금 서비스");
-            System.out.println("[2] 적금 서비스");
-            System.out.println("[3] 적금 해지 서비스");
-            System.out.println("[0] 뒤로가기");
-            System.out.println("============================================");
 
             while(true) {
+                System.out.println();
+                System.out.println("\n\n[예ㆍ적금 서비스]");
+                System.out.println("============================================");
+                System.out.println("정기예금 또는 적금 상품에 가입합니다.");
+                System.out.println("============================================");
+                System.out.println("[1] 정기 예금 서비스");
+                System.out.println("[2] 적금 서비스");
+                System.out.println("[3] 적금 해지 서비스");
+                System.out.println("[0] 뒤로가기");
+                System.out.println("============================================");
                 System.out.print("선택하실 서비스 번호를 입력하세요 (0-3): ");
                 String inputNum = scanner.nextLine();
 
@@ -80,7 +80,7 @@ public class SavingServiceManager {
                         closeSavingService.doCloseService(loggedInUserId);
                         break;
                     case 0:
-                        break;
+                        return;
                     default:
                         System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
                         break;
