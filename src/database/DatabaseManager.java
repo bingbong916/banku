@@ -7,6 +7,7 @@ import java.util.*;
 
 public class DatabaseManager {
     private static final String USER_FILE = "user.txt";
+    private static final String DATE_FILE = "date.txt";
 
     public List<String> readUserFile() throws IOException {
         Path path = Paths.get(USER_FILE);
@@ -28,4 +29,13 @@ public class DatabaseManager {
         Files.write(path, lines, StandardCharsets.UTF_8);
     }
 
+    public List<String> readDateFile() throws IOException {
+        Path path = Paths.get(DATE_FILE);
+        return Files.readAllLines(path, StandardCharsets.UTF_8);
+    }
+
+    public void writeDateFile(List<String> lines) throws IOException {
+        Path path = Paths.get(DATE_FILE);
+        Files.write(path, lines, StandardCharsets.UTF_8);
+    }
 }
