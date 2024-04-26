@@ -1,9 +1,12 @@
 package saving;
 
+import bank.MainMenu;
 import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
+import jdk.jfr.internal.tool.Main;
 
+import java.io.IOException;
 import java.lang.reflect.Parameter;
 import java.util.Scanner;
 
@@ -15,6 +18,7 @@ public class SavingServiceManager {
     private final TermDepositService termDepositService;
     private final CloseSavingService closeSavingService;
     private SavingProduct product0;
+
 
     public SavingServiceManager(UserDao userDao, AccountDao accountDao){
         this.accountDao = accountDao;
@@ -45,45 +49,67 @@ public class SavingServiceManager {
 
     public void printSavingMenu(String loggedInUserId){
 
-        System.out.println();
-        System.out.println("\n\n[예ㆍ적금 서비스]");
-        System.out.println("============================================");
-        System.out.println("정기예금 또는 적금 상품에 가입합니다.");
-        System.out.println("============================================");
-        System.out.println("[1] 정기 예금 서비스");
-        System.out.println("[2] 적금 서비스");
-        System.out.println("[3] 적금 해지 서비스");
-        System.out.println("[0] 뒤로가기");
-        System.out.println("============================================");
-
-        while(true) {
-            System.out.print("선택하실 서비스 번호를 입력하세요 (0-3): ");
-            String inputNum = scanner.nextLine();
-
-            if(!inputNum.matches("[0-3]")){
-                System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
-                continue;
+        try{
+            // 입장 시 계좌 존재 확인
+            if(!userDao.hasAccount(loggedInUserId)){
+                System.out.println();
+                System.out.println("해당 아이디의 계좌가 존재하지 않습니다. 계좌 개설 후 다시 이용해주세요.");
+                System.out.println();
+                return;
             }
 
-            int menuNum = Integer.parseInt(inputNum);
+//            System.out.println();
+//            System.out.println("\n\n[예ㆍ적금 서비스]");
+//            System.out.println("============================================");
+//            System.out.println("정기예금 또는 적금 상품에 가입합니다.");
+//            System.out.println("============================================");
+//            System.out.println("[1] 정기 예금 서비스");
+//            System.out.println("[2] 적금 서비스");
+//            System.out.println("[3] 적금 해지 서비스");
+//            System.out.println("[0] 뒤로가기");
+//            System.out.println("============================================");
 
-            switch (menuNum){
-                case 1:
-                    savingsService.doSavingService(loggedInUserId);
-                    break;
-                case 2:
-                    termDepositService.doSavingService(loggedInUserId);
-                    break;
-                case 3:
-                    closeSavingService.doCloseService(loggedInUserId);
-                    break;
-                case 0:
-                    break;
-                default:
+            while(true) { //출력 문구 위치 while문 안으로 이동
+                System.out.println();
+                System.out.println("\n\n[예ㆍ적금 서비스]");
+                System.out.println("============================================");
+                System.out.println("정기예금 또는 적금 상품에 가입합니다.");
+                System.out.println("============================================");
+                System.out.println("[1] 정기 예금 서비스");
+                System.out.println("[2] 적금 서비스");
+                System.out.println("[3] 적금 해지 서비스");
+                System.out.println("[0] 뒤로가기");
+                System.out.println("============================================");
+                System.out.print("선택하실 서비스 번호를 입력하세요 (0-3): ");
+                String inputNum = scanner.nextLine();
+
+                if(!inputNum.matches("[0-3]")){
                     System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
-                    break;
+                    continue;
+                }
+
+                int menuNum = Integer.parseInt(inputNum);
+
+                switch (menuNum) {
+                    case 1:
+                        savingsService.doSavingService(loggedInUserId);
+                        break;
+                    case 2:
+                        termDepositService.doSavingService(loggedInUserId);
+                        break;
+                    case 3:
+                        closeSavingService.doCloseService(loggedInUserId);
+                        break;
+                    case 0:
+                        return;
+                        // break -> return 수정
+                    default:
+                        System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
+                        break;
+                } //return; // return 추가해봄
             }
-            break;
+        } catch (IOException e){
+            System.out.println("입금 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 }

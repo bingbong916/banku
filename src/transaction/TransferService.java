@@ -20,8 +20,10 @@ public class TransferService {
     public void transfer(String loggedInUserId) {
         try {
             String senderAccountNumber = userDao.getAccountNumber(loggedInUserId);
-            if (senderAccountNumber == null) {
-                System.out.println("계좌번호 못 찾았습니다.");
+            if(!userDao.hasAccount(loggedInUserId)){
+                System.out.println();
+                System.out.println("해당 아이디의 계좌가 존재하지 않습니다. 계좌 개설 후 다시 이용해주세요.");
+                System.out.println();
                 return;
             }
 
@@ -54,7 +56,7 @@ public class TransferService {
                         return;
                     }
 
-                    if (!isValidAmount(amountStr)) {
+                    if (!isValidAmount(amountStr) || Integer.parseInt(amountStr) == 0) {
                         System.out.println("올바른 금액을 입력하세요!");
                         continue;
                     }
@@ -90,8 +92,7 @@ public class TransferService {
         }
     }
 
-
-    private boolean isValidAccountNumber(String accountNumber) {
+	private boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{6}-\\d{6}");
     }
 

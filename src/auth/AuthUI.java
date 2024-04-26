@@ -3,7 +3,6 @@ import bank.MainMenu;
 
 import database.DatabaseManager;
 import database.UserDao;
-import saving.CloseSavingService;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatterBuilder;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.Period;
 
 
 
@@ -254,7 +252,7 @@ public class AuthUI {
         
         String userId;
         String password;
-        String loginDateStr;
+
         // 아이디
         while (true) {
             System.out.print("아이디를 입력하세요: ");
@@ -300,36 +298,25 @@ public class AuthUI {
             }
 
             break;
-
         }
 
-        //오늘 날짜
-        while (true) {
-            System.out.print("오늘 날짜를 입력하세요: ");
-            loginDateStr = scanner.nextLine();
-            if (loginDateStr == null || loginDateStr.isEmpty()) {
-                System.out.println("오늘 날짜를 입력해주세요.");
-                continue;
-            }
 
-            break;
+        System.out.print("아이디를 입력하세요: ");
+        String userId = scanner.nextLine();
+        System.out.print("비밀번호를 입력하세요: ");
+        String password = scanner.nextLine();
+        System.out.print("오늘 날짜를 입력하세요: "); // 오늘 날짜 입력받기 추가
+        String inputDate = scanner.nextLine();
 
-        }
-
-        String loggedInUserId = loginService.login(userId, password, loginDateStr); // 날짜 추가
+        String loggedInUserId = loginService.login(userId, password);
 
         if (loggedInUserId != null) {
             System.out.println("로그인 성공!");
-            System.out.println("오늘 날짜: " + loginDateStr); // 입력받은 날짜 확인용
-
+            System.out.println("오늘 날짜: " + inputDate); // 입력받은 날짜 확인용
             return userId;
         } else {
 //            System.out.println("로그인 실패");
             return null;
         }
-
     }
-
-    
-
 }

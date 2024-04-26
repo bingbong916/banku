@@ -30,7 +30,7 @@ public class TermDepositService {
     public void doSavingService(String loggedInUserId) {
         try {
             System.out.println();
-            System.out.println("[적금 서비스]"); // 정기예금 -> 적금 텍스트 수정
+            System.out.println("\n\n[적금 서비스]"); // 정기예금 -> 적금 텍스트 수정
             System.out.println("============================================");
             System.out.println("적금 가능한 상품");
             System.out.println("[1] 6개월 적금 - 연 2.0%, 월 ₩ 200,000    예상 수령액 : ₩ 1,200,000");
@@ -93,8 +93,8 @@ public class TermDepositService {
                         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
                         break;
                     case 0:
-                        savingServiceManager.printSavingMenu(loggedInUserId);
-                        break;
+//                        savingServiceManager.printSavingMenu(loggedInUserId);
+                        return;
                     default:
                         System.out.println("숫자만 입력하세요.");       //상품 번호의 숫자만 입력하세요 라고 수정?
                         continue;
