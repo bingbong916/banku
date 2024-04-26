@@ -258,22 +258,26 @@ public class AuthUI {
             System.out.print("아이디를 입력하세요: ");
             userId = scanner.nextLine();
 
-            if (userId == null || userId.isEmpty()) {
+            if (userId.isEmpty()) {
                 System.out.println("아이디를 입력해주세요");
                 continue;
-            }
-            else if (!userId.matches("[a-z0-9]+")) {
+            } else if (!userId.matches("[a-z0-9]+")) {
                 System.out.println("소문자 영어와 숫자의 조합으로 이루어져야 합니다.");
                 continue;
-            }
-
-            else if (userId.length() < 6 || userId.length() > 10) {
+            } else if (userId.length() < 6 || userId.length() > 10) {
                 System.out.println("6자 이상 10자 이하로 입력해주세요.");
                 continue;
+            } else {
+                try {
+                    if (!loginService.checkUserId(userId)) {
+                        System.out.println("존재하지 않는 아이디입니다.\n");
+                        continue;
+                    }
+                } catch (IOException e) {
+                    System.out.println("에러가 발생했습니다: " + e.getMessage());
+                    continue;
+                }
             }
-
-            
-
             break;
         }
 
@@ -282,21 +286,27 @@ public class AuthUI {
             System.out.print("비밀번호를 입력하세요: ");
             password = scanner.nextLine();
 
-            if (password == null || password.isEmpty()) {
+            if (password.isEmpty()) {
                 System.out.println("비밀번호를 입력해주세요.");
                 continue;
-            }
-
-            else if (!password.matches("\\d+")) {
+            } else if (!password.matches("\\d+")) {
                 System.out.println("비밀번호는 숫자만 포함해야 합니다.");
                 continue;
-            }
-
-            else if (password.length() != 6) {
+            } else if (password.length() != 6) {
                 System.out.println("비밀번호는 6자리 숫자로 이루어져야 합니다.");
                 continue;
+            } else {
+                try {
+                    if (!loginService.verifyUserPassword(userId, password)) {
+                        System.out.println("일치하지 않는 비밀번호 입니다.\n");
+                        continue;
+                    }
+                } catch (IOException e) {
+                    System.out.println("에러가 발생했습니다: " + e.getMessage());
+                    continue;
+                }
             }
-
+            System.out.println("로그인 성공!");
             break;
         }
 
