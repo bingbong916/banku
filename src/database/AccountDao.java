@@ -29,7 +29,17 @@ public class AccountDao {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         // Assuming the balance is stored as the first line in the account file
         String balanceStr = lines.get(0);
+
         return Integer.parseInt(balanceStr);
+    }
+
+    public String getBalanceToString(String accountNumber) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        // Assuming the balance is stored as the first line in the account file
+        String balanceStr = lines.get(0);
+        DecimalFormat decimalFormat = new DecimalFormat("###,###");
+
+        return decimalFormat.format(Integer.parseInt(balanceStr));
     }
 
     public String getStartDate(String accountNumber, int index) throws IOException {
@@ -52,8 +62,9 @@ public class AccountDao {
         String carryBackStr = lines.get(1);
         if(!carryBackStr.isEmpty()) {
             String[] parts = carryBackStr.split("\t");
+            DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-            return parts[0];
+            return decimalFormat.format(Integer.parseInt(parts[0]));
         }
         return accountNumber;
     }
