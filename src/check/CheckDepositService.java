@@ -150,7 +150,7 @@ public class CheckDepositService {
                 System.out.println("만기일: " + addMonths(startDate4, 24));
                 System.out.println("예상 환급액: ₩ 25,830,000");
             }
-            if (!result1 & !result2 & !result3 & !result4) {
+            if (!result1 && !result2 && !result3 && !result4) {
                 System.out.println("가입된 예·적금이 없습니다.");
             }
 
