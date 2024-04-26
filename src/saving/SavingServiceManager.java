@@ -4,7 +4,6 @@ import bank.MainMenu;
 import database.AccountDao;
 import database.DatabaseManager;
 import database.UserDao;
-import jdk.jfr.internal.tool.Main;
 
 import java.io.IOException;
 import java.lang.reflect.Parameter;
@@ -57,17 +56,6 @@ public class SavingServiceManager {
                 System.out.println();
                 return;
             }
-
-//            System.out.println();
-//            System.out.println("\n\n[예ㆍ적금 서비스]");
-//            System.out.println("============================================");
-//            System.out.println("정기예금 또는 적금 상품에 가입합니다.");
-//            System.out.println("============================================");
-//            System.out.println("[1] 정기 예금 서비스");
-//            System.out.println("[2] 적금 서비스");
-//            System.out.println("[3] 적금 해지 서비스");
-//            System.out.println("[0] 뒤로가기");
-//            System.out.println("============================================");
 
             while (true) { //출력 문구 위치 while문 안으로 이동
                 while (true) {

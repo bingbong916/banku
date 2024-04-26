@@ -213,8 +213,6 @@ public class AuthUI {
 
             break;
         }
-
-        // 회원가입 정보 추가
         try {
             registrationService.registerUser(userId, password, name, rrn);
 
