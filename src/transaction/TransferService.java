@@ -47,6 +47,11 @@ public class TransferService {
                     continue;
                 }
 
+                if (senderAccountNumber.equals(receiverAccountNumber)) {
+                    System.out.println("자신의 계좌로의 송금은 불가능합니다.");
+                    continue;
+                }
+
                 while (true) {
                     System.out.print("송금할 금액: ₩ ");
                     String amountStr = scanner.nextLine();
