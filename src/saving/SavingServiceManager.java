@@ -49,14 +49,6 @@ public class SavingServiceManager {
     public void printSavingMenu(String loggedInUserId) {
 
         try {
-            // 입장 시 계좌 존재 확인
-            if (!userDao.hasAccount(loggedInUserId)) {
-                System.out.println();
-                System.out.println("해당 아이디의 계좌가 존재하지 않습니다. 계좌 개설 후 다시 이용해주세요.");
-                System.out.println();
-                return;
-            }
-
             while (true) { //출력 문구 위치 while문 안으로 이동
                 while (true) {
                     System.out.println();

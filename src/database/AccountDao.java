@@ -75,22 +75,22 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
-    public void depositSavings(String accountNumber, int money) throws IOException {
+    public void depositSavings(String accountNumber, long money) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        int savings = money + Integer.parseInt(lines.get(0));
-        lines.set(0, Integer.toString(savings)); // 잔액 index = 0
+        long savings = money + Long.parseLong(lines.get(0));
+        lines.set(0, Long.toString(savings)); // 잔액 index = 0
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
-    public int withdrawalSavings (String accountNumber, int money) throws IOException {
+    public int withdrawalSavings (String accountNumber, long money) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        int oldSavings = Integer.parseInt(lines.get(0));
-        if(Integer.parseInt(lines.get(0)) - money < 0){
+        long oldSavings = Long.parseLong(lines.get(0));
+        if(Long.parseLong(lines.get(0)) - money < 0){
             return 0;
         }
-        int newSavings = oldSavings - money;
+        long newSavings = oldSavings - money;
 
-        lines.set(0, Integer.toString(newSavings)); // 잔액 index = 0
+        lines.set(0, Long.toString(newSavings)); // 잔액 index = 0
         dbManager.writeAccountFile(accountNumber, lines);
         return 1;
     }
