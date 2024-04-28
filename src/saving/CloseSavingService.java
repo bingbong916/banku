@@ -123,7 +123,7 @@ public class CloseSavingService {
                     System.out.println("[3] 12개월 적금");
                 }
                 if (result4) {
-                    System.out.println("[4] 24개월 저금");
+                    System.out.println("[4] 24개월 적금");
                 }
 
                 System.out.println("[0] 뒤로가기");
