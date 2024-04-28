@@ -63,12 +63,12 @@ public class CloseSavingService {
                     } //추가
 
                     if (!inputName.matches("^[가-힣]+$")) {
-                        System.out.println("이름의 형식이 잘못되었습니다.");     //메세지 뭐라 쓸지
+                        System.out.println("올바른 양식이 아닙니다.");     //메세지 뭐라 쓸지
                         continue;
                     }
 
                     if (inputName.length() < 2 || inputName.length() > 3) {
-                        System.out.println("이름의 길이가 잘못되었습니다.");     //메세지 뭐라 쓸지
+                        System.out.println("올바른 양식이 아닙니다.");     //메세지 뭐라 쓸지
                         continue;
                     }
 
@@ -91,7 +91,7 @@ public class CloseSavingService {
                         return;
                     } //추가
                     if (!inputRRN.matches("\\d{6}-\\d{7}")) {
-                        System.out.println("주민등록번호 형식에 어긋납니다.");    //메세지 뭐라 쓸지
+                        System.out.println("올바른 양식이 아닙니다.");    //메세지 뭐라 쓸지
                         continue;
                     }
 
