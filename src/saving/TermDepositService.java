@@ -81,13 +81,11 @@ public class TermDepositService {
                         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
                         break;
                     case 3:
-                        System.out.println("체크1");
                         if(accountDao.hasSavings(account, 4)) {
                             System.out.println("이미 가입한 적금입니다.");
                             savingServiceManager.printSavingMenu(loggedInUserId);
                             break; // 이미 가입한 적금인지 확인
                         }
-                        System.out.println("체크2");
                         // 첫 달 납입금을 현재 계좌에서 차감
                         accountDao.withdrawalSavings(account, 1000000);
                         // 첫 달 납입금을 적금 계좌에 적립
