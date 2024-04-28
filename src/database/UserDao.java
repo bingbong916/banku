@@ -71,6 +71,17 @@ public class UserDao {
         }
         return userId;
     }
+    
+    public boolean checkRecAccNumber(String accountNumber) throws IOException {
+    	List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            String[] parts = line.split("\t");
+            if (parts.length >= 5 && parts[4].trim().equals(accountNumber)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public String findUserToAccount(String userId) throws IOException {
         List<String> lines = dbManager.readUserFile();
