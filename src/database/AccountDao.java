@@ -103,10 +103,7 @@ public class AccountDao {
 
     public boolean hasSavings (String accountNumber, int index) throws IOException{
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        if (lines.get(index).isEmpty()) {
-            return false;
-        }
-        return true;
+        return !lines.get(index).trim().isEmpty();
     }
 
     public void removeSavings (String accountNumber, int productNum) throws IOException{
