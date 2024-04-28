@@ -11,6 +11,9 @@ public class DatabaseManager {
 
     public List<String> readUserFile() throws IOException {
         Path path = Paths.get(USER_FILE);
+        if (!Files.exists(path)) {
+            Files.createFile(path);
+        }
         return Files.readAllLines(path, StandardCharsets.UTF_8);
     }
 
@@ -31,6 +34,9 @@ public class DatabaseManager {
 
     public List<String> readDateFile() throws IOException {
         Path path = Paths.get(DATE_FILE);
+        if (!Files.exists(path)) {
+            Files.write(path, Collections.singletonList("00000000"), StandardCharsets.UTF_8);
+        }
         return Files.readAllLines(path, StandardCharsets.UTF_8);
     }
 
