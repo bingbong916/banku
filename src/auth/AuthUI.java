@@ -46,29 +46,7 @@ public class AuthUI {
             System.out.println("[2] 로그인 서비스");
             System.out.println("[0] 종료하기");
             System.out.println("============================================");
-<<<<<<< HEAD
-            System.out.print("선택하실 메뉴 번호를 입력하세요 (0-2): ");
 
-            String selected = scanner.nextLine();
-            switch (selected) {
-                case "1":
-                    registerUser();
-                    break;
-                case "2":
-                    loggedInUserId = loginUser();
-                    if (loggedInUserId != null) {
-                        MainMenu mainMenu = new MainMenu(loggedInUserId);
-                        mainMenu.show();
-                    } else {
-//                        System.out.println("로그인 실패");
-                    }
-                    break;
-                case "0":
-                    System.out.println("서비스를 종료합니다.");
-                    return;
-                default:
-                    System.out.println("잘못된 입력입니다. 다시 시도해주세요: ");
-=======
             boolean validInput = false;
             while (!validInput) {
                 System.out.print("선택하실 메뉴 번호를 입력하세요 (0-2): ");
@@ -93,7 +71,6 @@ public class AuthUI {
                         System.out.println("잘못된 입력입니다. 다시 번호를 입력해주세요 (0-2)");
                         break;
                 }
->>>>>>> upstream/main
             }
         }
     }
