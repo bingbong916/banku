@@ -5,6 +5,8 @@ import database.DatabaseManager;
 import database.DateDao;
 import database.UserDao;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import java.io.IOException;
@@ -312,10 +314,14 @@ public class AuthUI {
 
         String inputDate;
 
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+
         while (true) {
             try {
                 String pastDate = dateDao.getDate();
-                System.out.println("이전 날짜 :" + pastDate);
+                Date date = format1.parse(pastDate);
+                System.out.println("이전 날짜 :" + format2.format(date));
                 System.out.println();
                 System.out.print("오늘 날짜를 입력하세요: "); // 오늘 날짜 입력받기 추가
                 inputDate = scanner.nextLine();
@@ -331,13 +337,19 @@ public class AuthUI {
 
         String loggedInUserId = loginService.login(userId, password);
 
-        if (loggedInUserId != null) {
-            System.out.println("로그인 성공!");
-            System.out.println("오늘 날짜: " + inputDate); // 입력받은 날짜 확인용
-            System.out.println();
-            return userId;
-        } else {
+        try {
+            if (loggedInUserId != null) {
+                System.out.println("로그인 성공!");
+                Date date = format1.parse(inputDate);
+                System.out.println("오늘 날짜: " + format2.format(date)); // 입력받은 날짜 확인용
+                System.out.println();
+                return userId;
+            } else {
 //            System.out.println("로그인 실패");
+                return null;
+            }
+        }catch (Exception e){
+            e.getMessage();
             return null;
         }
     }
