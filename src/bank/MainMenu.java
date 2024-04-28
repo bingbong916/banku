@@ -13,6 +13,8 @@ import check.CheckManager;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static java.lang.System.exit;
+
 public class MainMenu {
     private final Scanner scanner;
     private final AccountService accountService;
@@ -117,7 +119,7 @@ public class MainMenu {
                     printMainMenu();
                     break;
                 case "0":
-                    return;
+                    exit(0);
                 default:
                     System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
                     break;
