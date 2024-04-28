@@ -39,7 +39,7 @@ public class DateDao {
                 dbManager.writeDateFile(lines);
                 return;
             } else if (month == pastMonth) {
-                if (date > pastDate) {
+                if (date >= pastDate) {
                     lines.set(0, inputDate);
                     dbManager.writeDateFile(lines);
                     return;
