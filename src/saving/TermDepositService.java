@@ -45,16 +45,17 @@ public class TermDepositService {
             while (true) {
                 String account = userDao.findUserToAccount(loggedInUserId);
                 String startDate = dateDao.getDate();
+                String input = "";
 
                 System.out.print("적금하실 상품 번호의 숫자만 입력하세요 (0~3): ");
-                String input = scanner.nextLine();
+                input = scanner.nextLine();
 
-                if(input.matches("^[0-3]+$")){
+                if(!input.matches("^[0-3]+$")){
                     System.out.println("숫자만 입력하세요.");       //상품 번호의 숫자만 입력하세요 라고 수정?
                     continue;
                 }
 
-                int termDepositNum = scanner.nextInt();
+                int termDepositNum = Integer.parseInt(input);
 
                 //추가
                 switch (termDepositNum){
