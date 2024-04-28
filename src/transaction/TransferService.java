@@ -41,7 +41,7 @@ public class TransferService {
                     continue;
                 }
                 
-                if (accountDao.checkAccountNumber(receiverAccountNumber) == null) {
+                if (!userDao.checkRecAccNumber(receiverAccountNumber)) {
                     System.out.println("받는 사람의 계좌번호가 존재하지 않습니다.");
                     continue;
                 }

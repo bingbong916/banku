@@ -1,5 +1,6 @@
 package database;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -31,17 +32,6 @@ public class AccountDao {
         String balanceStr = lines.get(0);
 
         return Long.parseLong(balanceStr);
-    }
-
-    public String checkAccountNumber(String accountNumber) throws IOException {
-        List<String> lines = dbManager.readUserFile();
-        for (String line : lines) {
-            String[] userInfo = line.split("\t");
-            if (userInfo[0].equals(accountNumber)) {
-                return userInfo[4];
-            }
-        }
-        return null; 
     }
     
     public String getBalanceToString(String accountNumber) throws IOException {
