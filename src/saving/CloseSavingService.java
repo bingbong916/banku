@@ -168,9 +168,9 @@ public class CloseSavingService {
                         int currentMonths = product1.getCurrentMonths();
                         int totalReturnAmount = product1.calculateTotalAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
-                        int currentBalance = accountDao.getBalance(accountNumber);
+                        long currentBalance = accountDao.getBalance(accountNumber);
                         // 적금 해지 금액을 현재 계좌에 합치기
-                        int newBalance = currentBalance + totalReturnAmount;
+                        long newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
                         accountDao.updateBalance(accountNumber, newBalance);
                         System.out.println(currentMonths);

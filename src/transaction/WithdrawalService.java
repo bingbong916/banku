@@ -61,13 +61,12 @@ public class WithdrawalService {
                 int type = accountDao.withdrawalSavings(account, amount);
 
                 // 출금 잔고 0원 로직 해야함
+                System.out.println();
                 if(type == 1){
-                    System.out.println();
                     System.out.println("출금이 완료되었습니다!");
                     System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
                     break;
                 } else {
-                    System.out.println();
                     System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다. 출금할 금액을 다시 입력해주세요.");
                 }
             }

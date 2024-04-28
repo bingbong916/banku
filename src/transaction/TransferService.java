@@ -55,14 +55,14 @@ public class TransferService {
                         return;
                     }
 
-                    if (!isValidAmount(amountStr) || Integer.parseInt(amountStr) == 0) {
+                    if (!isValidAmount(amountStr) || Long.parseLong(amountStr) == 0) {
                         System.out.println("올바른 금액을 입력하세요!");
                         continue;
                     }
 
-                    int amount = Integer.parseInt(amountStr.replace(",", "")); // Remove commas if present
+                    long amount = Long.parseLong(amountStr.replace(",", "")); // Remove commas if present
 
-                    int senderBalance = accountDao.getBalance(senderAccountNumber);
+                    long senderBalance = accountDao.getBalance(senderAccountNumber);
                     if (senderBalance < amount) {
                         System.out.println("잔액이 부족합니다!");
                         System.out.println("현재 잔액: ₩ " + senderBalance);
@@ -70,7 +70,7 @@ public class TransferService {
                         continue;
                     }
 
-                    int receiverBalance = accountDao.getBalance(receiverAccountNumber);
+                    long receiverBalance = accountDao.getBalance(receiverAccountNumber);
 
                     senderBalance -= amount;
                     receiverBalance += amount;
