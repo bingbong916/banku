@@ -9,6 +9,16 @@ public class DatabaseManager {
     private static final String USER_FILE = "user.txt";
     private static final String DATE_FILE = "date.txt";
 
+    public void makeFiles() throws IOException {
+        Path user_path = Paths.get(USER_FILE);
+        if (!Files.exists(user_path)) {
+            Files.createFile(user_path);
+        }
+        Path date_path = Paths.get(DATE_FILE);
+        if (!Files.exists(date_path)) {
+            Files.write(date_path, Collections.singletonList("00000000"), StandardCharsets.UTF_8);
+        }
+    }
     public List<String> readUserFile() throws IOException {
         Path path = Paths.get(USER_FILE);
         return Files.readAllLines(path, StandardCharsets.UTF_8);
