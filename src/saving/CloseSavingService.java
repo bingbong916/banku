@@ -97,7 +97,7 @@ public class CloseSavingService {
 
                     if (!inputRRN.equals(userDao.findUserToRRN(loggedInUserId))) {
                         System.out.println("존재하지 않는 주민등록번호입니다.");
-                        return;
+                        continue;
                     }
                     break;
                 }
