@@ -40,6 +40,11 @@ public class TransferService {
                     System.out.println("올바른 계좌 번호를 입력하세요!");
                     continue;
                 }
+                
+                if (accountDao.checkAccountNumber(receiverAccountNumber) == null) {
+                    System.out.println("받는 사람의 계좌번호가 존재하지 않습니다.");
+                    continue;
+                }
 
                 if (senderAccountNumber.equals(receiverAccountNumber)) {
                     System.out.println("자신의 계좌로의 송금은 불가능합니다.");

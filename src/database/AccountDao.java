@@ -33,6 +33,17 @@ public class AccountDao {
         return Integer.parseInt(balanceStr);
     }
 
+    public String checkAccountNumber(String accountNumber) throws IOException {
+        List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            String[] userInfo = line.split("\t");
+            if (userInfo[0].equals(accountNumber)) {
+                return userInfo[4];
+            }
+        }
+        return null; 
+    }
+    
     public String getBalanceToString(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         // Assuming the balance is stored as the first line in the account file
