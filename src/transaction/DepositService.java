@@ -54,14 +54,17 @@ public class DepositService {
                 }
 
                 if (!money.matches("\\d+")) {
+                    System.out.println();
                     System.out.println("올바른 양식이 아닙니다.");
+                } else if (Long.parseLong(money)>=0 && Long.parseLong(money) < 1000){
+                    System.out.println("최소 금액 1000원 이상 입력해주세요.");
                 } else {
                     break;
                 }
             }
 
             // 입금 금액 입력 받기
-            int amount = Integer.parseInt(money);
+            long amount = Long.parseLong(money);
 
             // id 해당 계좌
             String account = userDao.findUserToAccount(loggedInUserId);

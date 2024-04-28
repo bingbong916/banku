@@ -47,6 +47,7 @@ public class AuthUI {
             System.out.println("[0] 종료하기");
             System.out.println("============================================");
             System.out.print("선택하실 메뉴 번호를 입력하세요 (0-2): ");
+
             String selected = scanner.nextLine();
             switch (selected) {
                 case "1":
@@ -65,8 +66,7 @@ public class AuthUI {
                     System.out.println("서비스를 종료합니다.");
                     return;
                 default:
-                    System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
-                    break;
+                    System.out.println("잘못된 입력입니다. 다시 시도해주세요: ");
             }
         }
     }
