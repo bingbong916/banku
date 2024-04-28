@@ -31,7 +31,7 @@ public class CheckDepositService {
 
         LocalDate expDate = date.plusMonths(months);
         
-        return expDate.format(DateTimeFormatter.BASIC_ISO_DATE);
+        return expDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     private static boolean isValidAccountNumber(String accountNumber) {
