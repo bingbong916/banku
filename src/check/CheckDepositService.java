@@ -4,6 +4,8 @@ import database.*;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 
 public class CheckDepositService {
@@ -25,7 +27,7 @@ public class CheckDepositService {
     }
 
     public static String addMonths(String startDate, int months) {
-        LocalDate date = LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate date = LocalDate.parse(startDate, DateTimeFormatter.BASIC_ISO_DATE);
 
         LocalDate expDate = date.plusMonths(months);
         
@@ -108,10 +110,11 @@ public class CheckDepositService {
             boolean result3 = accountDao.hasSavings(account, 3);
             boolean result4 = accountDao.hasSavings(account, 4);
 
-            String startDate1 = accountDao.getStartDate(account, 1);
-            String startDate2 = accountDao.getStartDate(account, 2);
-            String startDate3 = accountDao.getStartDate(account,3);
-            String startDate4 = accountDao.getStartDate(account, 4);
+
+            String startDate1 = accountDao.getStartDate(account, 0);
+            String startDate2 = accountDao.getStartDate(account, 1);
+            String startDate3 = accountDao.getStartDate(account,2);
+            String startDate4 = accountDao.getStartDate(account, 3);
 
             String carryBack = accountDao.getCarryBack(account);
 

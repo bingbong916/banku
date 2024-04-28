@@ -35,27 +35,30 @@ public class SavingsService {
     public void doSavingService(String loggedInUserId) {
 
         try {
-            Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String account = userDao.findUserToAccount(loggedInUserId);
+            if(accountDao.hasSavings(account, 1)) {
+                System.out.println("이미 가입한 예금입니다.");
+                savingServiceManager.printSavingMenu(loggedInUserId);
+                return; // 이미 가입한 예금인지 확인
+            }
+
             Scanner scan = new Scanner(System.in);
             System.out.println();
             System.out.println("\n\n[정기예금 서비스]");
             System.out.println("============================================");
-            System.out.println("현재 예금 가능한 최대 금액: ₩");
+            System.out.println("현재 예금 가능한 최대 금액: ₩ 1,000,000,000");
             System.out.println("'q'를 입력할 시 이전 화면으로 돌아갑니다.");
             System.out.println("============================================");
 
             while (true) {
                 System.out.print("예금할 금액을 입력하세요 (₩1,000 ~ ₩1,000,000,000): ₩ ");
                 String inputMoney = scan.nextLine();
-                int intInputMoney = Integer.parseInt(inputMoney);
-                savingServiceManager.updateSavingProductAmount(intInputMoney);
                 if (inputMoney.equals("q")){
                     savingServiceManager.printSavingMenu(loggedInUserId);
                     return;
                 }
 
-                if(!inputMoney.matches("\\d+")){
+                if(!inputMoney.matches("^[0-9]+$")){
                     System.out.println("숫자가 아닙니다.");
                     continue;
                 }
@@ -67,14 +70,17 @@ public class SavingsService {
                     continue;
                 }
 
-                String amount = decimalFormat.format(money);
-                String account = userDao.findUserToAccount(loggedInUserId);
-                String startDate = dateDao.getDate();
-                if(accountDao.hasSavings(account, 1)) {
-                    System.out.println("이미 가입한 예금입니다.");
-                    savingServiceManager.printSavingMenu(loggedInUserId);
-                    break; // 이미 가입한 예금인지 확인
+                int currentBalance = Integer.parseInt(accountDao.showSavings(account));
+                if (money > currentBalance) {
+                    System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + decimalFormat.format(currentBalance) + "입니다.");
+                    continue;
                 }
+
+                int intInputMoney = Integer.parseInt(inputMoney);
+                savingServiceManager.updateSavingProductAmount(intInputMoney);
+                String amount = decimalFormat.format(money);
+                String startDate = dateDao.getDate();
+
                 intInputMoney = Integer.parseInt(inputMoney);
                 // 첫 달 납입금을 현재 계좌에서 차감
                 accountDao.withdrawalSavings(account, intInputMoney);

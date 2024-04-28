@@ -49,14 +49,6 @@ public class SavingServiceManager {
     public void printSavingMenu(String loggedInUserId) {
 
         try {
-            // 입장 시 계좌 존재 확인
-            if (!userDao.hasAccount(loggedInUserId)) {
-                System.out.println();
-                System.out.println("해당 아이디의 계좌가 존재하지 않습니다. 계좌 개설 후 다시 이용해주세요.");
-                System.out.println();
-                return;
-            }
-
             while (true) { //출력 문구 위치 while문 안으로 이동
                 while (true) {
                     System.out.println();
@@ -69,12 +61,17 @@ public class SavingServiceManager {
                     System.out.println("[3] 적금 해지 서비스");
                     System.out.println("[0] 뒤로가기");
                     System.out.println("============================================");
-                    System.out.print("선택하실 서비스 번호를 입력하세요 (0-3): ");
-                    String inputNum = scanner.nextLine();
 
-                    if (!inputNum.matches("[0-3]")) {
-                        System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
-                        continue;
+                    String inputNum = "";
+                    while (true){
+                        System.out.print("선택하실 서비스 번호를 입력하세요 (0-3): ");
+                        inputNum = scanner.nextLine();
+
+                        if (!inputNum.matches("[0-3]")) {
+                            System.out.println("원하는 메뉴의 숫자만을 입력해 주세요.");
+                            continue;
+                        }
+                        break;
                     }
 
                     int menuNum = Integer.parseInt(inputNum);

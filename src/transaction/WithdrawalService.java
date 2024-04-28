@@ -27,14 +27,6 @@ public class WithdrawalService {
 
     public void showWithdrawal(String loggedInUserId){
         try{
-            // 입장 시 계좌 존재 확인
-            if(!userDao.hasAccount(loggedInUserId)){
-                System.out.println();
-                System.out.println("해당 아이디의 계좌가 존재하지 않습니다. 계좌 개설 후 다시 이용해주세요.");
-                System.out.println();
-                return;
-            }
-
             // 입금 서비스 시작
             System.out.println("\n\n[출금 서비스]");
             System.out.println("============================================");
@@ -76,7 +68,7 @@ public class WithdrawalService {
                     break;
                 } else {
                     System.out.println();
-                    System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 " + accountDao.showSavings(account) + " 입니다. 출금할 금액을 다시 입력해주세요.");
+                    System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다. 출금할 금액을 다시 입력해주세요.");
                 }
             }
 

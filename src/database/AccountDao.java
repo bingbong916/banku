@@ -45,13 +45,12 @@ public class AccountDao {
     public String getStartDate(String accountNumber, int index) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         List<String> subList = lines.subList(1, lines.size());
-        for (index=0;index<4;index++) {
-            String str = subList.get(index);
-            if (!str.isEmpty()) {
-                String[] parts = str.split("\t");
 
-                return parts[1];
-            }
+        String str = subList.get(index);
+        if (!str.isEmpty()) {
+            String[] parts = str.split("\t");
+
+            return parts[1];
         }
         return accountNumber;
     }
@@ -104,10 +103,7 @@ public class AccountDao {
 
     public boolean hasSavings (String accountNumber, int index) throws IOException{
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        if (lines.get(index).isEmpty()) {
-            return false;
-        }
-        return true;
+        return !lines.get(index).trim().isEmpty();
     }
 
     public void removeSavings (String accountNumber, int productNum) throws IOException{
