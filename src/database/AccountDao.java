@@ -123,6 +123,11 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber,lines);
     }
 
+    public Integer getSavings (String accountNumber) throws  IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        return Integer.parseInt(lines.get(0));
+    }
+
     //추가
         public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
             List<String> lines = dbManager.readAccountFile(accountNumber);

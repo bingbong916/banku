@@ -59,31 +59,31 @@ public class SavingsService {
                 }
 
                 if(!inputMoney.matches("^[0-9]+$")){
-                    System.out.println("숫자가 아닙니다.");
+                    System.out.println("숫자만 입력하세요.");
                     continue;
                 }
 
                 int money = Integer.parseInt(inputMoney);
 
                 if (money < 1000 || money > 1000000000) {
-                    System.out.println("범위 내 금액을 입력하세요.");
+                    System.out.println("올바른 금액을 입력하세요.");
                     continue;
                 }
 
-                int currentBalance = Integer.parseInt(accountDao.showSavings(account));
+
+                int currentBalance = accountDao.getSavings(account);
+
+
                 if (money > currentBalance) {
                     System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + decimalFormat.format(currentBalance) + "입니다.");
                     continue;
                 }
 
-                int intInputMoney = Integer.parseInt(inputMoney);
-                savingServiceManager.updateSavingProductAmount(intInputMoney);
-                String amount = decimalFormat.format(money);
+                savingServiceManager.updateSavingProductAmount(money);
                 String startDate = dateDao.getDate();
 
-                intInputMoney = Integer.parseInt(inputMoney);
                 // 첫 달 납입금을 현재 계좌에서 차감
-                accountDao.withdrawalSavings(account, intInputMoney);
+                accountDao.withdrawalSavings(account, money);
                 // 첫 달 납입금을 예금 계좌에 적립
                 accountDao.updateSavings(account, 0, inputMoney, startDate);
                 System.out.println("예금이 완료되었습니다!");
