@@ -16,7 +16,7 @@ public class DatabaseManager {
         }
         Path date_path = Paths.get(DATE_FILE);
         if (!Files.exists(date_path)) {
-            Files.write(date_path, Collections.singletonList("00000000"), StandardCharsets.UTF_8);
+            Files.write(date_path, Collections.singletonList("00010101"), StandardCharsets.UTF_8);
         }
     }
     public List<String> readUserFile() throws IOException {
