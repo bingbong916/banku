@@ -134,7 +134,7 @@ public class CheckDepositService {
                 System.out.println(resultNumber + ")");
                 System.out.println("6개월 적금");
                 System.out.println("만기일: " + addMonths(startDate2, 6));
-                System.out.println("예상 환급액: ₩ 1,200,000");
+                System.out.println("예상 환급액: ₩ 1,224,000");
                 System.out.println(" ");
 
             }
