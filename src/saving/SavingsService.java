@@ -58,7 +58,7 @@ public class SavingsService {
                     return;
                 }
 
-                if(!inputMoney.matches("\\d+")){
+                if(!inputMoney.matches("^[0-9]+$")){
                     System.out.println("숫자가 아닙니다.");
                     continue;
                 }

@@ -43,13 +43,17 @@ public class TermDepositService {
             System.out.println("============================================");
 
             while (true) {
-                String amount = "0";
-                Date date = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String account = userDao.findUserToAccount(loggedInUserId);
                 String startDate = dateDao.getDate();
 
                 System.out.print("적금하실 상품 번호의 숫자만 입력하세요 (0~3): ");
+                String input = scanner.nextLine();
+
+                if(input.matches("^[0-3]+$")){
+                    System.out.println("숫자만 입력하세요.");       //상품 번호의 숫자만 입력하세요 라고 수정?
+                    continue;
+                }
+
                 int termDepositNum = scanner.nextInt();
 
                 //추가
@@ -108,9 +112,6 @@ public class TermDepositService {
                     case 0:
 //                        savingServiceManager.printSavingMenu(loggedInUserId);
                         return;
-                    default:
-                        System.out.println("숫자만 입력하세요.");       //상품 번호의 숫자만 입력하세요 라고 수정?
-                        continue;
                 }
                 System.out.println();
                 break;
