@@ -48,9 +48,11 @@ public class DepositService {
                 if (!money.matches("\\d+")) {
                     System.out.println();
                     System.out.println("올바른 양식이 아닙니다.");
-                } else if (Long.parseLong(money)>=0 && Long.parseLong(money) < 1000){
-                    System.out.println("최소 금액 1000원 이상 입력해주세요.");
-                } else {
+                }
+//                else if (Long.parseLong(money)>=0 && Long.parseLong(money) < 1000){
+//                    System.out.println("최소 금액 1000원 이상 입력해주세요.");
+//                }
+                else {
                     break;
                 }
             }
