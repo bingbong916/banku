@@ -118,21 +118,25 @@ public class AuthUI {
 
             if (userId == null || userId.isEmpty()) {
                 System.out.println("아이디를 입력해주세요");
+                System.out.println("");
                 continue;
             }
 
             else if (!userId.matches("[a-z0-9]+")) {
                 System.out.println("소문자 영어와 숫자의 조합으로 이루어져야 합니다.");
+                System.out.println("");
                 continue;
             }
 
             else if (userId.length() < 6 || userId.length() > 10) {
                 System.out.println("6자 이상 10자 이하로 입력해주세요.");
+                System.out.println("");
                 continue;
             } else
                 try {
                     if(userDao.checkDuplicateUserId(userId)) {
                         System.out.println("아이디가 이미 존재합니다.");
+                        System.out.println("");
                         continue;
                     }
 
@@ -153,16 +157,19 @@ public class AuthUI {
 
             if (password == null || password.isEmpty()) {
                 System.out.println("비밀번호를 입력해주세요.");
+                System.out.println("");
                 continue;
             }
 
             else if (!password.matches("\\d+")) {
                 System.out.println("비밀번호는 숫자만 포함해야 합니다.");
+                System.out.println("");
                 continue;
             }
 
             else if (password.length() != 6) {
                 System.out.println("비밀번호는 6자리 숫자로 이루어져야 합니다.");
+                System.out.println("");
                 continue;
             }
 
@@ -176,19 +183,23 @@ public class AuthUI {
 
             if (name == null || name.isEmpty()) {
                 System.out.println("이름을 입력해주세요.");
+                System.out.println("");
                 continue;
             }
 
             else if (!name.matches("[ㄱ-ㅎㅏ-ㅣ가-힣]+")) {
                 System.out.println("이름은 한글로만 구성되어야 합니다.");
+                System.out.println("");
                 continue;
             }
             if (!name.matches("^[가-힣]+$")) {
                 System.out.println("이름은 조합된 한글 글자로만 입력해주세요.");
+                System.out.println("");
                 continue;
             }
             else if (name.length() < 2 || name.length() > 5) {
                 System.out.println("2자 이상 5자 이하로 입력해주세요.");
+                System.out.println("");
                 continue;
             }
 
@@ -202,16 +213,19 @@ public class AuthUI {
 
             if (rrn == null || rrn.isEmpty()) {
                 System.out.println("주민등록번호를 입력해주세요.");
+                System.out.println("");
                 continue;
             }
 
             else if (!rrn.matches("\\d{6}-\\d{7}")) {
                 System.out.println("주민등록번호는 (6자리 숫자)-(7자리 숫자) 형식이어야 합니다.");
+                System.out.println("");
                 continue;
             } else
                 try {
                     if (userDao.checkDuplicateRRN(rrn)) {
                         System.out.println("주민등록번호가 이미 존재합니다.");
+                        System.out.println("");
                         continue;
                     }
 
@@ -230,6 +244,7 @@ public class AuthUI {
 
                         } catch (DateTimeParseException e) {
                             System.out.println("유효하지 않은 생년월일입니다.");
+                            System.out.println("");
                             continue;
                         }
                     }
@@ -246,6 +261,7 @@ public class AuthUI {
 
         } catch (Exception e) {
             System.out.println("회원가입 중 오류가 발생했습니다: " + e.getMessage());
+            System.out.println("");
         }
 
     }
@@ -266,21 +282,26 @@ public class AuthUI {
 
             if (userId.isEmpty()) {
                 System.out.println("아이디를 입력해주세요");
+                System.out.println("");
                 continue;
             } else if (!userId.matches("[a-z0-9]+")) {
                 System.out.println("소문자 영어와 숫자의 조합으로 이루어져야 합니다.");
+                System.out.println("");
                 continue;
             } else if (userId.length() < 6 || userId.length() > 10) {
                 System.out.println("6자 이상 10자 이하로 입력해주세요.");
+                System.out.println("");
                 continue;
             } else {
                 try {
                     if (!loginService.checkUserId(userId)) {
                         System.out.println("존재하지 않는 아이디입니다.\n");
+                        System.out.println("");
                         continue;
                     }
                 } catch (IOException e) {
                     System.out.println("에러가 발생했습니다: " + e.getMessage());
+                    System.out.println("");
                     continue;
                 }
             }
@@ -294,21 +315,26 @@ public class AuthUI {
 
             if (password.isEmpty()) {
                 System.out.println("비밀번호를 입력해주세요.");
+                System.out.println("");
                 continue;
             } else if (!password.matches("\\d+")) {
                 System.out.println("비밀번호는 숫자만 포함해야 합니다.");
+                System.out.println("");
                 continue;
             } else if (password.length() != 6) {
                 System.out.println("비밀번호는 6자리 숫자로 이루어져야 합니다.");
+                System.out.println("");
                 continue;
             } else {
                 try {
                     if (!loginService.verifyUserPassword(userId, password)) {
                         System.out.println("일치하지 않는 비밀번호 입니다.\n");
+                        System.out.println("");
                         continue;
                     }
                 } catch (IOException e) {
                     System.out.println("에러가 발생했습니다: " + e.getMessage());
+                    System.out.println("");
                     continue;
                 }
             }
@@ -328,6 +354,7 @@ public class AuthUI {
                 dateDao.setDate(inputDate);
             } catch (Exception e){
                 System.out.println("유효하지 않은 날짜입니다.");
+                System.out.println("");
                 continue;
             }
             break;
@@ -339,6 +366,7 @@ public class AuthUI {
         if (loggedInUserId != null) {
             System.out.println("로그인 성공!");
             System.out.println("오늘 날짜: " + inputDate); // 입력받은 날짜 확인용
+            System.out.println("");
             return userId;
         } else {
 //            System.out.println("로그인 실패");
