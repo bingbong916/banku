@@ -35,7 +35,7 @@ public class AuthUI {
         this.loginService = new LoginService(userDao);
         dateDao = new DateDao(dbManager);
     }
-    public void showMenu() {
+    public void showMenu() throws IOException {
         String loggedInUserId = null;
         while (true) {
             System.out.println("\n\n[회원가입·로그인 서비스]");
