@@ -26,12 +26,12 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
     
-    public int getBalance(String accountNumber) throws IOException {
+    public long getBalance(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         // Assuming the balance is stored as the first line in the account file
         String balanceStr = lines.get(0);
 
-        return Integer.parseInt(balanceStr);
+        return Long.parseLong(balanceStr);
     }
     
     public String getBalanceToString(String accountNumber) throws IOException {
@@ -40,7 +40,7 @@ public class AccountDao {
         String balanceStr = lines.get(0);
         DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-        return decimalFormat.format(Integer.parseInt(balanceStr));
+        return decimalFormat.format(Long.parseLong(balanceStr));
     }
 
     public String getStartDate(String accountNumber, int index) throws IOException {
@@ -64,12 +64,12 @@ public class AccountDao {
             String[] parts = carryBackStr.split("\t");
             DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-            return decimalFormat.format(Integer.parseInt(parts[0]));
+            return decimalFormat.format(Long.parseLong(parts[0]));
         }
         return accountNumber;
     }
 
-    public void updateBalance(String accountNumber, int newBalance) throws IOException {
+    public void updateBalance(String accountNumber, long newBalance) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         // Update balance in the first line
         lines.set(0, String.valueOf(newBalance));
@@ -99,7 +99,7 @@ public class AccountDao {
     public String showSavings (String accountNumber) throws IOException{
         List<String> lines = dbManager.readAccountFile(accountNumber);
         DecimalFormat decimalFormat = new DecimalFormat("###,###");
-        return decimalFormat.format(Integer.parseInt(lines.get(0)));
+        return decimalFormat.format(Long.parseLong(lines.get(0)));
     }
 
     public boolean hasSavings (String accountNumber, int index) throws IOException{
@@ -111,6 +111,11 @@ public class AccountDao {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         lines.set(productNum, "");
         dbManager.writeAccountFile(accountNumber,lines);
+    }
+
+    public Integer getSavings (String accountNumber) throws  IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        return Integer.parseInt(lines.get(0));
     }
 
     //추가
