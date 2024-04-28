@@ -138,7 +138,26 @@ public class CloseSavingService {
                         continue;
                     }
 
+
                     int inputNum = Integer.parseInt(input);
+
+                    if(inputNum == 1 && !result1){
+                        System.out.println("올바르지 않은 메뉴입니다.");
+                        continue;
+                    }
+                    if(inputNum == 2 && !result2){
+                        System.out.println("올바르지 않은 메뉴입니다.");
+                        continue;
+                    }
+                    if(inputNum == 3 && !result3){
+                        System.out.println("올바르지 않은 메뉴입니다.");
+                        continue;
+                    }
+                    if(inputNum == 4 && !result4){
+                        System.out.println("올바르지 않은 메뉴입니다.");
+                        continue;
+                    }
+
                     String accountNumber = userDao.findUserToAccount(loggedInUserId);
                     String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
                     int amount = Integer.parseInt(amountStr);
