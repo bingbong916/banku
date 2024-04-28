@@ -33,6 +33,17 @@ public class AccountDao {
         return Long.parseLong(balanceStr);
     }
 
+    public String checkAccountNumber(String accountNumber) throws IOException {
+        List<String> lines = dbManager.readUserFile();
+        for (String line : lines) {
+            String[] userInfo = line.split("\t");
+            if (userInfo[0].equals(accountNumber)) {
+                return userInfo[4];
+            }
+        }
+        return null; 
+    }
+    
     public String getBalanceToString(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         // Assuming the balance is stored as the first line in the account file
@@ -110,6 +121,11 @@ public class AccountDao {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         lines.set(productNum, "");
         dbManager.writeAccountFile(accountNumber,lines);
+    }
+
+    public Integer getSavings (String accountNumber) throws  IOException{
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        return Integer.parseInt(lines.get(0));
     }
 
     //추가

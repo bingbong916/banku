@@ -63,12 +63,12 @@ public class CloseSavingService {
                     } //추가
 
                     if (!inputName.matches("^[가-힣]+$")) {
-                        System.out.println("이름의 형식이 잘못되었습니다.");     //메세지 뭐라 쓸지
+                        System.out.println("올바른 양식이 아닙니다.");     //메세지 뭐라 쓸지
                         continue;
                     }
 
                     if (inputName.length() < 2 || inputName.length() > 3) {
-                        System.out.println("이름의 길이가 잘못되었습니다.");     //메세지 뭐라 쓸지
+                        System.out.println("올바른 양식이 아닙니다.");     //메세지 뭐라 쓸지
                         continue;
                     }
 
@@ -91,7 +91,7 @@ public class CloseSavingService {
                         return;
                     } //추가
                     if (!inputRRN.matches("\\d{6}-\\d{7}")) {
-                        System.out.println("주민등록번호 형식에 어긋납니다.");    //메세지 뭐라 쓸지
+                        System.out.println("올바른 양식이 아닙니다.");    //메세지 뭐라 쓸지
                         continue;
                     }
 
@@ -173,7 +173,6 @@ public class CloseSavingService {
                         long newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
                         accountDao.updateBalance(accountNumber, newBalance);
-                        System.out.println(currentMonths);
                         System.out.println("1번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product1.calculateTotalInterest(amount, currentMonths)));
