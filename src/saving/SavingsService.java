@@ -35,8 +35,6 @@ public class SavingsService {
     public void doSavingService(String loggedInUserId) {
 
         try {
-            Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Scanner scan = new Scanner(System.in);
             System.out.println();
             System.out.println("\n\n[정기예금 서비스]");
@@ -48,8 +46,6 @@ public class SavingsService {
             while (true) {
                 System.out.print("예금할 금액을 입력하세요 (₩1,000 ~ ₩1,000,000,000): ₩ ");
                 String inputMoney = scan.nextLine();
-                int intInputMoney = Integer.parseInt(inputMoney);
-                savingServiceManager.updateSavingProductAmount(intInputMoney);
                 if (inputMoney.equals("q")){
                     savingServiceManager.printSavingMenu(loggedInUserId);
                     return;
@@ -66,7 +62,8 @@ public class SavingsService {
                     System.out.println("범위 내 금액을 입력하세요.");
                     continue;
                 }
-
+                int intInputMoney = Integer.parseInt(inputMoney);
+                savingServiceManager.updateSavingProductAmount(intInputMoney);
                 String amount = decimalFormat.format(money);
                 String account = userDao.findUserToAccount(loggedInUserId);
                 String startDate = dateDao.getDate();
