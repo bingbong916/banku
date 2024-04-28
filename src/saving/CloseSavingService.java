@@ -173,7 +173,6 @@ public class CloseSavingService {
                         int newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
                         accountDao.updateBalance(accountNumber, newBalance);
-                        System.out.println(currentMonths);
                         System.out.println("1번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product1.calculateTotalInterest(amount, currentMonths)));
