@@ -67,7 +67,7 @@ public class CloseSavingService {
                         continue;
                     }
 
-                    if (inputName.length() < 2 || inputName.length() > 3) {
+                    if (inputName.length() < 2 || inputName.length() > 5) {
                         System.out.println("올바른 양식이 아닙니다.");     //메세지 뭐라 쓸지
                         continue;
                     }
