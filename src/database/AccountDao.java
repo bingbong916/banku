@@ -64,10 +64,14 @@ public class AccountDao {
             String[] parts = carryBackStr.split("\t");
             DecimalFormat decimalFormat = new DecimalFormat("###,###");
 
-            return decimalFormat.format(Long.parseLong(parts[0]));
+            String input = parts[0];
+            Long carryBack = (Long) Math.round(Double.parseDouble(input) + Double.parseDouble(input)*0.03);
+
+            return decimalFormat.format(carryBack);
         }
         return accountNumber;
     }
+
 
     public void updateBalance(String accountNumber, long newBalance) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
