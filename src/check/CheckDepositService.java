@@ -8,6 +8,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
 
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
+
 public class CheckDepositService {
     private final UserDao userDao;
     private static AccountDao accountDao;
@@ -110,7 +114,6 @@ public class CheckDepositService {
             boolean result3 = accountDao.hasSavings(account, 3);
             boolean result4 = accountDao.hasSavings(account, 4);
 
-
             String startDate1 = accountDao.getStartDate(account, 0);
             String startDate2 = accountDao.getStartDate(account, 1);
             String startDate3 = accountDao.getStartDate(account,2);
@@ -127,7 +130,6 @@ public class CheckDepositService {
                 System.out.println("만기일: " + addMonths(startDate1, 12));
                 System.out.println("예상 환급액: ₩ " + carryBack);
                 System.out.println(" ");
-
             }
             if (result2) {
                 resultNumber++;
@@ -136,7 +138,6 @@ public class CheckDepositService {
                 System.out.println("만기일: " + addMonths(startDate2, 6));
                 System.out.println("예상 환급액: ₩ 1,224,000");
                 System.out.println(" ");
-
             }
             if (result3) {
                 resultNumber++;
