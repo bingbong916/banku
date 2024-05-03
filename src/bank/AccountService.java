@@ -35,13 +35,23 @@ public class AccountService {
                 System.out.print("초기 입금액을 입력하세요: ₩ ");
                 amount = scanner.nextLine();
 
+                try{
+                    Long.parseLong(amount);
+                }catch (NumberFormatException e){
+                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
+                    continue;
+                }
+
                 if (amount.equals("q")) {
                     return;
                 }
 
                 if (!amount.matches("\\d+")) {
                     System.out.println("올바른 양식이 아닙니다.");
-                } else {
+                }else if (Long.parseLong(amount)==0){
+                    System.out.println("최소 1원 이상 입력해주세요.");
+                }
+                else {
                     break;
                 }
             }
