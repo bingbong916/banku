@@ -24,7 +24,7 @@ public class SavingServiceManager {
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
         //product0 수정해야함
-//        this.product0 = new SavingProduct(12, 3.0, 100000)
+        SavingProduct product0 = new SavingProduct(12, 3.0, 100000);
         SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
@@ -49,7 +49,7 @@ public class SavingServiceManager {
     public void printSavingMenu(String loggedInUserId) {
 
         try {
-            while (true) { //출력 문구 위치 while문 안으로 이동
+
                 while (true) {
                     System.out.println();
                     System.out.println("\n\n[예ㆍ적금 서비스]");
@@ -94,7 +94,6 @@ public class SavingServiceManager {
                             break;
                     } //return; // return 추가해봄
                 }
-            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
