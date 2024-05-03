@@ -24,7 +24,7 @@ public class SavingServiceManager {
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
         //product0 수정해야함
-//        this.product0 = new SavingProduct(12, 3.0, 100000)
+        SavingProduct product0 = new SavingProduct(12, 3.0, 100000);
         SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
         SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
         SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
