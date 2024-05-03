@@ -49,7 +49,7 @@ public class SavingServiceManager {
     public void printSavingMenu(String loggedInUserId) {
 
         try {
-            while (true) { //출력 문구 위치 while문 안으로 이동
+
                 while (true) {
                     System.out.println();
                     System.out.println("\n\n[예ㆍ적금 서비스]");
@@ -94,7 +94,6 @@ public class SavingServiceManager {
                             break;
                     } //return; // return 추가해봄
                 }
-            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
