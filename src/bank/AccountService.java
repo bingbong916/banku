@@ -5,6 +5,9 @@ import database.DatabaseManager;
 import database.UserDao;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -60,8 +63,13 @@ public class AccountService {
     }
 
     private String generateAccountNumber() {
+        long timestamp = Instant.now().getEpochSecond(); // 현재 시간의 유닉스 타임스탬프(초)
+        String fullTimestamp = Long.toString(timestamp);
+        String lastEightDigits = fullTimestamp.length() > 8 ? fullTimestamp.substring(fullTimestamp.length() - 8) : fullTimestamp; // 마지막 8자리만 추출
+
         Random random = new Random();
-        // \\d{6}-\\d{6} 형식의 계좌 번호 생성
-        return String.format("%06d-%06d", random.nextInt(1000000), random.nextInt(1000000));
+        String randomPart = String.format("%08d", random.nextInt(100000000));
+
+        return lastEightDigits + "-" + randomPart;
     }
 }
