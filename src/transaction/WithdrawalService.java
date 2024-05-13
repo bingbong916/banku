@@ -38,8 +38,16 @@ public class WithdrawalService {
 
             while (true) {
                 // 출금 금액 입력 받기
+                System.out.println("출금 가능한 금액은 ₩\" + accountDao.showSavings(account) + \" 원 입니다");
                 System.out.print("출금할 금액: ₩ ");
                 money = scanner.nextLine();
+
+                try{
+                    Long.parseLong(money);
+                }catch (NumberFormatException e){
+                    System.out.println("최대 출금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
+                    continue;
+                }
 
                 if (money.equals("q")) {
                     return;
@@ -48,9 +56,8 @@ public class WithdrawalService {
                 if (!money.matches("\\d+")) {
                     System.out.println("올바른 양식이 아닙니다.");
                     continue;
-                } else if (Long.parseLong(money)>=0 && Long.parseLong(money) < 1000){
-                    System.out.println("최소 금액 1000원 이상 입력해주세요.");
-                    continue;
+                } else if (Long.parseLong(money)==0){
+                    System.out.println("최소 1원 이상 입력해주세요.");
                 }
 
                 // 출금 금액 입력 받기

@@ -41,6 +41,13 @@ public class DepositService {
                 System.out.print("입금할 금액: ₩ ");
                 money = scanner.nextLine();
 
+                try{
+                    Long.parseLong(money);
+                }catch (NumberFormatException e){
+                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
+                    continue;
+                }
+
                 if (money.equals("q")) {
                     return;
                 }
@@ -49,15 +56,14 @@ public class DepositService {
                     System.out.println();
                     System.out.println("올바른 양식이 아닙니다.");
                 }
-//                else if (Long.parseLong(money)>=0 && Long.parseLong(money) < 1000){
-//                    System.out.println("최소 금액 1000원 이상 입력해주세요.");
-//                }
+                else if (Long.parseLong(money)==0){
+                    System.out.println("최소 1원 이상 입력해주세요.");
+                }
                 else {
                     break;
                 }
             }
 
-            // 입금 금액 입력 받기
             long amount = Long.parseLong(money);
 
             // id 해당 계좌
