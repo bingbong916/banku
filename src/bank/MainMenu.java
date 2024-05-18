@@ -36,7 +36,7 @@ public class MainMenu {
         this.transferService = new TransferService(new AccountDao(new DatabaseManager()), userDao);
         this.depositService = new DepositService(userDao, accountDao);
         this.withdrawalService = new WithdrawalService(userDao, accountDao);
-        this.savingServiceManager = new SavingServiceManager(userDao, accountDao);
+        this.savingServiceManager = new SavingServiceManager();
         this.checkManager = new CheckManager(userDao, accountDao);
         this.loggedInUserId = userId;
         DateDao dateDao = new DateDao(new DatabaseManager());

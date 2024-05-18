@@ -117,9 +117,9 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber,lines);
     }
 
-    public Integer getSavings (String accountNumber) throws  IOException{
+    public long getSavings (String accountNumber) throws  IOException{
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        return Integer.parseInt(lines.get(0));
+        return Long.parseLong(lines.get(0));
     }
 
     //추가
