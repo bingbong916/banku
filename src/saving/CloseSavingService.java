@@ -164,9 +164,9 @@ public class CloseSavingService {
 
                 switch (inputNum){
                     case 1: //예금
-                        product1.adjustInterestRateBasedOnAmount(amount);
+                        product1.adjustRate(amount);
                         int currentMonths = product1.getCurrentMonths();
-                        int totalReturnAmount = product1.calculateTotalAmount(amount, currentMonths);
+                        int totalReturnAmount = product1.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
                         long currentBalance = accountDao.getBalance(accountNumber);
                         // 적금 해지 금액을 현재 계좌에 합치기
@@ -175,14 +175,14 @@ public class CloseSavingService {
                         accountDao.updateBalance(accountNumber, newBalance);
                         System.out.println("1번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product1.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합계 : " + decimalFormat.format(product1.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("이자 : " + decimalFormat.format(product1.calculateInterest(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product1.calculateAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,1);
                         break;
                     case 2:
-                        product2.adjustInterestRateBasedOnAmount(amount);
+                        product2.adjustRate(amount);
                         currentMonths = product2.getCurrentMonths();
-                        totalReturnAmount = product2.calculateTotalAmount(amount, currentMonths);
+                        totalReturnAmount = product2.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
                         currentBalance = accountDao.getBalance(accountNumber);
                         // 적금 해지 금액을 현재 계좌에 합치기
@@ -191,14 +191,14 @@ public class CloseSavingService {
                         accountDao.updateBalance(accountNumber, newBalance);
                         System.out.println("2번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product2.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합계 : " + decimalFormat.format(product2.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("이자 : " + decimalFormat.format(product2.calculateInterest(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product2.calculateAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,2);
                         break;
                     case 3:
-                        product3.adjustInterestRateBasedOnAmount(amount);
+                        product3.adjustRate(amount);
                         currentMonths = product3.getCurrentMonths();
-                        totalReturnAmount = product3.calculateTotalAmount(amount, currentMonths);
+                        totalReturnAmount = product3.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
                         currentBalance = accountDao.getBalance(accountNumber);
                         // 적금 해지 금액을 현재 계좌에 합치기
@@ -207,14 +207,14 @@ public class CloseSavingService {
                         accountDao.updateBalance(accountNumber, newBalance);
                         System.out.println("3번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product3.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합계 : " + decimalFormat.format(product3.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("이자 : " + decimalFormat.format(product3.calculateInterest(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product3.calculateAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,3);
                         break;
                     case 4:
-                        product4.adjustInterestRateBasedOnAmount(amount);
+                        product4.adjustRate(amount);
                         currentMonths = product4.getCurrentMonths();
-                        totalReturnAmount = product4.calculateTotalAmount(amount, currentMonths);
+                        totalReturnAmount = product4.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
                         currentBalance = accountDao.getBalance(accountNumber);
                         // 적금 해지 금액을 현재 계좌에 합치기
@@ -223,8 +223,8 @@ public class CloseSavingService {
                         accountDao.updateBalance(accountNumber, newBalance);
                         System.out.println("4번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
-                        System.out.println("이자 : " + decimalFormat.format(product4.calculateTotalInterest(amount, currentMonths)));
-                        System.out.println("합계 : " + decimalFormat.format(product4.calculateTotalAmount(amount, currentMonths)));
+                        System.out.println("이자 : " + decimalFormat.format(product4.calculateInterest(amount, currentMonths)));
+                        System.out.println("합계 : " + decimalFormat.format(product4.calculateAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,4);
                         break;
                     case 0:
