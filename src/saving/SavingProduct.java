@@ -26,17 +26,14 @@ public class SavingProduct {
         else if ((this.months * 0.5) <= currentMonths && currentMonths < (months)) {
          rate = rate * 0.8;
        }
-//       else {
-//         rate = this.rate;
-//        }
     }
 
     public int calculateInterest(int amount, int currentMonths) {
-        return (int) Math.round(amount * (rate / 100) / 12 * this.currentMonths);
+        return (int) Math.round(amount * (rate / 100) / 12 * currentMonths);
     }
 
     public int calculateAmount(int amount, int currentMonths) {
-        return (int) Math.round(amount + calculateInterest(amount, this.currentMonths));
+        return (int) Math.round(amount + calculateInterest(amount, currentMonths));
     }
 
     public int getCurrentMonths() {
