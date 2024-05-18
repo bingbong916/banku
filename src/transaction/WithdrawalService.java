@@ -37,7 +37,11 @@ public class WithdrawalService {
             String money = "";
 
             while (true) {
+                // id 해당 계좌
+                String account = userDao.findUserToAccount(loggedInUserId);
+
                 // 출금 금액 입력 받기
+                System.out.println("출금 가능한 금액은 ₩ " + accountDao.showSavings(account) + " 원 입니다");
                 System.out.print("출금할 금액: ₩ ");
                 money = scanner.nextLine();
 
@@ -48,16 +52,21 @@ public class WithdrawalService {
                 if (!money.matches("\\d+")) {
                     System.out.println("올바른 양식이 아닙니다.");
                     continue;
-                } else if (Long.parseLong(money)>=0 && Long.parseLong(money) < 1000){
-                    System.out.println("최소 금액 1000원 이상 입력해주세요.");
+                } else if (Long.parseLong(money) == 0) {
+                    System.out.println("최소 1원 이상 입력해주세요.");
+                    continue;
+                }
+
+                try{
+                    Long.parseLong(money);
+                }catch (NumberFormatException e){
+                    System.out.println("최대 출금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
                     continue;
                 }
 
                 // 출금 금액 입력 받기
                 long amount = Long.parseLong(money);
 
-                // id 해당 계좌
-                String account = userDao.findUserToAccount(loggedInUserId);
                 int type = accountDao.withdrawalSavings(account, amount);
 
                 // 출금 잔고 0원 로직 해야함
@@ -67,13 +76,12 @@ public class WithdrawalService {
                     System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
                     break;
                 } else {
-                    System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다. 출금할 금액을 다시 입력해주세요.");
+                    System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩ " + accountDao.showSavings(account) + " 입니다. 출금할 금액을 다시 입력해주세요.");
                 }
             }
 
         } catch (IOException e){
             System.out.println("출금 중 오류가 발생했습니다: " + e.getMessage());
         }
-
     }
 }
