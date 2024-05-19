@@ -41,41 +41,33 @@ public class DepositService {
                 System.out.print("입금할 금액: ₩ ");
                 money = scanner.nextLine();
 
-                try{
-                    Long.parseLong(money);
-                }catch (NumberFormatException e){
-                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
-                    continue;
-                }
-
                 if (money.equals("q")) {
                     return;
                 }
 
                 if (!money.matches("\\d+")) {
-                    System.out.println();
                     System.out.println("올바른 양식이 아닙니다.");
+                    continue;
                 }
-                else if (Long.parseLong(money)==0){
-                    System.out.println("최소 1원 이상 입력해주세요.");
-                }
-                else {
-                    break;
+
+                try {
+                    long amount = Long.parseLong(money);
+                    if (amount <= 0) {
+                        System.out.println("최소 1원 이상 입력해주세요.");
+                        continue;
+                    }
+
+                    // ID에 해당하는 계좌 조회
+                    String account = userDao.findUserToAccount(loggedInUserId);
+                    accountDao.depositSavings(account, amount);
+                    System.out.println("입금이 완료되었습니다!");
+                    System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
+                } catch (NumberFormatException e) {
+                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
                 }
             }
-
-            long amount = Long.parseLong(money);
-
-            // id 해당 계좌
-            String account = userDao.findUserToAccount(loggedInUserId);
-            accountDao.depositSavings(account, amount);
-
-            System.out.println();
-            System.out.println("입금이 완료되었습니다!");
-            System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("입금 중 오류가 발생했습니다: " + e.getMessage());
         }
-
     }
 }
