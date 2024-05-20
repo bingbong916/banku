@@ -144,18 +144,22 @@ public class CloseSavingService {
 
                     String accountNumber = userDao.findUserToAccount(loggedInUserId);
                     String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
-                    int amount = Integer.parseInt(amountStr);
+                    long amount = Long.parseLong(amountStr);
+                    long currentMonths;
+                    long totalReturnAmount;
+                    long currentBalance;
+                    long newBalance;
 
                 switch (inputNum){
                     case 1: //예금
-                        SavingProduct product1 = new SavingProduct(12, 3.0, 100000);
+                        SavingProduct product1 = new SavingProduct(12, 3.0, accountDao.getSavings(accountNumber, 0));
                         product1.adjustRate(amount);
-                        int currentMonths = product1.getCurrentMonths();
-                        int totalReturnAmount = product1.calculateAmount(amount, currentMonths);
+                        currentMonths = product1.getCurrentMonths(amount);
+                        totalReturnAmount = product1.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
-                        long currentBalance = accountDao.getBalance(accountNumber);
+                        currentBalance = accountDao.getBalance(accountNumber);
                         // 적금 해지 금액을 현재 계좌에 합치기
-                        long newBalance = currentBalance + totalReturnAmount;
+                        newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
                         accountDao.updateBalance(accountNumber, newBalance);
                         System.out.println("1번 상품 해지 결과");
@@ -167,7 +171,7 @@ public class CloseSavingService {
                     case 2:
                         SavingProduct product2 = new SavingProduct(6, 2.0, 200000);
                         product2.adjustRate(amount);
-                        currentMonths = product2.getCurrentMonths();
+                        currentMonths = product2.getCurrentMonths(amount);
                         totalReturnAmount = product2.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
                         currentBalance = accountDao.getBalance(accountNumber);
@@ -184,7 +188,7 @@ public class CloseSavingService {
                     case 3:
                         SavingProduct product3 = new SavingProduct(12, 3.0, 500000);
                         product3.adjustRate(amount);
-                        currentMonths = product3.getCurrentMonths();
+                        currentMonths = product3.getCurrentMonths(amount);
                         totalReturnAmount = product3.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
                         currentBalance = accountDao.getBalance(accountNumber);
@@ -201,7 +205,7 @@ public class CloseSavingService {
                     case 4:
                         SavingProduct product4 = new SavingProduct(24, 5.0, 1000000);
                         product4.adjustRate(amount);
-                        currentMonths = product4.getCurrentMonths();
+                        currentMonths = product4.getCurrentMonths(amount);
                         totalReturnAmount = product4.calculateAmount(amount, currentMonths);
                         // 현재 계좌 잔액 조회
                         currentBalance = accountDao.getBalance(accountNumber);

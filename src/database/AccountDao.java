@@ -1,11 +1,10 @@
 package database;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
+
 
 public class AccountDao {
     private final DatabaseManager dbManager;
@@ -152,6 +151,6 @@ public class AccountDao {
 
             return parts[0];
         }
-        return accountNumber;
+        return null;
     }
 }

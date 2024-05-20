@@ -435,15 +435,8 @@ public class AuthUI {
         이전 날짜와 입력받은 날짜의 개월 차이만큼 autoSaving 실행
          */
 
-        int pastYear = dateDao.parseYear(pastDate);
-        int pastMonth = dateDao.parseMonth(pastDate);
 
-        int presentYear = dateDao.parseYear(inputDate);
-        int presentMonth = dateDao.parseMonth(inputDate);
-
-        // 연도와 월을 이용하여 개월 수 계산
-        int yearDifference = presentYear - pastYear;
-        int cnt = yearDifference * 12 + (presentMonth - pastMonth);
+        int cnt = dateDao.calculateMonth(pastDate, inputDate);
 
         try {
             for (int i = 0; i < cnt; i++) {

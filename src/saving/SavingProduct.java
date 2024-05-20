@@ -2,41 +2,44 @@ package saving;
 
 public class SavingProduct {
 
-    private int months;
+    private long months;
     private double rate;
-    private int monthlyPayment;
-    private int currentMonths;
+    private long monthlyPayment;
+    private long currentMonths;
 
-    public SavingProduct(int months, double rate, int monthlyPayment) {
+    public SavingProduct(int months, double rate, long monthlyPayment) {
         this.months = months;
         this.rate = rate;
         this.monthlyPayment = monthlyPayment;
     }
 
     // amount를 기반으로 현재까지 납입한 개월 수 계산 후 이율 조정
-    public void adjustRate(int amount) {
-        this.currentMonths = amount / monthlyPayment;
+    public void adjustRate(long amount) {
+        currentMonths = amount / monthlyPayment;
       // 현재까지 납입한 개월 수에 따라 이율 조정
-         if (currentMonths < (months * 0.2)) {
+
+        if (currentMonths == 0)
+            rate = 0;
+
+        if (currentMonths < (months * 0.2))
             rate = rate * 0.1;
-        }
-         else if ((this.months * 0.2) <= currentMonths && currentMonths < (months * 0.5)) {
-         rate = rate * 0.5;
-      }
-        else if ((this.months * 0.5) <= currentMonths && currentMonths < (months)) {
-         rate = rate * 0.8;
-       }
+
+        if ((this.months * 0.2) <= currentMonths && currentMonths < (months * 0.5))
+             rate = rate * 0.5;
+
+        if ((this.months * 0.5) <= currentMonths && currentMonths < (months))
+            rate = rate * 0.8;
     }
 
-    public int calculateInterest(int amount, int currentMonths) {
+    public long calculateInterest(long amount, long currentMonths) {
         return (int) Math.round(amount * (rate / 100) / 12 * currentMonths);
     }
 
-    public int calculateAmount(int amount, int currentMonths) {
+    public long calculateAmount(long amount, long currentMonths) {
         return (int) Math.round(amount + calculateInterest(amount, currentMonths));
     }
 
-    public int getCurrentMonths() {
-        return this.currentMonths;
+    public long getCurrentMonths(long amount) {
+        return amount / monthlyPayment;
     }
 }

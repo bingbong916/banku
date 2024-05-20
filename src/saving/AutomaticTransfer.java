@@ -52,23 +52,28 @@ public class AutomaticTransfer {
     //적금 자동이체 로직
     public void autoSaving(String account) throws IOException {
         //적금 1번 상품 - 6개월 , 이율 2.0, 월 200000
-        if(accountDao.hasSavings(account, 2)){
-            accountDao.withdrawalSavings(account, 200000);
-            accountDao.addSavings(account, 200000, 2);
+        if(accountDao.hasSavings(account, 2)) {
+            if (accountDao.getBalance(account) >= 200000) {
+                accountDao.withdrawalSavings(account, 200000);
+                accountDao.addSavings(account, 200000, 2);
+            }
         }
 
         //적금 2번 상품 - 12개월 , 이율 3.0, 월 500000
-        if(accountDao.hasSavings(account, 3)){
-            accountDao.withdrawalSavings(account, 500000);
-            accountDao.addSavings(account, 500000, 3);
+        if(accountDao.hasSavings(account, 3)) {
+            if (accountDao.getBalance(account) >= 500000) {
+                accountDao.withdrawalSavings(account, 500000);
+                accountDao.addSavings(account, 500000, 3);
+            }
         }
 
         //적금 3번 상품 - 24개월 , 이율 5.0, 월 1000000
-        if(accountDao.hasSavings(account, 4)){
-            accountDao.withdrawalSavings(account, 1000000);
-            accountDao.addSavings(account, 1000000, 4);
+        if(accountDao.hasSavings(account, 4)) {
+            if (accountDao.getBalance(account) >= 1000000) {
+                accountDao.withdrawalSavings(account, 1000000);
+                accountDao.addSavings(account, 1000000, 4);
+            }
         }
-
     }
 
 

@@ -84,4 +84,17 @@ public class DateDao {
     public int parseDate(String date){
         return Integer.parseInt(date.substring(6,8));
     }
+
+    public int calculateMonth(String pastDate, String presentDate){
+        int pastYear = parseYear(pastDate);
+        int pastMonth = parseMonth(pastDate);
+
+        int presentYear = parseYear(presentDate);
+        int presentMonth = parseMonth(presentDate);
+
+        // 연도와 월을 이용하여 개월 수 계산
+        int yearDifference = presentYear - pastYear;
+        return yearDifference * 12 + (presentMonth - pastMonth);
+    }
+
 }
