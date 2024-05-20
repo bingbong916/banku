@@ -4,9 +4,6 @@ import database.AccountDao;
 import database.DatabaseManager;
 import database.DateDao;
 import database.UserDao;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class TermDepositService {

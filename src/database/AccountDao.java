@@ -117,17 +117,41 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber,lines);
     }
 
-    public long getSavings (String accountNumber) throws  IOException{
+    public long getSavings (String accountNumber, int index) throws  IOException{
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        return Long.parseLong(lines.get(0));
+        return Long.parseLong(lines.get(index));
     }
 
     //추가
-        public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
-            List<String> lines = dbManager.readAccountFile(accountNumber);
-            String productLine = lines.get(productIndex + 1); // 인덱스 1부터 적금 상품 정보 시작
-            String[] productInfo = productLine.split("\t");
-            return productInfo.length > 0 ? productInfo[0] : "0";
-        }
+    public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        String productLine = lines.get(productIndex + 1); // 인덱스 1부터 적금 상품 정보 시작
+        String[] productInfo = productLine.split("\t");
+        return productInfo.length > 0 ? productInfo[0] : "0";
+    }
 
+    public void addSavings (String accountNumber, long money, int productIndex) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        String line = lines.get(productIndex);
+        String[] parts = line.split("\t");
+        String startDate = getStartDate(accountNumber, productIndex - 1);
+        long oldSavings = Long.parseLong(parts[0]);
+        long newSavings = oldSavings + money;
+
+        lines.set(productIndex, newSavings + "\t" + startDate); // 잔액 index = 0
+        dbManager.writeAccountFile(accountNumber, lines);
+    }
+
+    public String getAmount(String accountNumber, int index) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        List<String> subList = lines.subList(1, lines.size());
+
+        String str = subList.get(index);
+        if (!str.isEmpty()) {
+            String[] parts = str.split("\t");
+
+            return parts[0];
+        }
+        return accountNumber;
+    }
 }

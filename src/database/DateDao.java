@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.time.Month;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -14,17 +15,17 @@ public class DateDao {
     public void setDate(String inputDate) throws Exception {
         validateDate(inputDate);
 
-        int year = Integer.parseInt(inputDate.substring(0, 4));
-        int month = Integer.parseInt(inputDate.substring(4, 6));
-        int date = Integer.parseInt(inputDate.substring(6, 8));
+        int year = parseYear(inputDate);
+        int month = parseMonth(inputDate);
+        int date = parseDate(inputDate);
 
 
         List<String> lines = dbManager.readDateFile();
         String past = getDate();
 
-        int pastYear = Integer.parseInt(past.substring(0, 4));
-        int pastMonth = Integer.parseInt(past.substring(4, 6));
-        int pastDate = Integer.parseInt(past.substring(6, 8));
+        int pastYear = parseYear(past);
+        int pastMonth = parseMonth(past);
+        int pastDate = parseDate(past);
 
 
         if (year > pastYear) {
@@ -70,23 +71,17 @@ public class DateDao {
         if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month]) {
             throw new Exception();
         }
+    }
 
-//        try {
-//            int year = Integer.parseInt(inputDate.substring(0, 4));
-//            int month = Integer.parseInt(inputDate.substring(4, 6));
-//            int day = Integer.parseInt(inputDate.substring(6, 8));
-//
-//            System.out.println(year);
-//            System.out.println(month);
-//            System.out.println(day);
-//
-//            if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month]) {
-//                throw new DateTimeParseException("입력된 월이나 일이 유효 범위를 초과함", inputDate, 0);
-//            }
-//
-//        } catch (DateTimeParseException e) {
-//            System.out.println("유효하지 않은 날짜입니다.");
-//        }
-//    }
+    public int parseYear(String date){
+        return Integer.parseInt(date.substring(0,4));
+    }
+
+    public int parseMonth(String date){
+        return Integer.parseInt(date.substring(4,6));
+    }
+
+    public int parseDate(String date){
+        return Integer.parseInt(date.substring(6,8));
     }
 }
