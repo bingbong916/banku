@@ -59,20 +59,23 @@ public class DepositService {
                 else if (Long.parseLong(money)==0){
                     System.out.println("최소 1원 이상 입력해주세요.");
                 }
-                else {
+
+                long amount = Long.parseLong(money);
+
+                // id 해당 계좌
+                String account = userDao.findUserToAccount(loggedInUserId);
+                int depositType = accountDao.depositSavings(account, amount);
+
+                if(depositType==1){
+                    System.out.println("통장의 최대 금액은 9,223,372,036,854,775,807원까지 가능합니다. 다시 시도해주세요.");
+                    System.out.println();
+                } else {
+                    System.out.println();
+                    System.out.println("입금이 완료되었습니다!");
+                    System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
                     break;
                 }
             }
-
-            long amount = Long.parseLong(money);
-
-            // id 해당 계좌
-            String account = userDao.findUserToAccount(loggedInUserId);
-            accountDao.depositSavings(account, amount);
-
-            System.out.println();
-            System.out.println("입금이 완료되었습니다!");
-            System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
         } catch (IOException e){
             System.out.println("입금 중 오류가 발생했습니다: " + e.getMessage());
         }

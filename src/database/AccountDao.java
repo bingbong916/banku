@@ -80,11 +80,16 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
-    public void depositSavings(String accountNumber, long money) throws IOException {
+    public int depositSavings(String accountNumber, long money) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        long savings = money + Long.parseLong(lines.get(0));
-        lines.set(0, Long.toString(savings)); // 잔액 index = 0
+        try{
+            money = Math.addExact(money, Long.parseLong(lines.get(0)));
+        }catch (ArithmeticException e){
+            return 1;
+        }
+        lines.set(0, Long.toString(money)); // 잔액 index = 0
         dbManager.writeAccountFile(accountNumber, lines);
+        return 2;
     }
 
     public int withdrawalSavings (String accountNumber, long money) throws IOException {
