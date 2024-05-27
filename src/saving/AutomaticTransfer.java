@@ -54,7 +54,7 @@ public class AutomaticTransfer {
         //적금 1번 상품 - 6개월 , 이율 2.0, 월 200000
         if(accountDao.hasSavings(account, 2)) {
             if (accountDao.getBalance(account) >= 200000) {
-                accountDao.withdrawalSavings(account, 200000);
+                accountDao.executeSavings(account, 200000, "withdrawal");
                 accountDao.addSavings(account, 200000, 2);
             }
         }
@@ -62,7 +62,7 @@ public class AutomaticTransfer {
         //적금 2번 상품 - 12개월 , 이율 3.0, 월 500000
         if(accountDao.hasSavings(account, 3)) {
             if (accountDao.getBalance(account) >= 500000) {
-                accountDao.withdrawalSavings(account, 500000);
+                accountDao.executeSavings(account, 500000, "withdrawal");
                 accountDao.addSavings(account, 500000, 3);
             }
         }
@@ -70,7 +70,7 @@ public class AutomaticTransfer {
         //적금 3번 상품 - 24개월 , 이율 5.0, 월 1000000
         if(accountDao.hasSavings(account, 4)) {
             if (accountDao.getBalance(account) >= 1000000) {
-                accountDao.withdrawalSavings(account, 1000000);
+                accountDao.executeSavings(account, 1000000, "withdrawal");
                 accountDao.addSavings(account, 1000000, 4);
             }
         }
@@ -95,7 +95,7 @@ public class AutomaticTransfer {
                 long savings = accountDao.getSavings(account, 0);
                 // 이자 계산 (단리)
                 long interest = (long) (savings * 0.03);
-                accountDao.depositSavings(account, interest);
+                accountDao.executeSavings(account, interest, "deposit");
                 accountDao.removeSavings(account, 1);
 
             }
@@ -107,7 +107,7 @@ public class AutomaticTransfer {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 1));
             if(presentAmount == 1200000){
                 long interest = (long) (1200000 * 0.02);
-                accountDao.depositSavings(account, interest);
+                accountDao.executeSavings(account, interest, "deposit");
                 accountDao.removeSavings(account, 2);
             }
 
@@ -118,7 +118,7 @@ public class AutomaticTransfer {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 2));
             if(presentAmount == 6500000){
                 long interest = (long) (6500000 * 0.03);
-                accountDao.depositSavings(account, interest);
+                accountDao.executeSavings(account, interest, "deposit");
                 accountDao.removeSavings(account, 3);
             }
         }
@@ -128,7 +128,7 @@ public class AutomaticTransfer {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 3));
             if(presentAmount == 24000000){
                 long interest = (long) (24000000 * 0.05);
-                accountDao.depositSavings(account, interest);
+                accountDao.executeSavings(account, interest, "deposit");
                 accountDao.removeSavings(account, 4);
             }
         }
