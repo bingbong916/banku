@@ -41,6 +41,16 @@ public class DepositService {
                 System.out.print("입금할 금액: ₩ ");
                 money = scanner.nextLine();
 
+
+                if (money.equals("q")) {
+                    return;
+                }
+
+                if (!money.matches("\\d+")) {
+                    System.out.println("올바른 양식이 아닙니다.");
+                    continue;
+                }
+
                 try{
                     Long.parseLong(money);
                 }catch (NumberFormatException e){
@@ -48,16 +58,9 @@ public class DepositService {
                     continue;
                 }
 
-                if (money.equals("q")) {
-                    return;
-                }
-
-                if (!money.matches("\\d+")) {
-                    System.out.println();
-                    System.out.println("올바른 양식이 아닙니다.");
-                }
-                else if (Long.parseLong(money)==0){
+                if (Long.parseLong(money)<=0){
                     System.out.println("최소 1원 이상 입력해주세요.");
+                    continue;
                 }
 
                 long amount = Long.parseLong(money);
@@ -76,9 +79,8 @@ public class DepositService {
                     break;
                 }
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("입금 중 오류가 발생했습니다: " + e.getMessage());
         }
-
     }
 }

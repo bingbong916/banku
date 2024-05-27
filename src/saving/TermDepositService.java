@@ -4,9 +4,6 @@ import database.AccountDao;
 import database.DatabaseManager;
 import database.DateDao;
 import database.UserDao;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class TermDepositService {
@@ -16,18 +13,13 @@ public class TermDepositService {
     private final SavingServiceManager savingServiceManager;
     private final DateDao dateDao;
 
-    public TermDepositService(UserDao userDao, AccountDao accountDao, SavingServiceManager savingServiceManager){
-        this.accountDao = accountDao;
-        this.userDao = userDao;
+    public TermDepositService(SavingServiceManager savingServiceManager){
+        this.accountDao = new AccountDao(new DatabaseManager());
+        this.userDao = new UserDao(new DatabaseManager());
         this.scanner = new Scanner(System.in);
         this.savingServiceManager = savingServiceManager;
         this.dateDao = new DateDao(new DatabaseManager());
-        initializeServices();
-    }
 
-    private void initializeServices() {
-        DatabaseManager dbManager = new DatabaseManager();
-        UserDao userDao = new UserDao(dbManager);
     }
 
     public void doSavingService(String loggedInUserId) {
@@ -62,7 +54,6 @@ public class TermDepositService {
                     case 1:
                         if (accountDao.hasSavings(account, 2)) {
                             System.out.println("이미 가입한 적금입니다.");
-                            savingServiceManager.printSavingMenu(loggedInUserId);
                         } else {
                             // 첫 달 납입금을 현재 계좌에서 차감
                             int type1 = accountDao.withdrawalSavings(account, 200000);
@@ -70,7 +61,6 @@ public class TermDepositService {
                                 // 첫 달 납입금을 적금 계좌에 적립
                                 accountDao.updateSavings(account, 1, "200000", startDate);
                                 System.out.println("적금 가입이 완료되었습니다!");
-                                SavingProduct product1 = new SavingProduct(6, 2.0, 200000);
                             } else {
                                 System.out.println();
                                 System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다.");
@@ -80,7 +70,6 @@ public class TermDepositService {
                     case 2:
                         if (accountDao.hasSavings(account, 3)) {
                             System.out.println("이미 가입한 적금입니다.");
-                            savingServiceManager.printSavingMenu(loggedInUserId);
                         }
                         // 첫 달 납입금을 현재 계좌에서 차감
                         int type2 = accountDao.withdrawalSavings(account, 500000);
@@ -88,7 +77,6 @@ public class TermDepositService {
                             // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 2, "500000", startDate);
                             System.out.println("적금 가입이 완료되었습니다!");
-                            SavingProduct product2 = new SavingProduct(12, 3.0, 500000);
                         } else {
                             System.out.println();
                             System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다.");
@@ -97,7 +85,6 @@ public class TermDepositService {
                     case 3:
                         if (accountDao.hasSavings(account, 4)) {
                             System.out.println("이미 가입한 적금입니다.");
-                            savingServiceManager.printSavingMenu(loggedInUserId);
                         }
                         // 첫 달 납입금을 현재 계좌에서 차감
                         int type3 = accountDao.withdrawalSavings(account, 1000000);
@@ -105,13 +92,11 @@ public class TermDepositService {
                             // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 3, "1000000", startDate);
                             System.out.println("적금 가입이 완료되었습니다!");
-                            SavingProduct product3 = new SavingProduct(24, 5.0, 1000000);
                         } else {
                             System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다.");
                         }
                         break;
                     case 0:
-//                        savingServiceManager.printSavingMenu(loggedInUserId);
                         return;
                 }
                 System.out.println();

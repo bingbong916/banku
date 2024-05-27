@@ -16,11 +16,13 @@ public class CheckDepositService {
     private final UserDao userDao;
     private static AccountDao accountDao;
     private final Scanner scanner;
+    private final DateDao dateDao;
 
     public CheckDepositService(UserDao userDao, AccountDao accountDao){
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
+        this.dateDao = new DateDao(new DatabaseManager());
         initializeServices();
     }
 
@@ -30,7 +32,7 @@ public class CheckDepositService {
         AccountDao accountDao = new AccountDao(dbManager);
     }
 
-    public static String addMonths(String startDate, int months) {
+    public String addMonths(String startDate, int months) {
         LocalDate date = LocalDate.parse(startDate, DateTimeFormatter.BASIC_ISO_DATE);
 
         LocalDate expDate = date.plusMonths(months);
@@ -38,12 +40,48 @@ public class CheckDepositService {
         return expDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
-    private static boolean isValidAccountNumber(String accountNumber) {
+    public String calculateMature(String account, int productIndex) throws IOException {
+        if(productIndex == 2){
+            String startDate = accountDao.getStartDate(account, 1);
+            String presentDate = dateDao.getDate();
+
+            int month = dateDao.calculateMonth(startDate, presentDate);
+
+            int savings = Integer.parseInt(accountDao.getAmount(account, 1));
+            int delayMonth = (((month + 1) * 200000) - savings) / 200000;
+            return addMonths(startDate,  6 + delayMonth);
+        }
+
+        if(productIndex == 3){
+            String startDate = accountDao.getStartDate(account, 2);
+            String presentDate = dateDao.getDate();
+
+            int month = dateDao.calculateMonth(startDate, presentDate);
+            int savings = Integer.parseInt(accountDao.getAmount(account, 2));
+
+            int delayMonth = (((month + 1) * 500000) - savings) / 500000;
+            return addMonths(startDate,  12 + delayMonth);
+        }
+
+        if(productIndex == 4){
+            String startDate = accountDao.getStartDate(account, 3);
+            String presentDate = dateDao.getDate();
+
+            int month = dateDao.calculateMonth(startDate, presentDate);
+            int savings = Integer.parseInt(accountDao.getAmount(account, 2));
+
+            int delayMonth = (((month + 1) * 1000000) - savings) / 1000000;
+            return addMonths(startDate,  24 + delayMonth);
+        }
+        return null;
+    }
+
+    private boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{6}-\\d{7}");
     }
 
 
-    public static void checkDeposit(String loggedInUserId) {
+    public void checkDeposit(String loggedInUserId) {
         Scanner scan = new Scanner(System.in);
 
         DatabaseManager dbManager = new DatabaseManager();
@@ -135,7 +173,7 @@ public class CheckDepositService {
                 resultNumber++;
                 System.out.println(resultNumber + ")");
                 System.out.println("6개월 적금");
-                System.out.println("만기일: " + addMonths(startDate2, 6));
+                System.out.println("만기일: " + calculateMature(account, 2));
                 System.out.println("예상 환급액: ₩ 1,224,000");
                 System.out.println(" ");
             }
@@ -143,7 +181,7 @@ public class CheckDepositService {
                 resultNumber++;
                 System.out.println(resultNumber + ")");
                 System.out.println("12개월 적금");
-                System.out.println("만기일: " + addMonths(startDate3, 12));
+                System.out.println("만기일: " + calculateMature(account, 3));
                 System.out.println("예상 환급액: ₩ 6,180,000");
                 System.out.println(" ");
             }
@@ -151,7 +189,7 @@ public class CheckDepositService {
                 resultNumber++;
                 System.out.println(resultNumber + ")");
                 System.out.println("24개월 적금");
-                System.out.println("만기일: " + addMonths(startDate4, 24));
+                System.out.println("만기일: " + calculateMature(account, 4));
                 System.out.println("예상 환급액: ₩ 25,830,000");
             }
             if (!result1 && !result2 && !result3 && !result4) {

@@ -4,6 +4,7 @@ import bank.MainMenu;
 import database.DatabaseManager;
 import database.DateDao;
 import database.UserDao;
+import saving.AutomaticTransfer;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +21,7 @@ public class AuthUI {
     private UserDao userDao;
     private final Scanner scanner;
     private DateDao dateDao;
+    private AutomaticTransfer automaticTransfer;
 
     public AuthUI() {
         this.scanner = new Scanner(System.in);
@@ -31,6 +33,7 @@ public class AuthUI {
         this.registrationService = new RegistrationService(userDao);
         this.loginService = new LoginService(userDao);
         dateDao = new DateDao(dbManager);
+        this.automaticTransfer = new AutomaticTransfer();
     }
     public void showMenu() throws IOException {
         String loggedInUserId = null;
@@ -394,13 +397,14 @@ public class AuthUI {
         }
 
         String inputDate;
+        String pastDate;
 
         SimpleDateFormat format1 = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
 
         while (true) {
             try {
-                String pastDate = dateDao.getDate();
+                pastDate = dateDao.getDate();
                 Date date = format1.parse(pastDate);
                 System.out.println("이전 날짜 :" + format2.format(date));
                 System.out.println();
@@ -425,6 +429,21 @@ public class AuthUI {
                 continue;
             }
             break;
+        }
+
+        /*
+        이전 날짜와 입력받은 날짜의 개월 차이만큼 autoSaving 실행
+         */
+
+
+        int cnt = dateDao.calculateMonth(pastDate, inputDate);
+
+        try {
+            for (int i = 0; i < cnt; i++) {
+                automaticTransfer.doService();
+            }
+        }catch (IOException e){
+            e.getMessage();
         }
 
 

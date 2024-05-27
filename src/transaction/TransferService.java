@@ -97,7 +97,7 @@ public class TransferService {
     }
 
 	private boolean isValidAccountNumber(String accountNumber) {
-        return accountNumber.matches("\\d{6}-\\d{6}");
+        return accountNumber.matches("\\d{8}-\\d{8}");
     }
 
     private boolean isValidAmount(String amountStr) {

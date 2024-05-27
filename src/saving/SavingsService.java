@@ -6,39 +6,29 @@ import database.DateDao;
 import database.UserDao;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class SavingsService {
-    private final Scanner scanner;
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final DecimalFormat decimalFormat;
     private final SavingServiceManager savingServiceManager;
     private final DateDao dateDao;
 
-    public SavingsService(UserDao userDao, AccountDao accountDao, SavingServiceManager savingServiceManager){
-        this.accountDao = accountDao;
-        this.userDao = userDao;
-        this.scanner = new Scanner(System.in);
+    public SavingsService(SavingServiceManager savingServiceManager){
+        this.accountDao = new AccountDao(new DatabaseManager());
+        this.userDao = new UserDao(new DatabaseManager());
         this.decimalFormat = new DecimalFormat("#,###");
         this.savingServiceManager = savingServiceManager;
-        dateDao = new DateDao(new DatabaseManager());
-        initializeServices();
+        this.dateDao = new DateDao(new DatabaseManager());
     }
 
-    private void initializeServices() {
-        DatabaseManager dbManager = new DatabaseManager();
-        UserDao userDao = new UserDao(dbManager);
-    }
     public void doSavingService(String loggedInUserId) {
 
         try {
             String account = userDao.findUserToAccount(loggedInUserId);
             if(accountDao.hasSavings(account, 1)) {
                 System.out.println("이미 가입한 예금입니다.");
-                savingServiceManager.printSavingMenu(loggedInUserId);
                 return; // 이미 가입한 예금인지 확인
             }
 
@@ -54,7 +44,6 @@ public class SavingsService {
                 System.out.print("예금할 금액을 입력하세요 (₩1,000 ~ ₩1,000,000,000): ₩ ");
                 String inputMoney = scan.nextLine();
                 if (inputMoney.equals("q")){
-                    savingServiceManager.printSavingMenu(loggedInUserId);
                     return;
                 }
 
@@ -71,7 +60,7 @@ public class SavingsService {
                 }
 
 
-                int currentBalance = accountDao.getSavings(account);
+                long currentBalance = accountDao.getSavings(account, 0);
 
 
                 if (money > currentBalance) {
@@ -79,7 +68,6 @@ public class SavingsService {
                     continue;
                 }
 
-                savingServiceManager.updateSavingProductAmount(money);
                 String startDate = dateDao.getDate();
 
                 // 첫 달 납입금을 현재 계좌에서 차감

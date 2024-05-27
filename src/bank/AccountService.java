@@ -5,6 +5,9 @@ import database.DatabaseManager;
 import database.UserDao;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -21,57 +24,62 @@ public class AccountService {
 
     public void openAccount(String loggedInUserId) {
         try {
-
             System.out.println("\n\n[계좌 개설 서비스]");
             System.out.println("============================================");
             System.out.println("계좌를 개설합니다.");
             System.out.println("============================================");
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
 
-
             String amount;
             while (true) {
-                // 초기 입금액 입력
                 System.out.print("초기 입금액을 입력하세요: ₩ ");
                 amount = scanner.nextLine();
-
-                try{
-                    Long.parseLong(amount);
-                }catch (NumberFormatException e){
-                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
-                    continue;
-                }
 
                 if (amount.equals("q")) {
                     return;
                 }
 
                 if (!amount.matches("\\d+")) {
-                    System.out.println("올바른 양식이 아닙니다.");
-                }else if (Long.parseLong(amount)==0){
+                    System.out.println("올바른 숫자 형식이 아닙니다. 다시 입력해주세요.");
+                    continue;
+                }
+
+                long parsedAmount;
+                try {
+                    parsedAmount = Long.parseLong(amount);
+                } catch (NumberFormatException e) {
+                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
+                    continue;
+                }
+
+                if (parsedAmount == 0) {
                     System.out.println("최소 1원 이상 입력해주세요.");
+                    continue;
                 }
-                else {
-                    break;
-                }
+
+                // 모든 검증을 통과하면 계좌 개설 진행
+                String accountNumber = generateAccountNumber();
+                userDao.addAccountToUser(loggedInUserId, accountNumber);
+                accountDao.createAccount(accountNumber, amount);
+
+                System.out.println("============================================");
+                System.out.println("계좌 개설이 완료되었습니다! 계좌번호: " + accountNumber);
+                break;
             }
-
-            String accountNumber = generateAccountNumber();
-
-            userDao.addAccountToUser(loggedInUserId, accountNumber);
-
-            accountDao.createAccount(accountNumber, amount);
-
-            System.out.println("============================================");
-            System.out.println("계좌 개설이 완료되었습니다! 계좌번호: " + accountNumber);
         } catch (IOException e) {
             System.out.println("계좌 개설 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 
+
     private String generateAccountNumber() {
+        long timestamp = Instant.now().getEpochSecond(); // 현재 시간의 유닉스 타임스탬프(초)
+        String fullTimestamp = Long.toString(timestamp);
+        String lastEightDigits = fullTimestamp.length() > 8 ? fullTimestamp.substring(fullTimestamp.length() - 8) : fullTimestamp; // 마지막 8자리만 추출
+
         Random random = new Random();
-        // \\d{6}-\\d{6} 형식의 계좌 번호 생성
-        return String.format("%06d-%06d", random.nextInt(1000000), random.nextInt(1000000));
+        String randomPart = String.format("%08d", random.nextInt(100000000));
+
+        return lastEightDigits + "-" + randomPart;
     }
 }
