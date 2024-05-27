@@ -52,9 +52,6 @@ public class WithdrawalService {
                 if (!money.matches("\\d+")) {
                     System.out.println("올바른 양식이 아닙니다.");
                     continue;
-                } else if (Long.parseLong(money) == 0) {
-                    System.out.println("최소 1원 이상 입력해주세요.");
-                    continue;
                 }
 
                 try{
@@ -64,14 +61,19 @@ public class WithdrawalService {
                     continue;
                 }
 
+                if (Long.parseLong(money) == 0) {
+                    System.out.println("최소 1원 이상 입력해주세요.");
+                    continue;
+                }
+
                 // 출금 금액 입력 받기
                 long amount = Long.parseLong(money);
 
-                int type = accountDao.withdrawalSavings(account, amount);
+                int returnNum = accountDao.executeSavings(account, amount, "withdrawal");
 
                 // 출금 잔고 0원 로직 해야함
                 System.out.println();
-                if(type == 1){
+                if(returnNum == 3){
                     System.out.println("출금이 완료되었습니다!");
                     System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
                     break;

@@ -41,6 +41,7 @@ public class DepositService {
                 System.out.print("입금할 금액: ₩ ");
                 money = scanner.nextLine();
 
+
                 if (money.equals("q")) {
                     return;
                 }
@@ -50,20 +51,32 @@ public class DepositService {
                     continue;
                 }
 
-                try {
-                    long amount = Long.parseLong(money);
-                    if (amount <= 0) {
-                        System.out.println("최소 1원 이상 입력해주세요.");
-                        continue;
-                    }
+                try{
+                    Long.parseLong(money);
+                }catch (NumberFormatException e){
+                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
+                    continue;
+                }
 
-                    // ID에 해당하는 계좌 조회
-                    String account = userDao.findUserToAccount(loggedInUserId);
-                    accountDao.depositSavings(account, amount);
+                if (Long.parseLong(money)<=0){
+                    System.out.println("최소 1원 이상 입력해주세요.");
+                    continue;
+                }
+
+                long amount = Long.parseLong(money);
+
+                // id 해당 계좌
+                String account = userDao.findUserToAccount(loggedInUserId);
+                int returnNum = accountDao.executeSavings(account, amount, "deposit");
+
+                if(returnNum == 3){
+                    System.out.println();
                     System.out.println("입금이 완료되었습니다!");
                     System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
-                } catch (NumberFormatException e) {
-                    System.out.println("최대 입금 가능 범위는 9,223,372,036,854,775,807원 입니다. 다시 입력해주세요.");
+                    break;
+                } else {
+                    System.out.println("통장의 최대 금액은 9,223,372,036,854,775,807원까지 가능합니다. 다시 시도해주세요.");
+                    System.out.println();
                 }
             }
         } catch (IOException e) {
