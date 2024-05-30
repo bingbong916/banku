@@ -60,7 +60,7 @@ public class SavingsService {
                 }
 
 
-                long currentBalance = accountDao.getSavings(account, 0);
+                long currentBalance = accountDao.getBalance(account);
 
 
                 if (money > currentBalance) {

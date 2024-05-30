@@ -141,10 +141,14 @@ public class CloseSavingService {
                         System.out.println("올바르지 않은 메뉴입니다.");
                         continue;
                     }
+                    if(inputNum == 0){
+                        return;
+                    }
 
                     String accountNumber = userDao.findUserToAccount(loggedInUserId);
-                    String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", ""); // , 제거
-                    long amount = Long.parseLong(amountStr);
+
+                    //현재 예적금 금액
+                    long amount = Long.parseLong(accountDao.getAmount(accountNumber, inputNum - 1));
                     long currentMonths;
                     long totalReturnAmount;
                     long currentBalance;
@@ -152,7 +156,7 @@ public class CloseSavingService {
 
                 switch (inputNum){
                     case 1: //예금
-                        SavingProduct product1 = new SavingProduct(12, 3.0, accountDao.getSavings(accountNumber, 0));
+                        SavingProduct product1 = new SavingProduct(12, 3.0, amount);
                         product1.adjustRate(amount);
                         currentMonths = product1.getCurrentMonths(amount);
                         totalReturnAmount = product1.calculateAmount(amount, currentMonths);
@@ -219,8 +223,6 @@ public class CloseSavingService {
                         System.out.println("합계 : " + decimalFormat.format(product4.calculateAmount(amount, currentMonths)));
                         accountDao.removeSavings(accountNumber,4);
                         break;
-                    case 0:
-                        return;
                     default:
                         String num = Integer.toString(inputNum);
                         if(!num.matches("[0-9]")){
