@@ -115,19 +115,19 @@ public class AccountDao {
         lines.set(productNum, "");
         dbManager.writeAccountFile(accountNumber,lines);
     }
-
-    public long getSavings (String accountNumber, int index) throws  IOException{
-        List<String> lines = dbManager.readAccountFile(accountNumber);
-        return Long.parseLong(lines.get(index));
-    }
-
-    //추가
-    public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
-        List<String> lines = dbManager.readAccountFile(accountNumber);
-        String productLine = lines.get(productIndex + 1); // 인덱스 1부터 적금 상품 정보 시작
-        String[] productInfo = productLine.split("\t");
-        return productInfo.length > 0 ? productInfo[0] : "0";
-    }
+//    //현재 잔고
+//    public long getSavings (String accountNumber, int index) throws  IOException{
+//        List<String> lines = dbManager.readAccountFile(accountNumber);
+//        return Long.parseLong(lines.get(index));
+//    }
+//
+//    //추가
+//    public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
+//        List<String> lines = dbManager.readAccountFile(accountNumber);
+//        String productLine = lines.get(productIndex + 1); // 인덱스 1부터 적금 상품 정보 시작
+//        String[] productInfo = productLine.split("\t");
+//        return productInfo.length > 0 ? productInfo[0] : "0";
+//    }
 
     public void addSavings (String accountNumber, long money, int productIndex) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
@@ -141,6 +141,7 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
+    //예적금 상품 계좌 내 현재 금액 반환
     public String getAmount(String accountNumber, int index) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         List<String> subList = lines.subList(1, lines.size());
