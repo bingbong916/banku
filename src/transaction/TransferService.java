@@ -80,8 +80,8 @@ public class TransferService {
                     senderBalance -= amount;
                     receiverBalance += amount;
 
-                    accountDao.updateBalance(senderAccountNumber, senderBalance);
-                    accountDao.updateBalance(receiverAccountNumber, receiverBalance);
+                    accountDao.executeTransaction(senderAccountNumber, senderBalance, "sender");
+                    accountDao.executeTransaction(receiverAccountNumber, receiverBalance, "receiver");
                     System.out.println();
                     System.out.println("송금이 완료되었습니다.");
                     System.out.println("현재 잔액: ₩ " + senderBalance);

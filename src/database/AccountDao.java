@@ -71,13 +71,13 @@ public class AccountDao {
         return accountNumber;
     }
 
-
-    public void updateBalance(String accountNumber, long newBalance) throws IOException {
-        List<String> lines = dbManager.readAccountFile(accountNumber);
-        // Update balance in the first line
-        lines.set(0, String.valueOf(newBalance));
-        dbManager.writeAccountFile(accountNumber, lines);
-    }
+////    // TODO: executeTransaction method 에 통합
+//    public void updateBalance(String accountNumber, long newBalance) throws IOException {
+//        List<String> lines = dbManager.readAccountFile(accountNumber);
+//        // Update balance in the first line
+//        lines.set(0, String.valueOf(newBalance));
+//        dbManager.writeAccountFile(accountNumber, lines);
+//    }
 
     // TODO: 모든 입출금 로직을 하나의 method 로 통합
     // TODO: 모든 입출금 로직에 대해 입출금 내역 로그 추가
@@ -113,8 +113,38 @@ public class AccountDao {
                 dbManager.writeAccountFile(accountNumber, lines);
                 return 0;
 
+            case "sender": // 송금 - 보내는 사람
+                // 이중 체크
+                if (oldBalance - money < 0) {
+                    return -1; // 잔고보다 더 많은 돈을 송금할 때
+                }
+                money = oldBalance - money;
+                lines.set(0, Long.toString(money));
+                dbManager.writeAccountFile(accountNumber, lines);
+                return 0;
+
+            case "receiver": // 송금 - 받는 사람
+                try {
+                    money = Math.addExact(money, oldBalance);
+                } catch (ArithmeticException e) {
+                    return -1; // 입금 long 형 범위 초과
+                }
+                lines.set(0, Long.toString(money));
+                dbManager.writeAccountFile(accountNumber, lines);
+                return 0;
+
+            case "canceled": // 적금 해지
+                try {
+                    money = Math.addExact(money, oldBalance);
+                } catch (ArithmeticException e) {
+                    return -1; // 입금 long 형 범위 초과
+                }
+                lines.set(0, Long.toString(money));
+                dbManager.writeAccountFile(accountNumber, lines);
+                return 0;
+
             default:
-                return -2; // 비정상적인 요청 타입
+                return -2; // 비정상 요청 타입
         }
     }
 

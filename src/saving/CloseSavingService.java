@@ -161,7 +161,7 @@ public class CloseSavingService {
                         // 적금 해지 금액을 현재 계좌에 합치기
                         newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
+                        accountDao.executeTransaction(accountNumber, newBalance, "canceled");
                         System.out.println("1번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product1.calculateInterest(amount, currentMonths)));
@@ -178,7 +178,7 @@ public class CloseSavingService {
                         // 적금 해지 금액을 현재 계좌에 합치기
                         newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
+                        accountDao.executeTransaction(accountNumber, newBalance, "canceled");
                         System.out.println("2번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product2.calculateInterest(amount, currentMonths)));
@@ -195,7 +195,7 @@ public class CloseSavingService {
                         // 적금 해지 금액을 현재 계좌에 합치기
                         newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
+                        accountDao.executeTransaction(accountNumber, newBalance, "canceled");
                         System.out.println("3번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product3.calculateInterest(amount, currentMonths)));
@@ -212,7 +212,7 @@ public class CloseSavingService {
                         // 적금 해지 금액을 현재 계좌에 합치기
                         newBalance = currentBalance + totalReturnAmount;
                         // 계좌 잔액 업데이트
-                        accountDao.updateBalance(accountNumber, newBalance);
+                        accountDao.executeTransaction(accountNumber, newBalance, "canceled");
                         System.out.println("4번 상품 해지 결과");
                         System.out.println("원금 : " + decimalFormat.format(amount));
                         System.out.println("이자 : " + decimalFormat.format(product4.calculateInterest(amount, currentMonths)));
