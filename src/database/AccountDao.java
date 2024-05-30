@@ -79,24 +79,30 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
-    public void depositSavings(String accountNumber, long money) throws IOException {
+    public int executeSavings(String accountNumber, long money, String type) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        long savings = money + Long.parseLong(lines.get(0));
-        lines.set(0, Long.toString(savings)); // 잔액 index = 0
-        dbManager.writeAccountFile(accountNumber, lines);
-    }
+        switch (type){
+            case "deposit":
+                try{
+                    money = Math.addExact(money, Long.parseLong(lines.get(0)));
+                }catch (ArithmeticException e){
+                    return 1; // 입금 long 형 범위 초과
+                }
+                lines.set(0, Long.toString(money));
+                dbManager.writeAccountFile(accountNumber, lines);
+                break;
 
-    public int withdrawalSavings (String accountNumber, long money) throws IOException {
-        List<String> lines = dbManager.readAccountFile(accountNumber);
-        long oldSavings = Long.parseLong(lines.get(0));
-        if(Long.parseLong(lines.get(0)) - money < 0){
-            return 0;
+            case "withdrawal":
+                long oldSavings = Long.parseLong(lines.get(0));
+                if(Long.parseLong(lines.get(0)) - money < 0){
+                    return 2; // 출금 잔고보다 더 많은 돈 빼갈 때
+                }
+                money = oldSavings - money;
+                lines.set(0, Long.toString(money));
+                dbManager.writeAccountFile(accountNumber, lines);
+                break;
         }
-        long newSavings = oldSavings - money;
-
-        lines.set(0, Long.toString(newSavings)); // 잔액 index = 0
-        dbManager.writeAccountFile(accountNumber, lines);
-        return 1;
+        return 3;
     }
 
     public String showSavings (String accountNumber) throws IOException{
@@ -106,6 +112,7 @@ public class AccountDao {
     }
 
     public boolean hasSavings (String accountNumber, int index) throws IOException{
+        System.out.println();
         List<String> lines = dbManager.readAccountFile(accountNumber);
         return !lines.get(index).trim().isEmpty();
     }

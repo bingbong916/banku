@@ -53,25 +53,25 @@ public class AutomaticTransfer {
     public void autoSaving(String account) throws IOException {
         //적금 1번 상품 - 6개월 , 이율 2.0, 월 200000
         if(accountDao.hasSavings(account, 2)) {
-            if (accountDao.getBalance(account) >= 200000L) {
-                accountDao.withdrawalSavings(account, 200000L);
-                accountDao.addSavings(account, 200000L, 2);
+            if (accountDao.getBalance(account) >= 200000) {
+                accountDao.withdrawalSavings(account, 200000);
+                accountDao.addSavings(account, 200000, 2);
             }
         }
 
         //적금 2번 상품 - 12개월 , 이율 3.0, 월 500000
         if(accountDao.hasSavings(account, 3)) {
-            if (accountDao.getBalance(account) >= 500000L) {
-                accountDao.withdrawalSavings(account, 500000L);
-                accountDao.addSavings(account, 500000L, 3);
+            if (accountDao.getBalance(account) >= 500000) {
+                accountDao.withdrawalSavings(account, 500000);
+                accountDao.addSavings(account, 500000, 3);
             }
         }
 
         //적금 3번 상품 - 24개월 , 이율 5.0, 월 1000000
         if(accountDao.hasSavings(account, 4)) {
-            if (accountDao.getBalance(account) >= 1000000L) {
-                accountDao.withdrawalSavings(account, 1000000L);
-                accountDao.addSavings(account, 1000000L, 4);
+            if (accountDao.getBalance(account) >= 1000000) {
+                accountDao.withdrawalSavings(account, 1000000);
+                accountDao.addSavings(account, 1000000, 4);
             }
         }
     }
@@ -92,11 +92,10 @@ public class AutomaticTransfer {
                 //돌려줄 돈 계산
                 //잔고에 추가
                 //예금 라인 삭제(개행 처리)
-                long past = Long.parseLong(accountDao.getAmount(account, 0));
+                long savings = accountDao.getSavings(account, 0);
                 // 이자 계산 (단리)
-                long interest = (long) (past * 0.03);
+                long interest = (long) (savings * 0.03);
                 accountDao.depositSavings(account, interest);
-                accountDao.depositSavings(account, past);
                 accountDao.removeSavings(account, 1);
 
             }
@@ -106,10 +105,9 @@ public class AutomaticTransfer {
         if(accountDao.hasSavings(account, 2)){
             //적금 만기 시 납부 금액과 같을 경우 만기 해지
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 1));
-            if(presentAmount == 1200000L){
-                long interest = (long) (1200000L * 0.02);
+            if(presentAmount == 1200000){
+                long interest = (long) (1200000 * 0.02);
                 accountDao.depositSavings(account, interest);
-                accountDao.depositSavings(account, 1200000L);
                 accountDao.removeSavings(account, 2);
             }
 
@@ -118,10 +116,9 @@ public class AutomaticTransfer {
         //적금 2번 상품 만기
         if(accountDao.hasSavings(account, 3)){
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 2));
-            if(presentAmount == 6500000L){
-                long interest = (long) (6500000L * 0.03);
+            if(presentAmount == 6500000){
+                long interest = (long) (6500000 * 0.03);
                 accountDao.depositSavings(account, interest);
-                accountDao.depositSavings(account,6500000L);
                 accountDao.removeSavings(account, 3);
             }
         }
@@ -129,10 +126,9 @@ public class AutomaticTransfer {
         //적금 3번 상품 만기
         if(accountDao.hasSavings(account, 4)){
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 3));
-            if(presentAmount == 24000000L){
-                long interest = (long) (24000000L * 0.05);
+            if(presentAmount == 24000000){
+                long interest = (long) (24000000 * 0.05);
                 accountDao.depositSavings(account, interest);
-                accountDao.depositSavings(account, 24000000L);
                 accountDao.removeSavings(account, 4);
             }
         }
