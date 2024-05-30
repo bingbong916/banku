@@ -56,7 +56,7 @@ public class TermDepositService {
                             System.out.println("이미 가입한 적금입니다.");
                         } else {
                             // 첫 달 납입금을 현재 계좌에서 차감
-                            int type1 = accountDao.executeTransaction(account, 200000, "withdrawal");
+                            int type1 = accountDao.executeTransaction(account, 200000, "savings");
                             if(type1 == 0){
                                 // 첫 달 납입금을 적금 계좌에 적립
                                 accountDao.updateSavings(account, 1, "200000", startDate);
@@ -72,7 +72,7 @@ public class TermDepositService {
                             System.out.println("이미 가입한 적금입니다.");
                         }
                         // 첫 달 납입금을 현재 계좌에서 차감
-                        int type2 = accountDao.executeTransaction(account, 500000, "withdrawal");
+                        int type2 = accountDao.executeTransaction(account, 500000, "savings");
                         if (type2 == 0) {
                             // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 2, "500000", startDate);
@@ -87,7 +87,7 @@ public class TermDepositService {
                             System.out.println("이미 가입한 적금입니다.");
                         }
                         // 첫 달 납입금을 현재 계좌에서 차감
-                        int type3 = accountDao.executeTransaction(account, 1000000, "withdrawal");
+                        int type3 = accountDao.executeTransaction(account, 1000000, "savings");
                         if (type3 == 0) {
                             // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 3, "1000000", startDate);
