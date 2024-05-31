@@ -2,6 +2,7 @@ package transaction;
 
 import database.AccountDao;
 import database.DatabaseManager;
+import database.DateDao;
 import database.UserDao;
 
 import java.io.IOException;
@@ -11,11 +12,13 @@ public class WithdrawalService {
     private final Scanner scanner;
     private final UserDao userDao;
     private final AccountDao accountDao;
+    private final DateDao dateDao;
 
     public WithdrawalService(UserDao userDao, AccountDao accountDao){
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.scanner = new Scanner(System.in);
+        this.dateDao = new DateDao(new DatabaseManager());
         initializeServices();
     }
 
@@ -24,10 +27,8 @@ public class WithdrawalService {
         UserDao userDao = new UserDao(dbManager);
     }
 
-
     public void showWithdrawal(String loggedInUserId){
         try{
-            // 입금 서비스 시작
             System.out.println("\n\n[출금 서비스]");
             System.out.println("============================================");
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
@@ -35,12 +36,11 @@ public class WithdrawalService {
             System.out.println("출금할 금액을 입력하세요");
 
             String money = "";
+            String currentDate = dateDao.getDate();
 
             while (true) {
-                // id 해당 계좌
                 String account = userDao.findUserToAccount(loggedInUserId);
 
-                // 출금 금액 입력 받기
                 System.out.println("출금 가능한 금액은 ₩ " + accountDao.showSavings(account) + " 원 입니다");
                 System.out.print("출금할 금액: ₩ ");
                 money = scanner.nextLine();
@@ -66,12 +66,10 @@ public class WithdrawalService {
                     continue;
                 }
 
-                // 출금 금액 입력 받기
                 long amount = Long.parseLong(money);
 
-                int returnNum = accountDao.executeTransaction(account, amount, "withdrawal");
+                int returnNum = accountDao.executeTransaction(account, amount, "withdrawal", currentDate);
 
-                // 출금 잔고 0원 로직 해야함
                 System.out.println();
                 if(returnNum == 0){
                     System.out.println("출금이 완료되었습니다!");

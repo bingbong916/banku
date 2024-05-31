@@ -19,12 +19,27 @@ public class AutomaticTransfer {
         this.dateDao = new DateDao(new DatabaseManager());
     }
 
-    public void doService() throws IOException {
-        List<String> accountList = listFilesInDirectory();
-        for(String account : accountList){
-            autoSaving(account);
-            matureSaving(account);
+    public void doService() throws IOException, Exception {
+        String presentDate = dateDao.getDate();
+        String lastDate = dateDao.getLastSavedDate();
+
+        if (lastDate == null) {
+            lastDate = presentDate;
         }
+
+        int monthsBetween = dateDao.calculateMonth(lastDate, presentDate);
+
+        for (int i = 0; i < monthsBetween; i++) {
+            List<String> accountList = listFilesInDirectory();
+            String currentProcessingDate = incrementMonth(lastDate);
+            for (String account : accountList) {
+                autoSaving(account, currentProcessingDate);
+                matureSaving(account, currentProcessingDate);
+            }
+            lastDate = currentProcessingDate;
+        }
+
+        dateDao.setDate(presentDate); // 최종 업데이트된 현재 날짜를 저장
     }
 
     public static List<String> listFilesInDirectory() {
@@ -48,90 +63,87 @@ public class AutomaticTransfer {
         return fileNames;
     }
 
-
-    //적금 자동이체 로직
-    public void autoSaving(String account) throws IOException {
-        //적금 1번 상품 - 6개월 , 이율 2.0, 월 200000
-        if(accountDao.hasSavings(account, 2)) {
+    public void autoSaving(String account, String date) throws IOException {
+        if (accountDao.hasSavings(account, 2)) {
             if (accountDao.getBalance(account) >= 200000) {
-                accountDao.executeTransaction(account, 200000, "withdrawal");
+                accountDao.executeTransaction(account, 200000, "savings", date);
                 accountDao.addSavings(account, 200000, 2);
             }
         }
 
-        //적금 2번 상품 - 12개월 , 이율 3.0, 월 500000
-        if(accountDao.hasSavings(account, 3)) {
+        if (accountDao.hasSavings(account, 3)) {
             if (accountDao.getBalance(account) >= 500000) {
-                accountDao.executeTransaction(account, 500000, "withdrawal");
+                accountDao.executeTransaction(account, 500000, "savings", date);
                 accountDao.addSavings(account, 500000, 3);
             }
         }
 
-        //적금 3번 상품 - 24개월 , 이율 5.0, 월 1000000
-        if(accountDao.hasSavings(account, 4)) {
+        if (accountDao.hasSavings(account, 4)) {
             if (accountDao.getBalance(account) >= 1000000) {
-                accountDao.executeTransaction(account, 1000000, "withdrawal");
+                accountDao.executeTransaction(account, 1000000, "savings", date);
                 accountDao.addSavings(account, 1000000, 4);
             }
         }
     }
 
+    private String incrementMonth(String date) {
+        int year = dateDao.parseYear(date);
+        int month = dateDao.parseMonth(date);
 
-    //예적금 만기 해지 로직
-    public void matureSaving(String account) throws IOException {
-        //에금 만기 - 12개월, 이율 3.0
-        if(accountDao.hasSavings(account, 1)){
+        if (month == 12) {
+            year++;
+            month = 1;
+        } else {
+            month++;
+        }
+
+        return String.format("%04d%02d01", year, month);
+    }
+
+    public void matureSaving(String account, String date) throws IOException {
+        //적금 만기 - 12개월, 이율 3.0
+        if (accountDao.hasSavings(account, 1)) {
             String start = accountDao.getStartDate(account, 0);
-            String present = dateDao.getDate();
-
+            String present = date;
 
             int startYear = dateDao.parseYear(start);
+            int startMonth = dateDao.parseMonth(start);
             int presentYear = dateDao.parseYear(present);
+            int presentMonth = dateDao.parseMonth(present);
 
-            if(startYear + 1 <= presentYear){
-                //돌려줄 돈 계산
-                //잔고에 추가
-                //예금 라인 삭제(개행 처리)
+            if (startYear * 12 + startMonth + 12 <= presentYear * 12 + presentMonth) {
                 long savings = accountDao.getSavings(account, 0);
-                // 이자 계산 (단리)
                 long interest = (long) (savings * 0.03);
-                accountDao.executeTransaction(account, interest, "deposit");
+                accountDao.executeTransaction(account, interest, "canceled", date);
                 accountDao.removeSavings(account, 1);
-
             }
         }
 
-        //적금 1번 상품 만기
-        if(accountDao.hasSavings(account, 2)){
-            //적금 만기 시 납부 금액과 같을 경우 만기 해지
+        if (accountDao.hasSavings(account, 2)) {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 1));
-            if(presentAmount == 1200000){
+            if (presentAmount == 1200000) {
                 long interest = (long) (1200000 * 0.02);
-                accountDao.executeTransaction(account, interest, "deposit");
+                accountDao.executeTransaction(account, interest, "canceled", date);
                 accountDao.removeSavings(account, 2);
             }
-
         }
 
-        //적금 2번 상품 만기
-        if(accountDao.hasSavings(account, 3)){
+        if (accountDao.hasSavings(account, 3)) {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 2));
-            if(presentAmount == 6500000){
+            if (presentAmount == 6500000) {
                 long interest = (long) (6500000 * 0.03);
-                accountDao.executeTransaction(account, interest, "deposit");
+                accountDao.executeTransaction(account, interest, "canceled", date);
                 accountDao.removeSavings(account, 3);
             }
         }
 
-        //적금 3번 상품 만기
-        if(accountDao.hasSavings(account, 4)){
+        if (accountDao.hasSavings(account, 4)) {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 3));
-            if(presentAmount == 24000000){
+            if (presentAmount == 24000000) {
                 long interest = (long) (24000000 * 0.05);
-                accountDao.executeTransaction(account, interest, "deposit");
+                accountDao.executeTransaction(account, interest, "canceled", date);
                 accountDao.removeSavings(account, 4);
             }
         }
-
     }
 }

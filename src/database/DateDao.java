@@ -1,7 +1,8 @@
 package database;
 
 import java.io.IOException;
-import java.time.Month;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -15,40 +16,18 @@ public class DateDao {
     public void setDate(String inputDate) throws Exception {
         validateDate(inputDate);
 
-        int year = parseYear(inputDate);
-        int month = parseMonth(inputDate);
-        int date = parseDate(inputDate);
-
-
         List<String> lines = dbManager.readDateFile();
-        String past = getDate();
+        String pastDate = getDate();
 
-        int pastYear = parseYear(past);
-        int pastMonth = parseMonth(past);
-        int pastDate = parseDate(past);
-
-
-        if (year > pastYear) {
-            lines.set(0, inputDate);
-            dbManager.writeDateFile(lines);
-            return;
+        // 첫 번째 줄에 현재 날짜를, 두 번째 줄에 이전 날짜를 유지
+        if (lines.size() < 2) {
+            lines.add(pastDate);
+        } else {
+            lines.set(1, pastDate);
         }
+        lines.set(0, inputDate);
 
-        if (year == pastYear) {
-            if (month > pastMonth) {
-                lines.set(0, inputDate);
-                dbManager.writeDateFile(lines);
-                return;
-            } else if (month == pastMonth) {
-                if (date >= pastDate) {
-                    lines.set(0, inputDate);
-                    dbManager.writeDateFile(lines);
-                    return;
-                }
-            }
-        }
-
-        throw new IOException("에러");
+        dbManager.writeDateFile(lines);
     }
 
     public String getDate() throws IOException {
@@ -56,36 +35,36 @@ public class DateDao {
         return lines.get(0);
     }
 
+    public String getLastSavedDate() throws IOException {
+        List<String> lines = dbManager.readDateFile();
+        return lines.size() > 1 ? lines.get(1) : null;
+    }
+
     public void validateDate(String inputDate) throws Exception {
+        if (inputDate.length() != 8) {
+            throw new DateTimeParseException("입력된 날짜는 8자리여야 합니다.", inputDate, 0);
+        }
 
-        if (inputDate.length() != 8)
-            throw new DateTimeParseException("입력된 월이나 일이 유효 범위를 초과함", inputDate, 0);
-
-        int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-        int year = Integer.parseInt(inputDate.substring(0, 4));
-        int month = Integer.parseInt(inputDate.substring(4, 6));
-        int day = Integer.parseInt(inputDate.substring(6, 8));
-
-
-        if (month < 1 || month > 12 || day < 1 || day > daysInMonth[month]) {
-            throw new Exception();
+        try {
+            LocalDate.parse(inputDate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+        } catch (DateTimeParseException e) {
+            throw new DateTimeParseException("유효하지 않은 날짜 형식입니다.", inputDate, 0);
         }
     }
 
-    public int parseYear(String date){
-        return Integer.parseInt(date.substring(0,4));
+    public int parseYear(String date) {
+        return Integer.parseInt(date.substring(0, 4));
     }
 
-    public int parseMonth(String date){
-        return Integer.parseInt(date.substring(4,6));
+    public int parseMonth(String date) {
+        return Integer.parseInt(date.substring(4, 6));
     }
 
-    public int parseDate(String date){
-        return Integer.parseInt(date.substring(6,8));
+    public int parseDay(String date) {
+        return Integer.parseInt(date.substring(6, 8));
     }
 
-    public int calculateMonth(String pastDate, String presentDate){
+    public int calculateMonth(String pastDate, String presentDate) {
         int pastYear = parseYear(pastDate);
         int pastMonth = parseMonth(pastDate);
 
@@ -96,5 +75,4 @@ public class DateDao {
         int yearDifference = presentYear - pastYear;
         return yearDifference * 12 + (presentMonth - pastMonth);
     }
-
 }

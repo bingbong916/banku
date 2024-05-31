@@ -1,6 +1,8 @@
 package transaction;
 
 import database.AccountDao;
+import database.DatabaseManager;
+import database.DateDao;
 import database.UserDao;
 
 import java.io.IOException;
@@ -9,17 +11,20 @@ import java.util.Scanner;
 public class TransferService {
     private final AccountDao accountDao;
     private final UserDao userDao;
+    private final DateDao dateDao;
     private final Scanner scanner;
 
     public TransferService(AccountDao accountDao, UserDao userDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
+        this.dateDao = new DateDao(new DatabaseManager());
         this.scanner = new Scanner(System.in);
     }
 
     public void transfer(String loggedInUserId) {
         try {
             String senderAccountNumber = userDao.getAccountNumber(loggedInUserId);
+            String currentDate = dateDao.getDate();
 
             System.out.println("\n\n[송금 서비스]");
             System.out.println("============================================");
@@ -40,7 +45,7 @@ public class TransferService {
                     System.out.println("올바른 계좌 번호를 입력하세요!");
                     continue;
                 }
-                
+
                 if (!userDao.checkRecAccNumber(receiverAccountNumber)) {
                     System.out.println("받는 사람의 계좌번호가 존재하지 않습니다.");
                     continue;
@@ -75,20 +80,18 @@ public class TransferService {
                         continue;
                     }
 
-                    long receiverBalance = accountDao.getBalance(receiverAccountNumber);
+                    String senderName = userDao.findUserToName(loggedInUserId);
+                    String receiverName = userDao.findUserNameByAccount(receiverAccountNumber);
 
-                    senderBalance -= amount;
-                    receiverBalance += amount;
+                    accountDao.executeTransferTransaction(senderAccountNumber, -amount, receiverName, "sender", currentDate);
+                    accountDao.executeTransferTransaction(receiverAccountNumber, amount, senderName, "receiver", currentDate);
 
-                    accountDao.updateBalance(senderAccountNumber, senderBalance);
-                    accountDao.updateBalance(receiverAccountNumber, receiverBalance);
                     System.out.println();
                     System.out.println("송금이 완료되었습니다.");
-                    System.out.println("현재 잔액: ₩ " + senderBalance);
-                    
+                    System.out.println("현재 잔액: ₩ " + (senderBalance - amount));
                     break;
                 }
-                
+
                 break;
             }
         } catch (IOException e) {
@@ -96,12 +99,11 @@ public class TransferService {
         }
     }
 
-	private boolean isValidAccountNumber(String accountNumber) {
+    private boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{8}-\\d{8}");
     }
 
     private boolean isValidAmount(String amountStr) {
         return amountStr.matches("\\d+");
     }
-
 }
