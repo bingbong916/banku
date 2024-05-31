@@ -93,6 +93,7 @@ public class CheckAccountService {
             System.out.println("계좌 조회 결과:");
             System.out.println("계좌 번호: " + storedAccount);
             System.out.println("현재 잔액: ₩ " + balance);
+            accountDao.showTransactionLog(storedAccount);
 
         }
         catch (Exception e){

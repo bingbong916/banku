@@ -37,6 +37,17 @@ public class AccountDao {
         return decimalFormat.format(Long.parseLong(balanceStr));
     }
 
+    public void showTransactionLog(String accountNumber) throws IOException {
+        List<String> lines = dbManager.readAccountFile(accountNumber);
+        System.out.println("============================================");
+        if (lines.size() > 5) {
+            for (int i = 5; i < lines.size(); i++) {
+                System.out.println(lines.get(i));
+            }
+        }
+    }
+
+
     public String getStartDate(String accountNumber, int index) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         List<String> subList = lines.subList(1, lines.size());
@@ -176,7 +187,7 @@ public class AccountDao {
     public String showSavings(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         DecimalFormat decimalFormat = new DecimalFormat("###,###");
-        return decimalFormat.format(Long.parseLong(lines.getFirst()));
+        return decimalFormat.format(Long.parseLong(lines.get(0)));
     }
 
     public boolean hasSavings(String accountNumber, int index) throws IOException {
