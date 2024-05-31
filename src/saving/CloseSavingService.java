@@ -35,7 +35,6 @@ public class CloseSavingService {
             System.out.println("예ㆍ적금 해지 서비스를 시작합니다. 개인정보를 입력해주세요");
             System.out.println("============================================");
 
-            boolean flag = true;
             while (true) {
                 String inputName;
                 String actualName;
@@ -141,71 +140,59 @@ public class CloseSavingService {
                         continue;
                     }
 
-                    String accountNumber = userDao.findUserToAccount(loggedInUserId);
-                    String amountStr = accountDao.getSavingsAmount(accountNumber, inputNum - 1).replaceAll(",", "");
-                    long amount = Long.parseLong(amountStr);
-                    long currentMonths;
+                    long amount = Long.parseLong(accountDao.getAmount(account, inputNum - 1));
                     long totalReturnAmount;
-                    long currentBalance;
-                    long newBalance;
+                    double rate;
+                    long interest;
                     String currentDate = dateDao.getDate();
 
                     switch (inputNum) {
                         case 1:
-                            SavingProduct product1 = new SavingProduct(12, 3.0, accountDao.getSavings(accountNumber, 0));
-                            product1.adjustRate(amount);
-                            currentMonths = product1.getCurrentMonths(amount);
-                            totalReturnAmount = product1.calculateAmount(amount, currentMonths);
-                            currentBalance = accountDao.getBalance(accountNumber);
-                            newBalance = currentBalance + totalReturnAmount;
-                            accountDao.executeTransaction(accountNumber, totalReturnAmount, "canceled", currentDate);
+                            String saveDate = accountDao.getStartDate(account, 0);
+                            String presentDate = dateDao.getDate();
+                            int month = dateDao.calculateMonth(saveDate, presentDate);
+                            rate = adjustRateSaving(month);
+                            interest = (long) (amount * rate);
+                            totalReturnAmount = amount + interest;
+                            accountDao.executeTransaction(account, totalReturnAmount, "canceled", currentDate);
                             System.out.println("1번 상품 해지 결과");
                             System.out.println("원금 : " + decimalFormat.format(amount));
-                            System.out.println("이자 : " + decimalFormat.format(product1.calculateInterest(amount, currentMonths)));
-                            System.out.println("합계 : " + decimalFormat.format(product1.calculateAmount(amount, currentMonths)));
-                            accountDao.removeSavings(accountNumber, 1);
+                            System.out.println("이자 : " + decimalFormat.format(interest));
+                            System.out.println("합계 : " + decimalFormat.format(totalReturnAmount));
+                            accountDao.removeSavings(account, 1);
                             break;
                         case 2:
-                            SavingProduct product2 = new SavingProduct(6, 2.0, 200000);
-                            product2.adjustRate(amount);
-                            currentMonths = product2.getCurrentMonths(amount);
-                            totalReturnAmount = product2.calculateAmount(amount, currentMonths);
-                            currentBalance = accountDao.getBalance(accountNumber);
-                            newBalance = currentBalance + totalReturnAmount;
-                            accountDao.executeTransaction(accountNumber, totalReturnAmount, "canceled", currentDate);
+                            rate = adjustRate(amount, 200000, 6, 0.02);
+                            interest = (long) (amount * rate);
+                            totalReturnAmount = amount + interest;
+                            accountDao.executeTransaction(account, totalReturnAmount, "canceled", currentDate);
                             System.out.println("2번 상품 해지 결과");
                             System.out.println("원금 : " + decimalFormat.format(amount));
-                            System.out.println("이자 : " + decimalFormat.format(product2.calculateInterest(amount, currentMonths)));
-                            System.out.println("합계 : " + decimalFormat.format(product2.calculateAmount(amount, currentMonths)));
-                            accountDao.removeSavings(accountNumber, 2);
+                            System.out.println("이자 : " + decimalFormat.format(interest));
+                            System.out.println("합계 : " + decimalFormat.format(totalReturnAmount));
+                            accountDao.removeSavings(account, 2);
                             break;
                         case 3:
-                            SavingProduct product3 = new SavingProduct(12, 3.0, 500000);
-                            product3.adjustRate(amount);
-                            currentMonths = product3.getCurrentMonths(amount);
-                            totalReturnAmount = product3.calculateAmount(amount, currentMonths);
-                            currentBalance = accountDao.getBalance(accountNumber);
-                            newBalance = currentBalance + totalReturnAmount;
-                            accountDao.executeTransaction(accountNumber, totalReturnAmount, "canceled", currentDate);
+                            rate = adjustRate(amount, 500000, 12, 0.03);
+                            interest = (long) (amount * rate);
+                            totalReturnAmount = amount + interest;
+                            accountDao.executeTransaction(account, totalReturnAmount, "canceled", currentDate);
                             System.out.println("3번 상품 해지 결과");
                             System.out.println("원금 : " + decimalFormat.format(amount));
-                            System.out.println("이자 : " + decimalFormat.format(product3.calculateInterest(amount, currentMonths)));
-                            System.out.println("합계 : " + decimalFormat.format(product3.calculateAmount(amount, currentMonths)));
-                            accountDao.removeSavings(accountNumber, 3);
+                            System.out.println("이자 : " + decimalFormat.format(interest));
+                            System.out.println("합계 : " + decimalFormat.format(totalReturnAmount));
+                            accountDao.removeSavings(account, 3);
                             break;
                         case 4:
-                            SavingProduct product4 = new SavingProduct(24, 5.0, 1000000);
-                            product4.adjustRate(amount);
-                            currentMonths = product4.getCurrentMonths(amount);
-                            totalReturnAmount = product4.calculateAmount(amount, currentMonths);
-                            currentBalance = accountDao.getBalance(accountNumber);
-                            newBalance = currentBalance + totalReturnAmount;
-                            accountDao.executeTransaction(accountNumber, totalReturnAmount, "canceled", currentDate);
+                            rate = adjustRate(amount, 1000000, 24, 0.05);
+                            interest = (long) (amount * rate);
+                            totalReturnAmount = amount + interest;
+                            accountDao.executeTransaction(account, totalReturnAmount, "canceled", currentDate);
                             System.out.println("4번 상품 해지 결과");
                             System.out.println("원금 : " + decimalFormat.format(amount));
-                            System.out.println("이자 : " + decimalFormat.format(product4.calculateInterest(amount, currentMonths)));
-                            System.out.println("합계 : " + decimalFormat.format(product4.calculateAmount(amount, currentMonths)));
-                            accountDao.removeSavings(accountNumber, 4);
+                            System.out.println("이자 : " + decimalFormat.format(interest));
+                            System.out.println("합계 : " + decimalFormat.format(totalReturnAmount));
+                            accountDao.removeSavings(account, 4);
                             break;
                         case 0:
                             return;
@@ -226,5 +213,43 @@ public class CloseSavingService {
         } catch (Exception e) {
             e.getMessage();
         }
+    }
+
+    //각각의 상품마다 납부해야 할 금액과 현재 납부된 금액을 비교한 이후 만기날짜 대비 비율을 계산
+    public double adjustRate(long amount, long monthlyPayment, int months, double rate) {
+        int currentMonths = (int) (amount / monthlyPayment);
+        // 현재까지 납입한 개월 수에 따라 이율 조정
+
+        if (currentMonths == 1)
+           return 0;
+
+        if (currentMonths < (months * 0.2))
+            return rate * 0.1;
+
+        if (currentMonths < (months * 0.5))
+            return rate * 0.5;
+
+        if (currentMonths < (months))
+            return rate * 0.8;
+
+        return -1;
+    }
+
+    public double adjustRateSaving(int month){
+        //예금 신청 날짜와 현재 날짜의 개월수 차이 계산
+        //개월수 차이에 따라 비율 차등 반환
+        //기존 이율은 0.03;
+        double rate = 0.03;
+
+        if(month < 12 * 0.2)
+            return rate * 0.1;
+
+        if (month < 12 * 0.5)
+            return rate * 0.5;
+
+        if(month < 12)
+            return rate * 0.8;
+
+        return -1;
     }
 }

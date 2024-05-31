@@ -33,8 +33,8 @@ public class AutomaticTransfer {
             List<String> accountList = listFilesInDirectory();
             String currentProcessingDate = incrementMonth(lastDate);
             for (String account : accountList) {
-                autoSaving(account, currentProcessingDate);
                 matureSaving(account, currentProcessingDate);
+                autoSaving(account, currentProcessingDate);
             }
             lastDate = currentProcessingDate;
         }
@@ -114,7 +114,8 @@ public class AutomaticTransfer {
             if (startYear * 12 + startMonth + 12 <= presentYear * 12 + presentMonth) {
                 long savings = accountDao.getSavings(account, 0);
                 long interest = (long) (savings * 0.03);
-                accountDao.executeTransaction(account, interest, "canceled", date);
+                long total = savings + interest;
+                accountDao.executeTransaction(account, total, "canceled", date);
                 accountDao.removeSavings(account, 1);
             }
         }
@@ -123,7 +124,8 @@ public class AutomaticTransfer {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 1));
             if (presentAmount == 1200000) {
                 long interest = (long) (1200000 * 0.02);
-                accountDao.executeTransaction(account, interest, "canceled", date);
+                long total = presentAmount + interest;
+                accountDao.executeTransaction(account, total, "canceled", date);
                 accountDao.removeSavings(account, 2);
             }
         }
@@ -132,7 +134,8 @@ public class AutomaticTransfer {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 2));
             if (presentAmount == 6500000) {
                 long interest = (long) (6500000 * 0.03);
-                accountDao.executeTransaction(account, interest, "canceled", date);
+                long total = presentAmount + interest;
+                accountDao.executeTransaction(account, total, "canceled", date);
                 accountDao.removeSavings(account, 3);
             }
         }
@@ -141,7 +144,8 @@ public class AutomaticTransfer {
             long presentAmount = Long.parseLong(accountDao.getAmount(account, 3));
             if (presentAmount == 24000000) {
                 long interest = (long) (24000000 * 0.05);
-                accountDao.executeTransaction(account, interest, "canceled", date);
+                long total = presentAmount + interest;
+                accountDao.executeTransaction(account, total, "canceled", date);
                 accountDao.removeSavings(account, 4);
             }
         }
