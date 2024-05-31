@@ -56,8 +56,8 @@ public class TermDepositService {
                             System.out.println("이미 가입한 적금입니다.");
                         } else {
                             // 첫 달 납입금을 현재 계좌에서 차감
-                            int type1 = accountDao.executeSavings(account, 200000, "withdrawal");
-                            if(type1 == 1){
+                            int type1 = accountDao.executeTransaction(account, 200000, "withdrawal");
+                            if(type1 == 0){
                                 // 첫 달 납입금을 적금 계좌에 적립
                                 accountDao.updateSavings(account, 1, "200000", startDate);
                                 System.out.println("적금 가입이 완료되었습니다!");
@@ -72,8 +72,8 @@ public class TermDepositService {
                             System.out.println("이미 가입한 적금입니다.");
                         }
                         // 첫 달 납입금을 현재 계좌에서 차감
-                        int type2 = accountDao.executeSavings(account, 500000, "withdrawal");
-                        if (type2 == 1) {
+                        int type2 = accountDao.executeTransaction(account, 500000, "withdrawal");
+                        if (type2 == 0) {
                             // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 2, "500000", startDate);
                             System.out.println("적금 가입이 완료되었습니다!");
@@ -87,8 +87,8 @@ public class TermDepositService {
                             System.out.println("이미 가입한 적금입니다.");
                         }
                         // 첫 달 납입금을 현재 계좌에서 차감
-                        int type3 = accountDao.executeSavings(account, 1000000, "withdrawal");
-                        if (type3 == 1) {
+                        int type3 = accountDao.executeTransaction(account, 1000000, "withdrawal");
+                        if (type3 == 0) {
                             // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 3, "1000000", startDate);
                             System.out.println("적금 가입이 완료되었습니다!");

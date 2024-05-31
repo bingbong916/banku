@@ -79,30 +79,43 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
-    public int executeSavings(String accountNumber, long money, String type) throws IOException {
+    // TODO: 모든 입출금 로직을 하나의 method 로 통합
+    // TODO: 모든 입출금 로직에 대해 입출금 내역 로그 추가
+    public int executeTransaction(String accountNumber, long money, String type) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
+        long oldBalance = Long.parseLong(lines.get(0));
         switch (type){
-            case "deposit":
-                try{
-                    money = Math.addExact(money, Long.parseLong(lines.get(0)));
-                }catch (ArithmeticException e){
-                    return 1; // 입금 long 형 범위 초과
+            case "deposit": // 입금
+                try {
+                    money = Math.addExact(money, oldBalance);
+                } catch (ArithmeticException e) {
+                    return -1; // 입금 long 형 범위 초과
                 }
                 lines.set(0, Long.toString(money));
                 dbManager.writeAccountFile(accountNumber, lines);
-                break;
+                return 0;
 
-            case "withdrawal":
-                long oldSavings = Long.parseLong(lines.get(0));
-                if(Long.parseLong(lines.get(0)) - money < 0){
-                    return 2; // 출금 잔고보다 더 많은 돈 빼갈 때
+            case "withdrawal": // 출금
+                if (oldBalance - money < 0) {
+                    return -1; // 잔고보다 더 많은 돈을 출금할 때
                 }
-                money = oldSavings - money;
+                money = oldBalance - money;
                 lines.set(0, Long.toString(money));
                 dbManager.writeAccountFile(accountNumber, lines);
-                break;
+                return 0;
+
+            case "savings": // 적금
+                if (oldBalance - money < 0) {
+                    return -1; // 적금 금액보다 더 많은 돈을 출금할 때
+                }
+                money = oldBalance - money;
+                lines.set(0, Long.toString(money));
+                dbManager.writeAccountFile(accountNumber, lines);
+                return 0;
+
+            default:
+                return -2; // 비정상적인 요청 타입
         }
-        return 3;
     }
 
     public String showSavings (String accountNumber) throws IOException{

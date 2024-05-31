@@ -67,9 +67,9 @@ public class DepositService {
 
                 // id 해당 계좌
                 String account = userDao.findUserToAccount(loggedInUserId);
-                int returnNum = accountDao.executeSavings(account, amount, "deposit");
+                int returnNum = accountDao.executeTransaction(account, amount, "deposit");
 
-                if(returnNum == 3){
+                if(returnNum == 0){
                     System.out.println();
                     System.out.println("입금이 완료되었습니다!");
                     System.out.println("현재 잔액: ₩ " + accountDao.showSavings(account));
