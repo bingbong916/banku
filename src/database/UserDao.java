@@ -116,7 +116,17 @@ public class UserDao {
         }
         return null;
     }
-    
+    public String findUserNameByAccount(String accountNumber) throws IOException {
+        List<String> lines = readUserFile();
+        for (String line : lines) {
+            String[] parts = line.split("\t");
+            if (parts.length >= 5 && parts[4].equals(accountNumber)) {
+                return parts[2];
+            }
+        }
+        return null;
+    }
+
     public boolean checkDuplicateUserId(String userId) throws IOException {
         List<String> lines = readUserFile();
         for (String line : lines) {

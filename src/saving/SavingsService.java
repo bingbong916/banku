@@ -59,9 +59,7 @@ public class SavingsService {
                     continue;
                 }
 
-
-                long currentBalance = accountDao.getBalance(account);
-
+                long currentBalance = accountDao.getSavings(account, 0);
 
                 if (money > currentBalance) {
                     System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + decimalFormat.format(currentBalance) + "입니다.");
@@ -71,17 +69,15 @@ public class SavingsService {
                 String startDate = dateDao.getDate();
 
                 // 첫 달 납입금을 현재 계좌에서 차감
-                accountDao.executeTransaction(account, money,"withdrawal");
+                accountDao.executeTransaction(account, money, "withdrawal", startDate);
                 // 첫 달 납입금을 예금 계좌에 적립
                 accountDao.updateSavings(account, 0, inputMoney, startDate);
                 System.out.println("예금이 완료되었습니다!");
                 System.out.println();
                 break;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
     }
-
-
 }
