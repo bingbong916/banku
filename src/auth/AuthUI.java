@@ -1,19 +1,16 @@
 package auth;
-import bank.MainMenu;
 
+import bank.MainMenu;
 import database.DatabaseManager;
 import database.DateDao;
 import database.UserDao;
 import saving.AutomaticTransfer;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.Scanner;
-
 import java.io.IOException;
-import java.time.format.DateTimeParseException;
-
-
 
 public class AuthUI {
     private RegistrationService registrationService;
@@ -27,6 +24,7 @@ public class AuthUI {
         this.scanner = new Scanner(System.in);
         initializeServices();
     }
+
     private void initializeServices() {
         DatabaseManager dbManager = new DatabaseManager();
         userDao = new UserDao(dbManager);
@@ -35,6 +33,7 @@ public class AuthUI {
         dateDao = new DateDao(dbManager);
         this.automaticTransfer = new AutomaticTransfer();
     }
+
     public void showMenu() throws IOException {
         String loggedInUserId = null;
         while (true) {
@@ -59,7 +58,7 @@ public class AuthUI {
                     case "2":
                         loggedInUserId = loginUser();
                         if (loggedInUserId.equals("q")) {
-                        	break;
+                            break;
                         }
                         if (loggedInUserId != null) {
                             MainMenu mainMenu = new MainMenu(loggedInUserId);
@@ -79,7 +78,6 @@ public class AuthUI {
     }
 
     private void registerUser() {
-
         String userId;
         String password;
         String name;
@@ -90,51 +88,34 @@ public class AuthUI {
         System.out.println("============================================");
         System.out.println("회원가입을 시작합니다.");
 
-
         // 아이디
         while (true) {
             System.out.print("아이디를 입력하세요: ");
             userId = scanner.nextLine();
-            
-            if(userId.equals("q")) {
-            	System.out.println("회원가입을 종료합니다.");
-            	System.out.println("\n\n[회원가입·로그인 서비스]");
-                System.out.println("============================================");
-                System.out.println("회원가입 또는 로그인을 해주세요");
-                System.out.println("============================================");
-                System.out.println("[1] 회원가입 서비스");
-                System.out.println("[2] 로그인 서비스");
-                System.out.println("[0] 종료하기");
-                System.out.println("============================================");
-            	return;
+
+            if (userId.equals("q")) {
+                System.out.println("회원가입을 종료합니다.");
+                return;
             }
 
             if (userId == null || userId.isEmpty()) {
                 System.out.println("아이디를 입력해주세요");
                 System.out.println();
-            }
-
-            else if (!userId.matches("[a-z0-9]+")) {
+            } else if (!userId.matches("[a-z0-9]+")) {
                 System.out.println("소문자 영어와 숫자의 조합으로 이루어져야 합니다.");
                 System.out.println();
-            }
-
-            else if (userId.length() < 6 || userId.length() > 10) {
+            } else if (userId.length() < 6 || userId.length() > 10) {
                 System.out.println("6자 이상 10자 이하로 입력해주세요.");
                 System.out.println();
             } else
                 try {
-                    if(userDao.checkDuplicateUserId(userId)) {
+                    if (userDao.checkDuplicateUserId(userId)) {
                         System.out.println("아이디가 이미 존재합니다.");
                         System.out.println();
-                    }
-
-                    else {
-
+                    } else {
                         break;
                     }
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
         }
@@ -144,32 +125,20 @@ public class AuthUI {
             System.out.print("비밀번호를 입력하세요: ");
             password = scanner.nextLine();
 
-            if(password.equals("q")) {
-            	System.out.println("회원가입을 종료합니다.");
-            	System.out.println("\n\n[회원가입·로그인 서비스]");
-                System.out.println("============================================");
-                System.out.println("회원가입 또는 로그인을 해주세요");
-                System.out.println("============================================");
-                System.out.println("[1] 회원가입 서비스");
-                System.out.println("[2] 로그인 서비스");
-                System.out.println("[0] 종료하기");
-                System.out.println("============================================");
-            	return;
+            if (password.equals("q")) {
+                System.out.println("회원가입을 종료합니다.");
+                return;
             }
-            
-            else if (password == null || password.isEmpty()) {
+
+            if (password == null || password.isEmpty()) {
                 System.out.println("비밀번호를 입력해주세요.");
                 System.out.println();
                 continue;
-            }
-
-            else if (!password.matches("\\d+")) {
+            } else if (!password.matches("\\d+")) {
                 System.out.println("비밀번호는 숫자만 포함해야 합니다.");
                 System.out.println();
                 continue;
-            }
-
-            else if (password.length() != 6) {
+            } else if (password.length() != 6) {
                 System.out.println("비밀번호는 6자리 숫자로 이루어져야 합니다.");
                 System.out.println();
                 continue;
@@ -183,36 +152,24 @@ public class AuthUI {
             System.out.print("이름을 입력하세요: ");
             name = scanner.nextLine();
 
-            if(name.equals("q")) {
-            	System.out.println("회원가입을 종료합니다.");
-            	System.out.println("\n\n[회원가입·로그인 서비스]");
-                System.out.println("============================================");
-                System.out.println("회원가입 또는 로그인을 해주세요");
-                System.out.println("============================================");
-                System.out.println("[1] 회원가입 서비스");
-                System.out.println("[2] 로그인 서비스");
-                System.out.println("[0] 종료하기");
-                System.out.println("============================================");
-            	return;
+            if (name.equals("q")) {
+                System.out.println("회원가입을 종료합니다.");
+                return;
             }
-            
-            else if (name == null || name.isEmpty()) {
+
+            if (name == null || name.isEmpty()) {
                 System.out.println("이름을 입력해주세요.");
                 System.out.println();
                 continue;
-            }
-
-            else if (!name.matches("[ㄱ-ㅎㅏ-ㅣ가-힣]+")) {
+            } else if (!name.matches("[ㄱ-ㅎㅏ-ㅣ가-힣]+")) {
                 System.out.println("이름은 한글로만 구성되어야 합니다.");
                 System.out.println();
                 continue;
-            }
-            else if (!name.matches("^[가-힣]+$")) {
+            } else if (!name.matches("^[가-힣]+$")) {
                 System.out.println("이름은 조합된 한글 글자로만 입력해주세요.");
                 System.out.println();
                 continue;
-            }
-            else if (name.length() < 2 || name.length() > 5) {
+            } else if (name.length() < 2 || name.length() > 5) {
                 System.out.println("2자 이상 5자 이하로 입력해주세요.");
                 System.out.println();
                 continue;
@@ -225,27 +182,17 @@ public class AuthUI {
         while (true) {
             System.out.print("주민등록번호를 입력하세요: (6자리 숫자 - 7자리 숫자) ");
             rrn = scanner.nextLine();
-            
-            if(rrn.equals("q")) {
-            	System.out.println("회원가입을 종료합니다.");
-            	System.out.println("\n\n[회원가입·로그인 서비스]");
-                System.out.println("============================================");
-                System.out.println("회원가입 또는 로그인을 해주세요");
-                System.out.println("============================================");
-                System.out.println("[1] 회원가입 서비스");
-                System.out.println("[2] 로그인 서비스");
-                System.out.println("[0] 종료하기");
-                System.out.println("============================================");
-            	return;
+
+            if (rrn.equals("q")) {
+                System.out.println("회원가입을 종료합니다.");
+                return;
             }
 
-            else if (rrn == null || rrn.isEmpty()) {
+            if (rrn == null || rrn.isEmpty()) {
                 System.out.println("주민등록번호를 입력해주세요.");
                 System.out.println();
                 continue;
-            }
-
-            else if (!rrn.matches("\\d{6}-\\d{7}")) {
+            } else if (!rrn.matches("\\d{6}-\\d{7}")) {
                 System.out.println("주민등록번호는 (6자리 숫자)-(7자리 숫자) 형식이어야 합니다.");
                 System.out.println();
                 continue;
@@ -255,9 +202,7 @@ public class AuthUI {
                         System.out.println("주민등록번호가 이미 존재합니다.");
                         System.out.println();
                         continue;
-                    }
-
-                    else {
+                    } else {
                         int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
                         String birthDate = rrn.substring(0, 6);
@@ -277,21 +222,17 @@ public class AuthUI {
                         }
                     }
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-
 
             break;
         }
         try {
             registrationService.registerUser(userId, password, name, rrn);
-
         } catch (Exception e) {
             System.out.println("회원가입 중 오류가 발생했습니다: " + e.getMessage());
             System.out.println();
         }
-
     }
 
     private String loginUser() {
@@ -308,20 +249,12 @@ public class AuthUI {
             System.out.print("아이디를 입력하세요: ");
             userId = scanner.nextLine();
 
-            if(userId.equals("q")) {
-            	System.out.println("로그인을 종료합니다.");
-            	System.out.println("\n\n[회원가입·로그인 서비스]");
-                System.out.println("============================================");
-                System.out.println("회원가입 또는 로그인을 해주세요");
-                System.out.println("============================================");
-                System.out.println("[1] 회원가입 서비스");
-                System.out.println("[2] 로그인 서비스");
-                System.out.println("[0] 종료하기");
-                System.out.println("============================================");
-            	return ("q");
+            if (userId.equals("q")) {
+                System.out.println("로그인을 종료합니다.");
+                return ("q");
             }
-            
-            else if (userId.isEmpty()) {
+
+            if (userId.isEmpty()) {
                 System.out.println("아이디를 입력해주세요");
                 System.out.println();
                 continue;
@@ -353,21 +286,13 @@ public class AuthUI {
         while (true) {
             System.out.print("비밀번호를 입력하세요: ");
             password = scanner.nextLine();
-            
-            if(password.equals("q")) {
-            	System.out.println("로그인을 종료합니다.");
-            	System.out.println("\n\n[회원가입·로그인 서비스]");
-                System.out.println("============================================");
-                System.out.println("회원가입 또는 로그인을 해주세요");
-                System.out.println("============================================");
-                System.out.println("[1] 회원가입 서비스");
-                System.out.println("[2] 로그인 서비스");
-                System.out.println("[0] 종료하기");
-                System.out.println("============================================");
-            	return ("q");
+
+            if (password.equals("q")) {
+                System.out.println("로그인을 종료합니다.");
+                return ("q");
             }
 
-            else if (password.isEmpty()) {
+            if (password.isEmpty()) {
                 System.out.println("비밀번호를 입력해주세요.");
                 System.out.println();
                 continue;
@@ -410,42 +335,29 @@ public class AuthUI {
                 System.out.println();
                 System.out.print("오늘 날짜를 입력하세요: "); // 오늘 날짜 입력받기 추가
                 inputDate = scanner.nextLine();
-                if(inputDate.equals("q")) {
-                	System.out.println("오늘 날짜 입력을 종료합니다.(로그인 취소)");
-                	System.out.println("\n\n[회원가입·로그인 서비스]");
-                    System.out.println("============================================");
-                    System.out.println("회원가입 또는 로그인을 해주세요");
-                    System.out.println("============================================");
-                    System.out.println("[1] 회원가입 서비스");
-                    System.out.println("[2] 로그인 서비스");
-                    System.out.println("[0] 종료하기");
-                    System.out.println("============================================");
-                	return ("q");
+                if (inputDate.equals("q")) {
+                    System.out.println("오늘 날짜 입력을 종료합니다.(로그인 취소)");
+                    return ("q");
                 }
+                dateDao.validateDate(inputDate);
                 dateDao.setDate(inputDate);
-            } catch (Exception e){
+
+                // 자동이체 실행 전 날짜 비교
+                int cnt = dateDao.calculateMonth(pastDate, inputDate);
+                for (int i = 0; i < cnt; i++) {
+                    automaticTransfer.doService();
+                }
+            } catch (DateTimeParseException e) {
                 System.out.println("유효하지 않은 날짜입니다.");
+                System.out.println();
+                continue;
+            } catch (Exception e) {
+                System.out.println("날짜 설정 중 오류가 발생했습니다. 상세 오류: " + e.getMessage());
                 System.out.println();
                 continue;
             }
             break;
         }
-
-        /*
-        이전 날짜와 입력받은 날짜의 개월 차이만큼 autoSaving 실행
-         */
-
-
-        int cnt = dateDao.calculateMonth(pastDate, inputDate);
-
-        try {
-            for (int i = 0; i < cnt; i++) {
-                automaticTransfer.doService();
-            }
-        }catch (IOException e){
-            e.getMessage();
-        }
-
 
         String loggedInUserId = loginService.login(userId, password);
 
@@ -457,10 +369,9 @@ public class AuthUI {
                 System.out.println();
                 return userId;
             } else {
-//            System.out.println("로그인 실패");
                 return null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
             return null;
         }

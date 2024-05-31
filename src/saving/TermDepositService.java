@@ -19,13 +19,12 @@ public class TermDepositService {
         this.scanner = new Scanner(System.in);
         this.savingServiceManager = savingServiceManager;
         this.dateDao = new DateDao(new DatabaseManager());
-
     }
 
     public void doSavingService(String loggedInUserId) {
         try {
             System.out.println();
-            System.out.println("\n\n[적금 서비스]"); // 정기예금 -> 적금 텍스트 수정
+            System.out.println("\n\n[적금 서비스]");
             System.out.println("============================================");
             System.out.println("적금 가능한 상품");
             System.out.println("[1] 6개월 적금 - 연 2.0%, 월 ₩ 200,000    예상 수령액 : ₩ 1,224,000");
@@ -43,22 +42,19 @@ public class TermDepositService {
                 input = scanner.nextLine();
 
                 if(!input.matches("^[0-3]+$")){
-                    System.out.println("숫자만 입력하세요.");       //상품 번호의 숫자만 입력하세요 라고 수정?
+                    System.out.println("숫자만 입력하세요.");
                     continue;
                 }
 
                 int termDepositNum = Integer.parseInt(input);
 
-                //추가
                 switch (termDepositNum){
                     case 1:
                         if (accountDao.hasSavings(account, 2)) {
                             System.out.println("이미 가입한 적금입니다.");
                         } else {
-                            // 첫 달 납입금을 현재 계좌에서 차감
-                            int type1 = accountDao.executeTransaction(account, 200000, "savings");
+                            int type1 = accountDao.executeTransaction(account, 200000, "savings", startDate);
                             if(type1 == 0){
-                                // 첫 달 납입금을 적금 계좌에 적립
                                 accountDao.updateSavings(account, 1, "200000", startDate);
                                 System.out.println("적금 가입이 완료되었습니다!");
                             } else {
@@ -71,10 +67,8 @@ public class TermDepositService {
                         if (accountDao.hasSavings(account, 3)) {
                             System.out.println("이미 가입한 적금입니다.");
                         }
-                        // 첫 달 납입금을 현재 계좌에서 차감
-                        int type2 = accountDao.executeTransaction(account, 500000, "savings");
+                        int type2 = accountDao.executeTransaction(account, 500000, "savings", startDate);
                         if (type2 == 0) {
-                            // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 2, "500000", startDate);
                             System.out.println("적금 가입이 완료되었습니다!");
                         } else {
@@ -86,10 +80,8 @@ public class TermDepositService {
                         if (accountDao.hasSavings(account, 4)) {
                             System.out.println("이미 가입한 적금입니다.");
                         }
-                        // 첫 달 납입금을 현재 계좌에서 차감
-                        int type3 = accountDao.executeTransaction(account, 1000000, "savings");
+                        int type3 = accountDao.executeTransaction(account, 1000000, "savings", startDate);
                         if (type3 == 0) {
-                            // 첫 달 납입금을 적금 계좌에 적립
                             accountDao.updateSavings(account, 3, "1000000", startDate);
                             System.out.println("적금 가입이 완료되었습니다!");
                         } else {
@@ -102,9 +94,8 @@ public class TermDepositService {
                 System.out.println();
                 break;
             }
-        }catch (Exception e){
+        } catch (Exception e){
             e.getMessage();
         }
-
     }
 }
