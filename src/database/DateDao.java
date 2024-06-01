@@ -106,8 +106,8 @@ public class DateDao {
         String lastUpdatedDate = getLastUpdatedDate(accountNumber);
         // 오늘 날짜를 가져옵니다.
         String today = getDate();
-        System.out.println("lastUpdatedDate : " + lastUpdatedDate);
-        System.out.println("today : " + today);
+//        System.out.println("lastUpdatedDate : " + lastUpdatedDate);
+//        System.out.println("today : " + today);
 
         // 두 날짜가 같은 달인지 확인합니다.
         return getMonthFromDateString(lastUpdatedDate) == getMonthFromDateString(today);
@@ -140,9 +140,9 @@ public class DateDao {
 
 
     // account/계좌번호.txt에서 몇 월인지 가져오는 메서드
-    private int getMonthFromAccountFileDate(String date) {
-        return Integer.parseInt(date.split(" ")[0]);
-    }
+//    private int getMonthFromAccountFileDate(String date) {
+//        return Integer.parseInt(date.split(" ")[0]);
+//    }
 
     // getDate에서 month 정보만 가져오는 메서드
     private int getMonthFromDateString(String date) {

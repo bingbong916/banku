@@ -46,6 +46,7 @@ public class MainMenu {
         this.savingServiceManager = new SavingServiceManager();
         this.checkManager = new CheckManager(userDao, accountDao);
         this.loggedInUserId = userId;
+        DateDao dateDao = new DateDao(new DatabaseManager());
         
     }
 
