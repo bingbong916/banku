@@ -51,7 +51,10 @@ public class MainMenu {
     }
 
     public void show() throws IOException {
-    	accountDao.calculateAndDepositInterest(userDao.getAccountNumber(loggedInUserId), dateDao);
+    	if (userDao.hasAccount(loggedInUserId)) {
+            accountDao.calculateAndDepositInterest(userDao.getAccountNumber(loggedInUserId), dateDao);
+        }
+    	
         printMainMenu();
         while (true) {
             System.out.print("선택하실 메뉴 번호를 입력하세요 (0-6): ");
