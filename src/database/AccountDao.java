@@ -214,18 +214,6 @@ public class AccountDao {
         dbManager.writeAccountFile(accountNumber, lines);
     }
 
-    public long getSavings(String accountNumber, int index) throws IOException {
-        List<String> lines = dbManager.readAccountFile(accountNumber);
-        return Long.parseLong(lines.get(index));
-    }
-
-    public String getSavingsAmount(String accountNumber, int productIndex) throws IOException {
-        List<String> lines = dbManager.readAccountFile(accountNumber);
-        String productLine = lines.get(productIndex + 1);
-        String[] productInfo = productLine.split("\t");
-        return productInfo.length > 0 ? productInfo[0] : "0";
-    }
-
     public void addSavings(String accountNumber, long money, int productIndex) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         String line = lines.get(productIndex);
