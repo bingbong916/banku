@@ -2,7 +2,7 @@ package bank;
 
 import database.AccountDao;
 import database.DatabaseManager;
-import database.DateDao;
+import database.DateDao; // 추가
 import database.UserDao;
 import transaction.TransferService;
 import saving.SavingServiceManager;
@@ -25,26 +25,32 @@ public class MainMenu {
     private final TransferService transferService;
     private final CheckManager checkManager;
     private final UserDao userDao;
+    private final AccountDao accountDao; // 추가된 부분
+    private final DateDao dateDao; // 추가된 부분
 
 
 
     public MainMenu(String userId) {
     	
         this.scanner = new Scanner(System.in);
+        
+        this.accountDao = new AccountDao(new DatabaseManager()); // 추가된 부분
+        this.dateDao = new DateDao(new DatabaseManager()); // 추가된 부분
+        
         this.userDao = new UserDao(new DatabaseManager());
-        DateDao dateDao = new DateDao(new DatabaseManager());
         AccountDao accountDao = new AccountDao(new DatabaseManager());
         this.accountService = new AccountService(userDao);
         this.transferService = new TransferService(new AccountDao(new DatabaseManager()), userDao);
         this.depositService = new DepositService(userDao, accountDao);
         this.withdrawalService = new WithdrawalService(userDao, accountDao);
         this.savingServiceManager = new SavingServiceManager();
-        this.checkManager = new CheckManager(userDao, accountDao, dateDao);
+        this.checkManager = new CheckManager(userDao, accountDao);
         this.loggedInUserId = userId;
         
     }
 
     public void show() throws IOException {
+    	accountDao.calculateAndDepositInterest(userDao.getAccountNumber(loggedInUserId), dateDao);
         printMainMenu();
         while (true) {
             System.out.print("선택하실 메뉴 번호를 입력하세요 (0-6): ");

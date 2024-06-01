@@ -106,23 +106,38 @@ public class DateDao {
         String lastUpdatedDate = getLastUpdatedDate(accountNumber);
         // 오늘 날짜를 가져옵니다.
         String today = getDate();
+        System.out.println("lastUpdatedDate : " + lastUpdatedDate);
+        System.out.println("today : " + today);
 
         // 두 날짜가 같은 달인지 확인합니다.
-        return getMonthFromAccountFileDate(lastUpdatedDate) == getMonthFromDateString(today);
+        return getMonthFromDateString(lastUpdatedDate) == getMonthFromDateString(today);
     }
 
-    // account/계좌번호.txt에서 마지막으로 업데이트 된 날짜를 가져오는 메서드
-    private String getLastUpdatedDate(String accountNumber) throws IOException {
+
+ // account/계좌번호.txt에서 마지막으로 업데이트 된 날짜를 가져오는 메서드
+    public String getLastUpdatedDate(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
-        String lastLine = lines.get(lines.size() - 1);
         Pattern pattern = Pattern.compile("(\\d+월 \\d+일)");
-        Matcher matcher = pattern.matcher(lastLine);
-        if (matcher.find()) {
-            return matcher.group(1).replace("월 ", "").replace("일", "");
-        } else {
-            throw new IOException("마지막 업데이트된 날짜를 찾을 수 없습니다.");
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            String line = lines.get(i);
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                // 월과 일이 한 자리수인 경우 앞에 0을 추가합니다.
+                String month = matcher.group(1).split("월")[0].trim();
+                String day = matcher.group(1).split("월")[1].replace("일", "").trim();
+                if (month.length() == 1) {
+                    month = "0" + month;
+                }
+                if (day.length() == 1) {
+                    day = "0" + day;
+                }
+                return "2024" + month + day;
+            }
         }
+        return null;  // 날짜를 찾지 못했을 때 null을 반환합니다.
     }
+
+
 
     // account/계좌번호.txt에서 몇 월인지 가져오는 메서드
     private int getMonthFromAccountFileDate(String date) {
