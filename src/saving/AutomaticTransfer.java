@@ -112,7 +112,7 @@ public class AutomaticTransfer {
             int presentMonth = dateDao.parseMonth(present);
 
             if (startYear * 12 + startMonth + 12 <= presentYear * 12 + presentMonth) {
-                long savings = accountDao.getSavings(account, 0);
+                long savings = Long.parseLong(accountDao.getAmount(account, 0));
                 long interest = (long) (savings * 0.03);
                 long total = savings + interest;
                 accountDao.executeTransaction(account, total, "canceled", date);
