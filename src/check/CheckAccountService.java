@@ -7,10 +7,13 @@ public class CheckAccountService {
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final Scanner scanner;
+    private final DateDao dateDao;  // DateDao 추가
 
-    public CheckAccountService(UserDao userDao, AccountDao accountDao){
+
+    public CheckAccountService(UserDao userDao, AccountDao accountDao, DateDao dateDao){
         this.accountDao = accountDao;
         this.userDao = userDao;
+        this.dateDao = dateDao;  // DateDao를 초기화합니다.
         this.scanner = new Scanner(System.in);
         initializeServices();
     }
@@ -19,6 +22,7 @@ public class CheckAccountService {
         DatabaseManager dbManager = new DatabaseManager();
         UserDao userDao = new UserDao(dbManager);
         AccountDao accountDao = new AccountDao(dbManager);
+        DateDao dateDao = new DateDao(dbManager);
     }
     private static boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{6}-\\d{7}");
@@ -31,6 +35,7 @@ public class CheckAccountService {
         DatabaseManager dbManager = new DatabaseManager();
         UserDao userDao = new UserDao(dbManager);
         AccountDao accountDao = new AccountDao(dbManager);
+        DateDao dateDao = new DateDao(dbManager);  // DateDao를 생성합니다.
 
 
         try {
@@ -86,6 +91,9 @@ public class CheckAccountService {
 
             //이름&주민번호 일치
             System.out.println("============================================");
+            
+            // 복리 계산 적용
+            accountDao.calculateAndDepositInterest(loggedInUserId, dateDao);
 
             String storedAccount = userDao.findUserToAccount(loggedInUserId);
             String balance = accountDao.getBalanceToString(storedAccount);

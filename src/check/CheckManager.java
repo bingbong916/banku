@@ -10,14 +10,16 @@ public class CheckManager {
     private final Scanner scanner;
     private final UserDao userDao;
     private final AccountDao accountDao;
+    private final DateDao dateDao;
     private final CheckAccountService checkAccountService;
     private final CheckDepositService checkDepositService;
 
-    public CheckManager(UserDao userDao, AccountDao accountDao){
+    public CheckManager(UserDao userDao, AccountDao accountDao, DateDao dateDao){
         this.accountDao = accountDao;
         this.userDao = userDao;
+        this.dateDao = dateDao;
         this.scanner = new Scanner(System.in);
-        this.checkAccountService = new CheckAccountService(userDao, accountDao);
+        this.checkAccountService = new CheckAccountService(userDao, accountDao, dateDao);
         this.checkDepositService = new CheckDepositService(userDao, accountDao);
         initializeServices();
     }
@@ -25,6 +27,7 @@ public class CheckManager {
     private void initializeServices() {
         DatabaseManager dbManager = new DatabaseManager();
         UserDao userDao = new UserDao(dbManager);
+        DateDao dateDao = new DateDao(dbManager);
     }
 
     public void printCheckingMenu(String loggedInUserId){

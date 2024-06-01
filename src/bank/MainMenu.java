@@ -29,17 +29,19 @@ public class MainMenu {
 
 
     public MainMenu(String userId) {
+    	
         this.scanner = new Scanner(System.in);
         this.userDao = new UserDao(new DatabaseManager());
+        DateDao dateDao = new DateDao(new DatabaseManager());
         AccountDao accountDao = new AccountDao(new DatabaseManager());
         this.accountService = new AccountService(userDao);
         this.transferService = new TransferService(new AccountDao(new DatabaseManager()), userDao);
         this.depositService = new DepositService(userDao, accountDao);
         this.withdrawalService = new WithdrawalService(userDao, accountDao);
         this.savingServiceManager = new SavingServiceManager();
-        this.checkManager = new CheckManager(userDao, accountDao);
+        this.checkManager = new CheckManager(userDao, accountDao, dateDao);
         this.loggedInUserId = userId;
-        DateDao dateDao = new DateDao(new DatabaseManager());
+        
     }
 
     public void show() throws IOException {
