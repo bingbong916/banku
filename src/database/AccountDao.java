@@ -2,7 +2,9 @@ package database;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AccountDao {
@@ -40,9 +42,31 @@ public class AccountDao {
     public void showTransactionLog(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         System.out.println("============================================");
+
+        List<List<String>> dateSections = new ArrayList<>();
+        List<String> currentSection = new ArrayList<>();
+
         if (lines.size() > 5) {
             for (int i = 5; i < lines.size(); i++) {
-                System.out.println(lines.get(i));
+                String line = lines.get(i);
+                if (line.matches("\\d+월 \\d+일")) {
+                    if (!currentSection.isEmpty()) {
+                        dateSections.add(new ArrayList<>(currentSection));
+                        currentSection.clear();
+                    }
+                }
+                currentSection.add(line);
+            }
+
+            if (!currentSection.isEmpty()) {
+                dateSections.add(currentSection);
+            }
+
+            Collections.reverse(dateSections);
+            for (List<String> section : dateSections) {
+                for (String s : section) {
+                    System.out.println(s);
+                }
             }
         }
     }
