@@ -10,6 +10,7 @@ public class CheckManager {
     private final Scanner scanner;
     private final UserDao userDao;
     private final AccountDao accountDao;
+
     private final CheckAccountService checkAccountService;
     private final CheckDepositService checkDepositService;
 
@@ -25,6 +26,7 @@ public class CheckManager {
     private void initializeServices() {
         DatabaseManager dbManager = new DatabaseManager();
         UserDao userDao = new UserDao(dbManager);
+        DateDao dateDao = new DateDao(dbManager);
     }
 
     public void printCheckingMenu(String loggedInUserId){
