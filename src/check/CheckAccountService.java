@@ -8,6 +8,8 @@ public class CheckAccountService {
     private final AccountDao accountDao;
     private final Scanner scanner;
 
+
+
     public CheckAccountService(UserDao userDao, AccountDao accountDao){
         this.accountDao = accountDao;
         this.userDao = userDao;
@@ -19,6 +21,7 @@ public class CheckAccountService {
         DatabaseManager dbManager = new DatabaseManager();
         UserDao userDao = new UserDao(dbManager);
         AccountDao accountDao = new AccountDao(dbManager);
+        DateDao dateDao = new DateDao(dbManager);
     }
     private static boolean isValidAccountNumber(String accountNumber) {
         return accountNumber.matches("\\d{6}-\\d{7}");
@@ -31,6 +34,7 @@ public class CheckAccountService {
         DatabaseManager dbManager = new DatabaseManager();
         UserDao userDao = new UserDao(dbManager);
         AccountDao accountDao = new AccountDao(dbManager);
+
 
 
         try {
@@ -86,6 +90,7 @@ public class CheckAccountService {
 
             //이름&주민번호 일치
             System.out.println("============================================");
+            
 
             String storedAccount = userDao.findUserToAccount(loggedInUserId);
             String balance = accountDao.getBalanceToString(storedAccount);
