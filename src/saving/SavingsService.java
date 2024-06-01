@@ -59,7 +59,7 @@ public class SavingsService {
                     continue;
                 }
 
-                long currentBalance = accountDao.getSavings(account, 0);
+                long currentBalance = accountDao.getBalance(account);
 
                 if (money > currentBalance) {
                     System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + decimalFormat.format(currentBalance) + "입니다.");
