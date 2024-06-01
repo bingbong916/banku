@@ -2,6 +2,7 @@ package bank;
 
 import database.AccountDao;
 import database.DatabaseManager;
+import database.DateDao;
 import database.UserDao;
 
 import java.io.IOException;
@@ -15,9 +16,11 @@ public class AccountService {
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final Scanner scanner;
+    private final DateDao dateDao;
 
-    public AccountService(UserDao userDao) {
+    public AccountService(UserDao userDao, DateDao dateDao) {
         this.userDao = userDao;
+        this.dateDao = dateDao;
         this.accountDao = new AccountDao(new DatabaseManager());
         this.scanner = new Scanner(System.in);
     }
@@ -31,6 +34,7 @@ public class AccountService {
             System.out.println("('q'를 입력할 시 이전 화면으로 돌아갑니다.)");
 
             String amount;
+            String date = dateDao.getDate();
             while (true) {
                 System.out.print("초기 입금액을 입력하세요: ₩ ");
                 amount = scanner.nextLine();
@@ -60,7 +64,7 @@ public class AccountService {
                 // 모든 검증을 통과하면 계좌 개설 진행
                 String accountNumber = generateAccountNumber();
                 userDao.addAccountToUser(loggedInUserId, accountNumber);
-                accountDao.createAccount(accountNumber, amount);
+                accountDao.createAccount(accountNumber, parsedAmount, date);
 
                 System.out.println("============================================");
                 System.out.println("계좌 개설이 완료되었습니다! 계좌번호: " + accountNumber);

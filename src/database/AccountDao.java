@@ -16,9 +16,10 @@ public class AccountDao {
         this.dbManager = dbManager;
     }
 
-    public void createAccount(String accountNumber, String balance) throws IOException {
-        List<String> lines = Arrays.asList(balance, "", "", "", "");
+    public void createAccount(String accountNumber, long balance, String date) throws IOException {
+        List<String> lines = Arrays.asList("0", "", "", "", "");
         dbManager.writeAccountFile(accountNumber, lines);
+        executeTransaction(accountNumber, balance, "deposit", date);
     }
 
     public void updateSavings(String accountNumber, int productIndex, String amount, String startDate) throws IOException {

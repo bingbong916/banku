@@ -38,8 +38,6 @@ public class AutomaticTransfer {
             }
             lastDate = currentProcessingDate;
         }
-
-        dateDao.setDate(presentDate); // 최종 업데이트된 현재 날짜를 저장
     }
 
     public static List<String> listFilesInDirectory() {
