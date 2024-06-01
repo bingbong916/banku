@@ -39,7 +39,7 @@ public class MainMenu {
         
         this.userDao = new UserDao(new DatabaseManager());
         AccountDao accountDao = new AccountDao(new DatabaseManager());
-        this.accountService = new AccountService(userDao);
+        this.accountService = new AccountService(userDao, dateDao);
         this.transferService = new TransferService(new AccountDao(new DatabaseManager()), userDao);
         this.depositService = new DepositService(userDao, accountDao);
         this.withdrawalService = new WithdrawalService(userDao, accountDao);
@@ -51,10 +51,13 @@ public class MainMenu {
     }
 
     public void show() throws IOException {
+<<<<<<< HEAD
     	if (userDao.hasAccount(loggedInUserId)) {
             accountDao.calculateAndDepositInterest(userDao.getAccountNumber(loggedInUserId), dateDao);
         }
     	
+=======
+>>>>>>> main
         printMainMenu();
         while (true) {
             System.out.print("선택하실 메뉴 번호를 입력하세요 (0-6): ");
