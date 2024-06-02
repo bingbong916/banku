@@ -17,29 +17,15 @@ public class DateDao {
 
     public void setDate(String inputDate) throws Exception {
         validateDate(inputDate);
-
         List<String> lines = dbManager.readDateFile();
-        String pastDate = getDate();
 
-        // 첫 번째 줄에 현재 날짜를, 두 번째 줄에 이전 날짜를 유지
-        if (lines.size() < 2) {
-            lines.add(pastDate);
-        } else {
-            lines.set(1, pastDate);
-        }
         lines.set(0, inputDate);
-
         dbManager.writeDateFile(lines);
     }
 
     public String getDate() throws IOException {
         List<String> lines = dbManager.readDateFile();
         return lines.get(0);
-    }
-
-    public String getLastSavedDate() throws IOException {
-        List<String> lines = dbManager.readDateFile();
-        return lines.size() > 1 ? lines.get(1) : null;
     }
 
     public void validateDate(String inputDate) throws Exception {
@@ -77,8 +63,8 @@ public class DateDao {
         int yearDifference = presentYear - pastYear;
         return yearDifference * 12 + (presentMonth - pastMonth);
     }
-    
-    
+
+
     // 날짜 차이 계산 메서드
     public long calculateDaysBetween(String date1, String date2) throws DateTimeParseException {
         // 현재 연도를 기준으로 두 날짜를 파싱
@@ -98,8 +84,8 @@ public class DateDao {
         int currentYear = LocalDate.now().getYear();
         return LocalDate.parse(currentYear + date, DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
-    
-    
+
+
     // 마지막으로 업데이트된 날짜와 오늘이 같은 달인지 확인하는 메서드(맞으면 true를, 아니면 false return)
     public boolean isSameMonth(String accountNumber) throws IOException {
         // 가장 마지막에 업데이트된 날짜를 가져옵니다.
@@ -114,7 +100,7 @@ public class DateDao {
     }
 
 
- // account/계좌번호.txt에서 마지막으로 업데이트 된 날짜를 가져오는 메서드
+    // account/계좌번호.txt에서 마지막으로 업데이트 된 날짜를 가져오는 메서드
     public String getLastUpdatedDate(String accountNumber) throws IOException {
         List<String> lines = dbManager.readAccountFile(accountNumber);
         Pattern pattern = Pattern.compile("(\\d+월 \\d+일)");
