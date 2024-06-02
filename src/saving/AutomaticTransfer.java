@@ -19,24 +19,18 @@ public class AutomaticTransfer {
         this.dateDao = new DateDao(new DatabaseManager());
     }
 
-    public void doService() throws IOException, Exception {
-        String presentDate = dateDao.getDate();
-        String lastDate = dateDao.getLastSavedDate();
+    public void doService(String pastDate, String presentDate) throws IOException, Exception {
 
-        if (lastDate == null) {
-            lastDate = presentDate;
-        }
-
-        int monthsBetween = dateDao.calculateMonth(lastDate, presentDate);
+        int monthsBetween = dateDao.calculateMonth(pastDate, presentDate);
 
         for (int i = 0; i < monthsBetween; i++) {
             List<String> accountList = listFilesInDirectory();
-            String currentProcessingDate = incrementMonth(lastDate);
+            String currentProcessingDate = incrementMonth(pastDate);
             for (String account : accountList) {
                 matureSaving(account, currentProcessingDate);
                 autoSaving(account, currentProcessingDate);
             }
-            lastDate = currentProcessingDate;
+            pastDate = currentProcessingDate;
         }
     }
 
