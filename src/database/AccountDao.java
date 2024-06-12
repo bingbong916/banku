@@ -336,18 +336,33 @@ public class AccountDao {
                     }
                     
                     currentDate = year +  month + day;  // 현재 연도를 추가합니다.
+                    
                     System.out.println("currentDate : " + currentDate);
+                    
+                 // 현재 날짜가 마지막으로 업데이트된 날짜의 달에 속하지 않으면, 해당 줄을 건너뛴다.
+                    if (!dateDao.isSameYearAndMonthInLine(accountNumber, currentDate)) {
+                    	System.out.println("건너뜀");
+                    	currentDate = null;
+                        continue;
+                        
+                    }
                 }
 
                 else {
                 	// 해당 줄에서 금액을 추출합니다.
-                    String[] parts = line.split("\\s+");
-                    if (parts.length > 0) {
-                        String balancePart = parts[parts.length - 1];
-                        balancePart = balancePart.replace("₩", "").replace(",", "");
-                        currentBalance = Long.parseLong(balancePart);
-//                        System.out.println("currentBalance : " + currentBalance);
-                    }
+                	if(currentDate == null) {
+                		continue;
+                	}
+                	else {
+                		String[] parts = line.split("\\s+");
+                        if (parts.length > 0) {
+                            String balancePart = parts[parts.length - 1];
+                            balancePart = balancePart.replace("₩", "").replace(",", "");
+                            currentBalance = Long.parseLong(balancePart);
+                            System.out.println("currentBalance : " + currentBalance);
+                        }
+                	}
+                    
                 }
                 
 
@@ -402,38 +417,40 @@ public class AccountDao {
             // 복리 입금 진행
          // 마지막으로 입금된 날짜를 가져옵니다.
             String lastDepositDate = lastDate;
-//            System.out.println("lastDepositDate : " + lastDepositDate);
+            System.out.println("lastDepositDate : " + lastDepositDate);
 
             // depositDate를 마지막으로 입금된 날짜의 다음 월의 첫날로 설정합니다.
             String depositDate = LocalDate.parse(lastDepositDate, DateTimeFormatter.ofPattern("yyyyMMdd")).plusMonths(1).withDayOfMonth(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             System.out.println("depositDate : " + depositDate);
-//            System.out.println("복리 계산이 실행되었습니다 -4");
-//            System.out.println("depositDate : " + depositDate);
-//            System.out.println("dateDao.getDate().substring(0, 6) + \"01\" : " + dateDao.getDate().substring(0, 6) + "01");
+            System.out.println("복리 계산이 실행되었습니다 -4");
+            System.out.println("depositDate : " + depositDate);
+            System.out.println("dateDao.getDate().substring(0, 6) + \"01\" : " + dateDao.getDate().substring(0, 6) + "01");
             
             while (LocalDate.parse(depositDate, DateTimeFormatter.ofPattern("yyyyMMdd")).isBefore(LocalDate.parse(dateDao.getDate(), DateTimeFormatter.ofPattern("yyyyMMdd")))) {
                 // 마지막으로 업데이트된 날짜와 입금 날짜 사이의 복리를 계산합니다.
             	System.out.println("복리 계산이 실행되었습니다 -5");
-            	
-//            	String depositDate1 = depositDate.substring(4,8);
-//            	System.out.println("depositDate1 : " + depositDate1);
-            	
                 long daysBetween = dateDao.calculateDaysBetween(lastDate, depositDate);
                 double interest = calculateInterest(lastBalance, daysBetween);
+                
+                System.out.println("Before interestsum : " + interestSum);
 
                 // 계산된 복리를 복리의 합에 더합니다.
                 interestSum += interest;
                 // 계산된 복리의 합을 입금합니다.
-                System.out.println("복리 계산이 실행되었습니다 - 6");
                 executeTransaction(accountNumber, interestSum, "compound", depositDate);
-                System.out.println("복리 계산이 실행되었습니다 - 7");
+
+                // 복리를 계산하고 입금한 후에 lastDate와 lastBalance를 업데이트합니다.
+                lastDate = depositDate;
+                lastBalance += interestSum;
+                
+             // 복리를 계산하고 입금한 후에 interestSum을 0으로 초기화합니다.
+                interestSum = 0;
+
 
                 // 다음 달의 첫날로 입금 날짜를 업데이트합니다.
-                System.out.println("depositDate(업뎃 전): " + depositDate);
                 depositDate = LocalDate.parse(depositDate, DateTimeFormatter.ofPattern("yyyyMMdd")).plusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-                System.out.println("depositDate(업뎃 후): " + depositDate);
-                System.out.println("복리 계산이 실행되었습니다 - 8");
             }
+            
         }
     }
 

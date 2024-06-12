@@ -122,6 +122,16 @@ public class DateDao {
         // 두 날짜가 같은 년도와 달인지 확인합니다.
         return getYearAndMonthFromDateString(lastUpdatedDate).equals(getYearAndMonthFromDateString(today));
     }
+    
+ // 마지막으로 업데이트된 날짜와 파싱된 날짜가 같은 년도와 달인지 확인하는 메서드(맞으면 true를, 아니면 false return)
+    public boolean isSameYearAndMonthInLine(String accountNumber, String parsedDate) throws IOException {
+        // 가장 마지막에 업데이트된 날짜를 가져옵니다.
+        String lastUpdatedDate = getLastUpdatedDate(accountNumber);
+
+        // 두 날짜가 같은 년도와 달인지 확인합니다.
+        return getYearAndMonthFromDateString(lastUpdatedDate).equals(getYearAndMonthFromDateString(parsedDate));
+    }
+
 
     // 날짜 문자열에서 년도와 월을 추출하는 메서드
     private String getYearAndMonthFromDateString(String date) {
