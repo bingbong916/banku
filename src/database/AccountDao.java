@@ -283,7 +283,7 @@ public class AccountDao {
     
  // 복리 계산
     public void calculateAndDepositInterest(String accountNumber, DateDao dateDao) throws IOException {
-        System.out.println("복리 계산이 실행되었습니다. -1");
+//        System.out.println("복리 계산이 실행되었습니다. -1");
         
         // 입출금 내역이 없을 때 오류 방지를 위한 early return
         if(dateDao.getLastUpdatedDate(accountNumber) == null) {
@@ -292,10 +292,10 @@ public class AccountDao {
         
         // 같은 달이 아닐 경우에만 복리를 계산하고 입금합니다.
         if (!dateDao.isSameYearAndMonth(accountNumber)) {
-            System.out.println("복리 계산이 실행되었습니다 -2");
+//            System.out.println("복리 계산이 실행되었습니다 -2");
             // 계좌 파일을 읽어옵니다.
             List<String> lines = dbManager.readAccountFile(accountNumber);
-            System.out.println("복리 계산이 실행되었습니다 -3");
+//            System.out.println("복리 계산이 실행되었습니다 -3");
             // 복리의 합을 저장할 변수를 초기화합니다.
             long interestSum = 0;
             // 마지막으로 업데이트된 날짜와 잔액을 저장할 변수를 초기화합니다.
@@ -337,11 +337,11 @@ public class AccountDao {
                     
                     currentDate = year +  month + day;  // 현재 연도를 추가합니다.
                     
-                    System.out.println("currentDate : " + currentDate);
+//                    System.out.println("currentDate : " + currentDate);
                     
                  // 현재 날짜가 마지막으로 업데이트된 날짜의 달에 속하지 않으면, 해당 줄을 건너뛴다.
                     if (!dateDao.isSameYearAndMonthInLine(accountNumber, currentDate)) {
-                    	System.out.println("건너뜀");
+//                    	System.out.println("건너뜀");
                     	currentDate = null;
                         continue;
                         
@@ -359,7 +359,7 @@ public class AccountDao {
                             String balancePart = parts[parts.length - 1];
                             balancePart = balancePart.replace("₩", "").replace(",", "");
                             currentBalance = Long.parseLong(balancePart);
-                            System.out.println("currentBalance : " + currentBalance);
+//                            System.out.println("currentBalance : " + currentBalance);
                         }
                 	}
                     
@@ -370,10 +370,10 @@ public class AccountDao {
                 if (i < lines.size() - 1) {
                 	Matcher nextMatcher1 = Pattern.compile("(\\d+년 \\d+월 \\d+일)").matcher(lines.get(i + 1));
                     boolean isFound = nextMatcher1.find();
-                    System.out.println("isFound 진입 전");
+//                    System.out.println("isFound 진입 전");
                     System.out.println(isFound);
                     if (isFound) {
-                        System.out.println("isFound 진입 후");
+//                        System.out.println("isFound 진입 후");
 
                         // 다음 날짜를 가져옵니다.
                         String nextYear = nextMatcher1.group(1).split("년")[0].trim();
@@ -404,35 +404,35 @@ public class AccountDao {
                     }
                 }
                 
-                System.out.println("isFound는 false");
+//                System.out.println("isFound는 false");
                 // 마지막으로 업데이트된 날짜와 잔액을 업데이트합니다.
                 lastDate = currentDate;
                 lastBalance = currentBalance;
-                System.out.println("currentDate" + currentDate);
-                System.out.println("lastDate" + lastDate);
-                System.out.println("currentBalance" + currentBalance);
-                System.out.println("lastBalance" + lastBalance);
+//                System.out.println("currentDate" + currentDate);
+//                System.out.println("lastDate" + lastDate);
+//                System.out.println("currentBalance" + currentBalance);
+//                System.out.println("lastBalance" + lastBalance);
             }
 
             // 복리 입금 진행
          // 마지막으로 입금된 날짜를 가져옵니다.
             String lastDepositDate = lastDate;
-            System.out.println("lastDepositDate : " + lastDepositDate);
+//            System.out.println("lastDepositDate : " + lastDepositDate);
 
             // depositDate를 마지막으로 입금된 날짜의 다음 월의 첫날로 설정합니다.
             String depositDate = LocalDate.parse(lastDepositDate, DateTimeFormatter.ofPattern("yyyyMMdd")).plusMonths(1).withDayOfMonth(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-            System.out.println("depositDate : " + depositDate);
-            System.out.println("복리 계산이 실행되었습니다 -4");
-            System.out.println("depositDate : " + depositDate);
-            System.out.println("dateDao.getDate().substring(0, 6) + \"01\" : " + dateDao.getDate().substring(0, 6) + "01");
+//            System.out.println("depositDate : " + depositDate);
+//            System.out.println("복리 계산이 실행되었습니다 -4");
+//            System.out.println("depositDate : " + depositDate);
+//            System.out.println("dateDao.getDate().substring(0, 6) + \"01\" : " + dateDao.getDate().substring(0, 6) + "01");
             
             while (LocalDate.parse(depositDate, DateTimeFormatter.ofPattern("yyyyMMdd")).isBefore(LocalDate.parse(dateDao.getDate(), DateTimeFormatter.ofPattern("yyyyMMdd")))) {
                 // 마지막으로 업데이트된 날짜와 입금 날짜 사이의 복리를 계산합니다.
-            	System.out.println("복리 계산이 실행되었습니다 -5");
+//            	System.out.println("복리 계산이 실행되었습니다 -5");
                 long daysBetween = dateDao.calculateDaysBetween(lastDate, depositDate);
                 double interest = calculateInterest(lastBalance, daysBetween);
                 
-                System.out.println("Before interestsum : " + interestSum);
+//                System.out.println("Before interestsum : " + interestSum);
 
                 // 계산된 복리를 복리의 합에 더합니다.
                 interestSum += interest;
