@@ -5,12 +5,14 @@ import database.DatabaseManager;
 import database.DateDao; // 추가
 import database.UserDao;
 import transaction.TransferService;
+import saving.AutomaticTransfer;
 import saving.SavingServiceManager;
 import transaction.DepositService;
 import transaction.WithdrawalService;
 import check.CheckManager;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
@@ -56,6 +58,14 @@ public class MainMenu {
             accountDao.calculateAndDepositInterest(userDao.getAccountNumber(loggedInUserId), dateDao);
             
         }
+    	
+            List<String> accountList = AutomaticTransfer.listFilesInDirectory();
+
+            
+            for (String account : accountList) {
+                accountDao.calculateAndDepositInterest(account, dateDao);
+            }
+        
 
         printMainMenu();
         while (true) {
