@@ -371,7 +371,7 @@ public class AccountDao {
                 	Matcher nextMatcher1 = Pattern.compile("(\\d+년 \\d+월 \\d+일)").matcher(lines.get(i + 1));
                     boolean isFound = nextMatcher1.find();
 //                    System.out.println("isFound 진입 전");
-                    System.out.println(isFound);
+//                    System.out.println(isFound);
                     if (isFound) {
 //                        System.out.println("isFound 진입 후");
 
