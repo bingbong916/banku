@@ -107,7 +107,7 @@ public class AutomaticTransfer {
                 long savings = Long.parseLong(accountDao.getAmount(account, 0));
                 long interest = (long) (savings * 0.03);
                 long total = savings + interest;
-                accountDao.executeTransaction(account, total, "canceled", date);
+                accountDao.executeTransaction(account, total, "canceledYegeum", date);
                 accountDao.removeSavings(account, 1);
             }
         }

@@ -69,7 +69,7 @@ public class SavingsService {
                 String startDate = dateDao.getDate();
 
                 // 첫 달 납입금을 현재 계좌에서 차감
-                accountDao.executeTransaction(account, money, "withdrawal", startDate);
+                accountDao.executeTransaction(account, money, "yegeum", startDate);
                 // 첫 달 납입금을 예금 계좌에 적립
                 accountDao.updateSavings(account, 0, inputMoney, startDate);
                 System.out.println("예금이 완료되었습니다!");
