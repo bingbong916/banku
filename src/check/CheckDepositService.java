@@ -110,7 +110,7 @@ public class CheckDepositService {
                     System.out.println("이름의 형식이 잘못되었습니다.");
                     continue;
                 }
-                if(userName.length() < 2 || userName.length() > 5){
+                if(userName.length() < 2 || userName.length() > 6){
                     System.out.println("이름의 길이가 잘못되었습니다.");
                     continue;
                 }
