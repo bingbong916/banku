@@ -154,7 +154,7 @@ public class CloseSavingService {
                             rate = adjustRateSaving(month);
                             interest = (long) (amount * rate);
                             totalReturnAmount = amount + interest;
-                            accountDao.executeTransaction(account, totalReturnAmount, "canceled", currentDate);
+                            accountDao.executeTransaction(account, totalReturnAmount, "canceledYegeum", currentDate);
                             System.out.println("1번 상품 해지 결과");
                             System.out.println("원금 : " + decimalFormat.format(amount));
                             System.out.println("이자 : " + decimalFormat.format(interest));
