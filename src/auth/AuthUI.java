@@ -344,9 +344,9 @@ public class AuthUI {
 
                 // 자동이체 실행 전 날짜 비교
                 int cnt = dateDao.calculateMonth(pastDate, inputDate);
-                for (int i = 0; i < cnt; i++) {
+//                for (int i = 0; i < cnt; i++) {
                     automaticTransfer.doService(pastDate, inputDate);
-                }
+//                }
             } catch (DateTimeParseException e) {
                 System.out.println("유효하지 않은 날짜입니다.");
                 System.out.println();
