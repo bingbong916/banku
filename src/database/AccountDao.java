@@ -156,6 +156,14 @@ public class AccountDao {
                 transactionLog.append("적금:\t- ").append(decimalFormat.format(money)).append("\t").append(decimalFormat.format(oldBalance));
                 break;
 
+            case "yegeum": // 예금
+                if (oldBalance - money < 0) {
+                    return -1; // 잔고보다 더 많은 돈을 출금할 때
+                }
+                oldBalance -= money;
+                transactionLog.append("예금:\t- ").append(decimalFormat.format(money)).append("\t").append(decimalFormat.format(oldBalance));
+                break;
+
             case "canceled": // 적금 해지
                 try {
                     oldBalance = Math.addExact(money, oldBalance);
@@ -163,6 +171,15 @@ public class AccountDao {
                     return -1; // 입금 long 형 범위 초과
                 }
                 transactionLog.append("적금 해지:\t+ ").append(decimalFormat.format(money)).append("\t").append(decimalFormat.format(oldBalance));
+                break;
+
+            case "canceledYegeum": // 예금 해지
+                try {
+                    oldBalance = Math.addExact(money, oldBalance);
+                } catch (ArithmeticException e) {
+                    return -1; // 입금 long 형 범위 초과
+                }
+                transactionLog.append("예금 해지:\t+ ").append(decimalFormat.format(money)).append("\t").append(decimalFormat.format(oldBalance));
                 break;
 
             default:
