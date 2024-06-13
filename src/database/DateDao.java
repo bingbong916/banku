@@ -18,7 +18,7 @@ public class DateDao {
     public void setDate(String inputDate) throws Exception {
         validateDate(inputDate);
         List<String> lines = dbManager.readDateFile();
-
+        lines.set(1, lines.getFirst());
         lines.set(0, inputDate);
         dbManager.writeDateFile(lines);
     }
