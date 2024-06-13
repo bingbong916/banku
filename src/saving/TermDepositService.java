@@ -66,26 +66,28 @@ public class TermDepositService {
                     case 2:
                         if (accountDao.hasSavings(account, 3)) {
                             System.out.println("이미 가입한 적금입니다.");
-                        }
-                        int type2 = accountDao.executeTransaction(account, 500000, "savings", startDate);
-                        if (type2 == 0) {
-                            accountDao.updateSavings(account, 2, "500000", startDate);
-                            System.out.println("적금 가입이 완료되었습니다!");
-                        } else {
-                            System.out.println();
-                            System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다.");
+                        }else {
+                            int type2 = accountDao.executeTransaction(account, 500000, "savings", startDate);
+                            if (type2 == 0) {
+                                accountDao.updateSavings(account, 2, "500000", startDate);
+                                System.out.println("적금 가입이 완료되었습니다!");
+                            } else {
+                                System.out.println();
+                                System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다.");
+                            }
                         }
                         break;
                     case 3:
                         if (accountDao.hasSavings(account, 4)) {
                             System.out.println("이미 가입한 적금입니다.");
-                        }
-                        int type3 = accountDao.executeTransaction(account, 1000000, "savings", startDate);
-                        if (type3 == 0) {
-                            accountDao.updateSavings(account, 3, "1000000", startDate);
-                            System.out.println("적금 가입이 완료되었습니다!");
-                        } else {
-                            System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다.");
+                        }else {
+                            int type3 = accountDao.executeTransaction(account, 1000000, "savings", startDate);
+                            if (type3 == 0) {
+                                accountDao.updateSavings(account, 3, "1000000", startDate);
+                                System.out.println("적금 가입이 완료되었습니다!");
+                            } else {
+                                System.out.println("현재 잔액이 부족합니다. 현재 남은 잔액은 ₩" + accountDao.showSavings(account) + " 입니다.");
+                            }
                         }
                         break;
                     case 0:
