@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class AutomaticTransfer {
     private final AccountDao accountDao;
@@ -20,18 +24,32 @@ public class AutomaticTransfer {
     }
 
     public void doService(String pastDate, String presentDate) throws IOException, Exception {
-
         int monthsBetween = dateDao.calculateMonth(pastDate, presentDate);
+        ExecutorService executorService = Executors.newFixedThreadPool(10); // 적절한 스레드 풀 크기를 설정하세요.
 
         for (int i = 0; i < monthsBetween; i++) {
             List<String> accountList = listFilesInDirectory();
             String currentProcessingDate = incrementMonth(pastDate);
-            for (String account : accountList) {
-                matureSaving(account, currentProcessingDate);
-                autoSaving(account, currentProcessingDate);
-            }
+
+            List<CompletableFuture<Void>> futures = accountList.stream()
+                    .map(account -> CompletableFuture.runAsync(() -> {
+                        try {
+                            accountDao.calculateAndDepositInterest(account, dateDao);
+                            matureSaving(account, currentProcessingDate);
+                            autoSaving(account, currentProcessingDate);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }, executorService))
+                    .collect(Collectors.toList());
+
+            // 모든 작업이 완료될 때까지 기다림
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
             pastDate = currentProcessingDate;
         }
+
+        executorService.shutdown();
     }
 
     public static List<String> listFilesInDirectory() {
