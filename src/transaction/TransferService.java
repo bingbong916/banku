@@ -82,6 +82,11 @@ public class TransferService {
                         continue; // Continue to re-prompt for the amount
                     }
 
+                    if(amountLong >= Long.MAX_VALUE){
+                        System.out.println("최대 송금 가능 범위는 9,223,372,036,854,775,807원 입니다.");
+                        continue; // Continue to re-prompt for the amount
+                    }
+
                     long senderBalance = accountDao.getBalance(senderAccountNumber);
                     if (senderBalance < amountLong) {
                         System.out.println("잔액이 부족합니다!");
@@ -117,30 +122,29 @@ public class TransferService {
     }
 
     private boolean isValidAmount(String amountStr) {
-        // Check if the amount is a valid number and within the range of a long
+        // Check if the amount is a valid number
         if (amountStr.matches("\\d+")) {
+            BigInteger amount = new BigInteger(amountStr.replace(",", "")); // Convert to BigInteger
+
             // Check against the maximum value of a long
-            BigInteger amount = new BigInteger(amountStr.replace(",", ""));
             if (amount.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
-                if (amount.compareTo(BigInteger.ONE) >= 0) {
-                    System.out.println("최대 송금 가능 범위는 9,223,372,036,854,775,807원 입니다.");
-                } else {
-                    System.out.println("최소 1원 이상 입력해주세요.");
-                }
-                return false;
+                System.out.println("최대 송금 가능 범위는 " + numberFormat.format(MAX_AMOUNT) + "원 입니다.");
+                return false; // Return false for amounts exceeding Long.MAX_VALUE
             }
+
             try {
                 long amountLong = amount.longValueExact(); // Convert to long, will throw if out of long range
-                if (amountLong < 0) {
-                    return false; // Amount cannot be negative
+                if (amountLong <= 0) {
+                    System.out.println("송금할 금액은 1원 이상이어야 합니다.");
+                    return false; // Return false for non-positive amounts
                 }
-                return true;
+
+                return true; // Valid amount within long range and positive
             } catch (ArithmeticException e) {
                 System.out.println("입력한 금액이 너무 큽니다. 올바른 금액을 입력하세요!");
-                return false;
+                return false; // Return false for amounts too large to convert to long
             }
         }
-        return false;
+        return false; // Not a valid numeric input
     }
-
 }
