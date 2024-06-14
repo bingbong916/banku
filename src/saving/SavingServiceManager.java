@@ -27,7 +27,7 @@ public class SavingServiceManager {
                     System.out.println("============================================");
                     System.out.println("[1] 정기 예금 서비스");
                     System.out.println("[2] 적금 서비스");
-                    System.out.println("[3] 적금 해지 서비스");
+                    System.out.println("[3] 예적금 해지 서비스");
                     System.out.println("[0] 뒤로가기");
                     System.out.println("============================================");
 
