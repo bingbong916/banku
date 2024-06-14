@@ -6,19 +6,24 @@ import database.DateDao;
 import database.UserDao;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.text.NumberFormat;
 import java.util.Scanner;
 
 public class TransferService {
+    private static final long MAX_AMOUNT = Long.MAX_VALUE;
     private final AccountDao accountDao;
     private final UserDao userDao;
     private final DateDao dateDao;
     private final Scanner scanner;
+    private final NumberFormat numberFormat;
 
     public TransferService(AccountDao accountDao, UserDao userDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.dateDao = new DateDao(new DatabaseManager());
         this.scanner = new Scanner(System.in);
+        this.numberFormat = NumberFormat.getInstance();
     }
 
     public void transfer(String loggedInUserId) {
@@ -65,34 +70,42 @@ public class TransferService {
                         return;
                     }
 
-                    if (!isValidAmount(amountStr) || Long.parseLong(amountStr) == 0) {
+                    if (!isValidAmount(amountStr)) {
                         System.out.println("올바른 금액을 입력하세요!");
-                        continue;
+                        continue; // Continue to re-prompt for the amount
                     }
 
-                    long amount = Long.parseLong(amountStr.replace(",", "")); // Remove commas if present
+                    long amountLong = Long.parseLong(amountStr.replace(",", ""));
+
+                    if (amountLong <= 0) {
+                        System.out.println("송금할 금액은 1원 이상이어야 합니다.");
+                        continue; // Continue to re-prompt for the amount
+                    }
 
                     long senderBalance = accountDao.getBalance(senderAccountNumber);
-                    if (senderBalance < amount) {
+                    if (senderBalance < amountLong) {
                         System.out.println("잔액이 부족합니다!");
-                        System.out.println("현재 잔액: ₩ " + senderBalance);
-                        // 사용자가 올바른 금액을 입력할 때까지 반복
-                        continue;
+                        System.out.println("현재 잔액: ₩ " + numberFormat.format(senderBalance));
+                        continue; // Continue to re-prompt for the amount
+                    }
+
+                    long receiverBalance = accountDao.getBalance(receiverAccountNumber);
+                    if (Long.MAX_VALUE - receiverBalance < amountLong) {
+                        System.out.println("받는 사람의 계좌 잔액이 너무 큽니다. 다른 금액을 입력하세요!");
+                        continue; // Continue to re-prompt for the amount
                     }
 
                     String senderName = userDao.findUserToName(loggedInUserId);
                     String receiverName = userDao.findUserNameByAccount(receiverAccountNumber);
 
-                    accountDao.executeTransferTransaction(senderAccountNumber, -amount, receiverName, "sender", currentDate);
-                    accountDao.executeTransferTransaction(receiverAccountNumber, amount, senderName, "receiver", currentDate);
+                    accountDao.executeTransferTransaction(senderAccountNumber, -amountLong, receiverName, "sender", currentDate);
+                    accountDao.executeTransferTransaction(receiverAccountNumber, amountLong, senderName, "receiver", currentDate);
 
                     System.out.println();
                     System.out.println("송금이 완료되었습니다.");
-                    System.out.println("현재 잔액: ₩ " + (senderBalance - amount));
-                    break;
+                    System.out.println("현재 잔액: ₩ " + numberFormat.format(senderBalance - amountLong));
+                    return; // Exit both loops after successful transfer
                 }
-
-                break;
             }
         } catch (IOException e) {
             System.out.println("송금 중 오류가 발생했습니다: " + e.getMessage());
@@ -104,6 +117,30 @@ public class TransferService {
     }
 
     private boolean isValidAmount(String amountStr) {
-        return amountStr.matches("\\d+");
+        // Check if the amount is a valid number and within the range of a long
+        if (amountStr.matches("\\d+")) {
+            // Check against the maximum value of a long
+            BigInteger amount = new BigInteger(amountStr.replace(",", ""));
+            if (amount.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+                if (amount.compareTo(BigInteger.ONE) >= 0) {
+                    System.out.println("최대 송금 가능 범위는 9,223,372,036,854,775,807원 입니다.");
+                } else {
+                    System.out.println("최소 1원 이상 입력해주세요.");
+                }
+                return false;
+            }
+            try {
+                long amountLong = amount.longValueExact(); // Convert to long, will throw if out of long range
+                if (amountLong < 0) {
+                    return false; // Amount cannot be negative
+                }
+                return true;
+            } catch (ArithmeticException e) {
+                System.out.println("입력한 금액이 너무 큽니다. 올바른 금액을 입력하세요!");
+                return false;
+            }
+        }
+        return false;
     }
+
 }
