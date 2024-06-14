@@ -220,7 +220,7 @@ public class CloseSavingService {
         int currentMonths = (int) (amount / monthlyPayment);
         // 현재까지 납입한 개월 수에 따라 이율 조정
 
-        if (currentMonths == 0)
+        if (currentMonths == 1)
            return 0;
 
         if (currentMonths < (months * 0.2))
@@ -241,7 +241,7 @@ public class CloseSavingService {
         //기존 이율은 0.03;
         double rate = 0.03;
 
-        if (month <= 0)
+        if (month <= 1)
             return 0;
 
         if(month < 12 * 0.2)
